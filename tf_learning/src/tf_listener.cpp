@@ -12,8 +12,13 @@
 
 #include <basic_msgs/points.h>
 
+#include <vector>
+
+#include <iostream>
+
 #define pi 3.1415926
 
+using namespace std;
 //  ros::Publisher scan_pub=n.advertise<basic_msgs::laser_points>("laser_points",1000);
 bool flag =false;
 class Scan_info{
@@ -21,6 +26,7 @@ public:
     sensor_msgs::LaserScan ranges;
     geometry_msgs::PointStamped laser_point;
     basic_msgs::laser_points laser_point_vector;
+    basic_msgs::laser_points laser_point_picture_vector;
     Scan_info();
     ~Scan_info();
     void scancallback(const sensor_msgs::LaserScanConstPtr& msg);
@@ -38,7 +44,7 @@ Scan_info::~Scan_info(){
 void Scan_info::scancallback(const sensor_msgs::LaserScanConstPtr& msg){
         int num=sizeof(msg->ranges);
         basic_msgs::points test_msg;
-        
+        Scan_info::laser_point_vector.data.clear();
         // printf(" ranges: \n");
         for (int i=0;i<num;i++){
         // printf("%f, ",msg->ranges[i]);
@@ -61,14 +67,20 @@ void Scan_info::scancallback(const sensor_msgs::LaserScanConstPtr& msg){
      } 
 
 
-void transformPoint(const tf::TransformListener& listener, geometry_msgs::PointStamped& laser_point,basic_msgs::laser_points& laser_point_vector, int i){
+void transformPoint(const tf::TransformListener& listener, geometry_msgs::PointStamped& laser_point,basic_msgs::laser_points& laser_point_vector, basic_msgs::laser_points& laser_point_picture_vector,int i){
 
     //we'll create a point in the base_laser frame that we'd like to transform to the base_footprint frame
 
-    
+    laser_point_picture_vector.data.clear();
     // ROS_INFO("---i is :%d ---",i);
     laser_point.header.frame_id = "base_link";
+    int num=laser_point_vector.data.size();
+    
+    ROS_INFO("Num:%d",num);
+    for (int i=0;i<num;i++){
+     cout<<laser_point_vector.data[i]<<endl;
 
+    
     
 
     //we'll just use the most recent transform available for our simple example
@@ -79,9 +91,9 @@ void transformPoint(const tf::TransformListener& listener, geometry_msgs::PointS
 
     //just an arbitrary point in space
     ROS_INFO("laser point.x:%f",laser_point.point.x);
-    // laser_point.point.x = 0.1;
+    laser_point.point.x = laser_point_vector.data[i].x;
 
-    // laser_point.point.y = 0.2;
+    laser_point.point.y = laser_point_vector.data[i].y;
 
     // laser_point.point.z = 0.0;
 
@@ -93,7 +105,7 @@ void transformPoint(const tf::TransformListener& listener, geometry_msgs::PointS
 
     listener.transformPoint("picture_frame", laser_point, base_point);
     flag=true;
-    
+   
 
     ROS_INFO(" base_footprint: (%.2f, %.2f. %.2f) -----> picture_frame: (%.2f, %.2f, %.2f) at time %.2f",
 
@@ -106,9 +118,11 @@ void transformPoint(const tf::TransformListener& listener, geometry_msgs::PointS
     catch(tf::TransformException& ex){
 
     ROS_ERROR("Received an exception trying to transform a point from \"base_laser\" to \"base_footprint\": %s", ex.what());
-
+    flag=false;
    
 
+    }
+    
     }
 
 }
@@ -132,19 +146,27 @@ int main(int argc, char** argv){
 
     //we'll transform a point once every second
 
-    ros::Timer timer1 = n.createTimer(ros::Duration(1.0), boost::bind(&transformPoint, boost::ref(listener),boost::ref(scaninfo->laser_point),boost::ref(scaninfo->laser_point_vector),i));
+    ros::Timer timer1 = n.createTimer(ros::Duration(1.0), boost::bind(&transformPoint, boost::ref(listener),boost::ref(scaninfo->laser_point),boost::ref(scaninfo->laser_point_vector),boost::ref(scaninfo->laser_point_picture_vector),i));
     // ros::Timer timer2 = n.createTimer(ros::Duration(1.0), boost::bind(&transformPoint, boost::ref(listener),boost::ref(laser_point)));
     // ros::Timer timer3 = n.createTimer(ros::Duration(1.0), boost::bind(&transformPoint, boost::ref(listener),boost::ref(laser_point)));
     // ros::Timer timer4 = n.createTimer(ros::Duration(1.0), boost::bind(&transformPoint, boost::ref(listener),boost::ref(laser_point)));
 
-    ros::Rate r(10);
+    ros::Rate r(1);
    while (ros::ok()){
        if(flag=true){
+    ROS_INFO("before");
 
+    ROS_INFO("after");
+    // for(int i=1;i<2;i++){
+    //     ROS_INFO("i: %d, %lf, %lf",i,scaninfo->laser_point_vector.data[i].x,scaninfo->laser_point_vector.data[i].y);
+    // }
     scan_pub.publish(scaninfo->laser_point_vector);
+
+
+       }
+
     ros::spinOnce();
     r.sleep();
-       }
 
 }    
 
