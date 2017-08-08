@@ -33,7 +33,7 @@ geometry_msgs::PointStamped transformPoint(const tf::TransformListener& listener
 
      try {
        
-       listener.transformPoint("picture",scan_point[i],base_point[i]);
+       listener.transformPoint("picture_frame",scan_point[i],base_point[i]);
       ROS_INFO("base_laser: (%.2f, %.2f. %.2f) -----> base_link: (%.2f, %.2f, %.2f) at time %.2f",scan_point[i].point.x, scan_point[i].point.y, scan_point[i].point.z,base_point[i].point.x, base_point[i].point.y, base_point[i].point.z, base_point[i].header.stamp.toSec());
      }catch(tf::TransformException& ex){ ROS_ERROR("Received an exception trying to transform a point from \"base_laser\" to \"base_link\": %s", ex.what());}
 
@@ -81,25 +81,25 @@ int main(int argc, char** argv){
     //  scan_point[i].point.z=0;
 
     // }
-    tf::TransformListener listener;
-    geometry_msgs::PointStamped scan_point[3];
-    geometry_msgs::PointStamped base_point[3];
+    // tf::TransformListener listener;
+    // geometry_msgs::PointStamped scan_point[3];
+    // geometry_msgs::PointStamped base_point[3];
     
-    for(int i=1;i<3;i++)
-    {
-     scan_point[i].header.stamp=ros::Time();
-     scan_point[i].header.frame_id="base_footprint";  
-     scan_point[i].point.x=5*cos(i*pi);
-     scan_point[i].point.y=5*sin(i*pi);
-     scan_point[i].point.z=0;
-     ROS_INFO("%lf,%lf,%lf",scan_point[i].point.x,scan_point[i].point.y,scan_point[i].point.z);
-     try {
+    // for(int i=1;i<3;i++)
+    // {
+    //  scan_point[i].header.stamp=ros::Time();
+    //  scan_point[i].header.frame_id="base_footprint";  
+    //  scan_point[i].point.x=5*cos(i*pi);
+    //  scan_point[i].point.y=5*sin(i*pi);
+    //  scan_point[i].point.z=0;
+    //  ROS_INFO("%lf,%lf,%lf",scan_point[i].point.x,scan_point[i].point.y,scan_point[i].point.z);
+    //  try {
        
-       listener.transformPoint("picture_frame",scan_point[i],base_point[i]);
-      ROS_INFO("base_laser: (%.2f, %.2f. %.2f) -----> base_link: (%.2f, %.2f, %.2f) at time %.2f",scan_point[i].point.x, scan_point[i].point.y, scan_point[i].point.z,base_point[i].point.x, base_point[i].point.y, base_point[i].point.z, base_point[i].header.stamp.toSec());
-     }catch(tf::TransformException& ex){ ROS_ERROR("Received an exception trying to transform a point from \"base_laser\" to \"base_link\": %s", ex.what());}
+    //    listener.transformPoint("picture_frame",scan_point[i],base_point[i]);
+    //   ROS_INFO("base_laser: (%.2f, %.2f. %.2f) -----> base_link: (%.2f, %.2f, %.2f) at time %.2f",scan_point[i].point.x, scan_point[i].point.y, scan_point[i].point.z,base_point[i].point.x, base_point[i].point.y, base_point[i].point.z, base_point[i].header.stamp.toSec());
+    //  }catch(tf::TransformException& ex){ ROS_ERROR("Received an exception trying to transform a point from \"base_laser\" to \"base_link\": %s", ex.what());}
 
-    }
+    // }
     ros::spinOnce();
     rate.sleep();
     
