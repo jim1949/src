@@ -1,0 +1,5 @@
+basic_msgs/nav_pose nav_pose
+---
+float64[] data
+string errormsg
+bool  successed

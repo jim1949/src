@@ -42,15 +42,20 @@ Scan_info::~Scan_info(){
 }
 
 void Scan_info::scancallback(const sensor_msgs::LaserScanConstPtr& msg){
-        int num=sizeof(msg->ranges);
+        const int num=msg->ranges.size();
         basic_msgs::points test_msg;
         Scan_info::laser_point_vector.data.clear();
-        // printf(" ranges: \n");
-        for (int i=0;i<num;i++){
-        // printf("%f, ",msg->ranges[i]);
+        ROS_INFO(" laser num: %d\n", num);
+        for (int i=0;i<num;i=i+5){
+            float range;
+        if (msg->ranges[i]>3.0){range=0.0;}
+        else {range=msg->ranges[i];}
+        // printf("ranges:[%d]%f, ",i,msg->ranges[i]);
+        float sigma=1.5*i/5*pi/216;
+        test_msg.x=range*cos(sigma-3*pi/4);
+       
+        test_msg.y=range*sin(sigma-3*pi/4);
         
-        test_msg.x=msg->ranges[i]*cos(pi*i/num);
-        test_msg.y=msg->ranges[i]*sin(pi*i/num);
         Scan_info::laser_point_vector.data.push_back(test_msg);
         // Scan_info::laser_point_vector.push_back(test_msg);
         // v.push_back(float(test_msg.x));
@@ -102,17 +107,19 @@ void transformPoint(const tf::TransformListener& listener, geometry_msgs::PointS
     try{
 
     geometry_msgs::PointStamped base_point;
-
+    basic_msgs::points point;
     listener.transformPoint("picture_frame", laser_point, base_point);
-    flag=true;
+    point.x=base_point.point.x*20;
+    point.y=base_point.point.y*20;
    
-
+    laser_point_picture_vector.data.push_back(point);
     ROS_INFO(" base_footprint: (%.2f, %.2f. %.2f) -----> picture_frame: (%.2f, %.2f, %.2f) at time %.2f",
 
         laser_point.point.x, laser_point.point.y, laser_point.point.z,
 
         base_point.point.x, base_point.point.y, base_point.point.z, base_point.header.stamp.toSec());
 
+    flag=true;
     }
 
     catch(tf::TransformException& ex){
@@ -140,7 +147,7 @@ int main(int argc, char** argv){
     // geometry_msgs::PointStamped laser_point;
     ros::Subscriber scan_sub=n.subscribe("base_scan",100,&Scan_info::scancallback,scaninfo);
     ros::Publisher scan_pub=n.advertise<basic_msgs::laser_points>("laser_points",1000);
-
+    ros::Publisher laser_pub=n.advertise<basic_msgs::laser_points>("laser_pose_picture",1000);
    
     
 
@@ -161,7 +168,7 @@ int main(int argc, char** argv){
     //     ROS_INFO("i: %d, %lf, %lf",i,scaninfo->laser_point_vector.data[i].x,scaninfo->laser_point_vector.data[i].y);
     // }
     scan_pub.publish(scaninfo->laser_point_vector);
-
+    laser_pub.publish(scaninfo->laser_point_picture_vector);
 
        }
 

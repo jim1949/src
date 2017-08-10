@@ -1,0 +1,6 @@
+int32 data
+
+---
+float64[] data
+string errormsg
+bool  successed

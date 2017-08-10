@@ -2,11 +2,10 @@
 string birthtime
 float64 gridX
 float64 gridY
-float64 angle
 int32 id
 string name
 int32 mapid
 string mapname
 int32 type
-geometry_msgs/Pose worldposition
+geometry_msgs/Pose[] worldposition
 

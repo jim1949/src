@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(navigation_msgs)
+project(operation)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -8,8 +8,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  geometry_msgs
   message_generation
+  geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -48,18 +48,21 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-add_message_files(FILES
-  screen_robot_pose.msg
-  task.msg
-)
+  add_message_files(
+    FILES
+    Num.msg
+  )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   AddTwoInts.srv
-#   SubTwoInts.srv
-# #   Service2.srv
-# )
+add_service_files(
+  FILES
+  mapping_name.srv
+  mapping_status.srv
+  nav_points_info.srv
+  path_info.srv
+  wall_info.srv
+  #   Service2.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -106,8 +109,8 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES navigation_msgs
-  CATKIN_DEPENDS  message_runtime 
+  LIBRARIES operation
+  CATKIN_DEPENDS roscpp rospy std_msgs message_runtime geometry_msgs
   DEPENDS system_lib
 )
 
@@ -123,23 +126,23 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(navigation_msgs
-#   src/${PROJECT_NAME}/navigation_msgs.cpp
+# add_library(operation
+#   src/${PROJECT_NAME}/operation.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(navigation_msgs ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(operation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 
-# add_executable(add_two_ints_server src/add_two_ints_server.cpp)  
-# target_link_libraries(add_two_ints_server ${catkin_LIBRARIES})  
-# add_dependencies(add_two_ints_server navigation_msgs_gencpp)  
+add_executable(operation_main_node src/operation_main_node.cpp)  
+target_link_libraries(operation_main_node ${catkin_LIBRARIES})  
+add_dependencies(operation_main_node operation_gencpp)  
   
-# add_executable(add_two_ints_client src/add_two_ints_client.cpp)  
-# target_link_libraries(add_two_ints_client ${catkin_LIBRARIES})  
-# add_dependencies(add_two_ints_client navigation_msgs_gencpp)
+add_executable(operation_second_node src/operation_second_node.cpp)  
+target_link_libraries(operation_second_node ${catkin_LIBRARIES})  
+add_dependencies(operation_second_node operation_gencpp)
 #############
 ## Install ##
 #############
@@ -155,7 +158,7 @@ include_directories(
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS navigation_msgs navigation_msgs_node
+# install(TARGETS operation operation_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -180,14 +183,10 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_navigation_msgs.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_operation.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-
-
-
-
