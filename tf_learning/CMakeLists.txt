@@ -257,3 +257,11 @@ add_dependencies(nw_tf_listener ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXP
 target_link_libraries(nw_tf_listener
   ${catkin_LIBRARIES}
 )
+
+add_executable(nw_listener
+  src/nw_listener.cpp
+)
+add_dependencies(nw_listener ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(nw_listener
+  ${catkin_LIBRARIES}
+)

@@ -45,7 +45,7 @@ void Scan_info::scancallback(const sensor_msgs::LaserScanConstPtr& msg){
         const int num=msg->ranges.size();
         basic_msgs::points test_msg;
         Scan_info::laser_point_vector.data.clear();
-        ROS_INFO(" laser num: %d\n", num);
+        // ROS_INFO(" laser num: %d\n", num);
         for (int i=0;i<num;i=i+5){
             float range;
         if (msg->ranges[i]>3.0){range=0.0;}
@@ -57,17 +57,9 @@ void Scan_info::scancallback(const sensor_msgs::LaserScanConstPtr& msg){
         test_msg.y=range*sin(sigma-3*pi/4);
         
         Scan_info::laser_point_vector.data.push_back(test_msg);
-        // Scan_info::laser_point_vector.push_back(test_msg);
-        // v.push_back(float(test_msg.x));
-        
 
         }
-        // scan_pub.publish(Scan_info::laser_point_vector);
 
-        //    ROS_INFO("number of laser scans:%ld\n",sizeof(msg->ranges));
-    //    static float n=0.5;
-    //    n=n+0.5;
-    //    Scan_info::laser_point.point.x=n;
 
      } 
 
@@ -81,9 +73,9 @@ void transformPoint(const tf::TransformListener& listener, geometry_msgs::PointS
     laser_point.header.frame_id = "base_link";
     int num=laser_point_vector.data.size();
     
-    ROS_INFO("Num:%d",num);
+    
     for (int i=0;i<num;i++){
-     cout<<laser_point_vector.data[i]<<endl;
+    //  cout<<laser_point_vector.data[i]<<endl;
 
     
     
@@ -95,7 +87,7 @@ void transformPoint(const tf::TransformListener& listener, geometry_msgs::PointS
     
 
     //just an arbitrary point in space
-    ROS_INFO("laser point.x:%f",laser_point.point.x);
+    // ROS_INFO("laser point.x:%f",laser_point.point.x);
     laser_point.point.x = laser_point_vector.data[i].x;
 
     laser_point.point.y = laser_point_vector.data[i].y;
@@ -113,11 +105,11 @@ void transformPoint(const tf::TransformListener& listener, geometry_msgs::PointS
     point.y=base_point.point.y*20;
    
     laser_point_picture_vector.data.push_back(point);
-    ROS_INFO(" base_footprint: (%.2f, %.2f. %.2f) -----> picture_frame: (%.2f, %.2f, %.2f) at time %.2f",
+    // ROS_INFO(" base_footprint: (%.2f, %.2f. %.2f) -----> picture_frame: (%.2f, %.2f, %.2f) at time %.2f",
 
-        laser_point.point.x, laser_point.point.y, laser_point.point.z,
+    //     laser_point.point.x, laser_point.point.y, laser_point.point.z,
 
-        base_point.point.x, base_point.point.y, base_point.point.z, base_point.header.stamp.toSec());
+    //     base_point.point.x, base_point.point.y, base_point.point.z, base_point.header.stamp.toSec());
 
     flag=true;
     }
@@ -161,12 +153,7 @@ int main(int argc, char** argv){
     ros::Rate r(1);
    while (ros::ok()){
        if(flag=true){
-    ROS_INFO("before");
 
-    ROS_INFO("after");
-    // for(int i=1;i<2;i++){
-    //     ROS_INFO("i: %d, %lf, %lf",i,scaninfo->laser_point_vector.data[i].x,scaninfo->laser_point_vector.data[i].y);
-    // }
     scan_pub.publish(scaninfo->laser_point_vector);
     laser_pub.publish(scaninfo->laser_point_picture_vector);
 

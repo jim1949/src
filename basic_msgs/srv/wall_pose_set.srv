@@ -1,4 +1,4 @@
-basic_msgs/nav_pose nav_pose
+basic_msgs/wall_pose wall_pose
 ---
 float64[] data
 string errormsg
