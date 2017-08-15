@@ -209,3 +209,11 @@ add_dependencies(grid_pose_solver ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_E
 target_link_libraries(grid_pose_solver
   ${catkin_LIBRARIES}
 )
+
+add_executable(startup
+  src/startup.cpp
+)
+add_dependencies(startup ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(startup
+  ${catkin_LIBRARIES}
+)

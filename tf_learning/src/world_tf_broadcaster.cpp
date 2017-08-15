@@ -1,7 +1,10 @@
+//broadcaste the picture frame.
+
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
 #include <nav_msgs/MapMetaData.h>
+
 #define pi 3.1415926
 
 int map_height;
@@ -29,14 +32,14 @@ ROS_INFO("%lf,%lf,%lf,%lf,%lf,%lf,%lf,%d",origin_x,origin_y,origin_z,q_x,q_y,q_z
 int main(int argc, char** argv){
   ros::init(argc, argv, "my_tf_broadcaster");
   ros::NodeHandle node;
-
+  ROS_INFO("start:world_tf_broadcaster.");
   ros::Subscriber sub = node.subscribe("map_metadata", 1000, chatterCallback);
   tf::TransformBroadcaster br;
   
 
 
  
-  ros::Rate rate(20.0);
+  ros::Rate rate(10.0);
   while (node.ok()){
     if(flag){
     tf::Transform transform;

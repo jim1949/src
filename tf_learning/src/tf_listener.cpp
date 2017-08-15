@@ -1,5 +1,5 @@
 
-
+// publish the pose of lasers in the picture frame.
 #include <ros/ros.h>
 
 #include <geometry_msgs/PointStamped.h>
@@ -46,12 +46,12 @@ void Scan_info::scancallback(const sensor_msgs::LaserScanConstPtr& msg){
         basic_msgs::points test_msg;
         Scan_info::laser_point_vector.data.clear();
         // ROS_INFO(" laser num: %d\n", num);
-        for (int i=0;i<num;i=i+5){
+        for (int i=0;i<num;i=i+45){
             float range;
         if (msg->ranges[i]>3.0){range=0.0;}
         else {range=msg->ranges[i];}
         // printf("ranges:[%d]%f, ",i,msg->ranges[i]);
-        float sigma=1.5*i/5*pi/216;
+        float sigma=1.5*i*pi/1081;
         test_msg.x=range*cos(sigma-3*pi/4);
        
         test_msg.y=range*sin(sigma-3*pi/4);

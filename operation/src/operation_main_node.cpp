@@ -1,4 +1,18 @@
 // as a operation server to monitor everything happened on the robot.
+/*
+should be the monitor of mapping status:
+1.need set mapsaver_bringup_path,mapsaver_stop_path.
+2.service(mapping_status):
+  0)start mapping
+      mapsaver_bringup.sh(start map_server launch file. tf_learning :start publish laser and robot pose to\
+      the map.)
+  1)pause mapping(stop tf_learning.)
+  2)stop mapping(stop map_server.transfer the map folder to another folder with unique id.)
+
+
+
+
+*/
 #include "ros/ros.h"  
 #include "operation/mapping_status.h" 
 #include <stdlib.h> 
@@ -11,7 +25,7 @@
 int parameter=-1;
 pthread_t id;
 int i,ret;
-std::string mapsaver_bringup_path,mapsaver_stop_path;
+std::string mapsaver_bringup_path,mapsaver_pause_path,mapsaver_stop_path;
 
 struct Param{
 int type;
@@ -26,25 +40,28 @@ ROS_INFO("type: %d",param->type);
 
 std::string sh="sh ";
 std::string bringup=sh+mapsaver_bringup_path;
+std::string pause=sh+mapsaver_pause_path;
 std::string stop=sh+mapsaver_stop_path;
 std::cout<<stop;
 
 if (param->type==-1) {
   ROS_INFO("-1");
+  ROS_INFO("wrong input for build the map.");
 
 } 
 if (param->type==0) {
- ROS_INFO("0");
+ ROS_INFO("start to build the map ...");
 
   system(bringup.c_str());
    }
 
 else if(param->type==1) {
-  ROS_INFO("1");
-
+  ROS_INFO("pause the map ...");
+  system(pause.c_str());
 }
 else if (param->type==2){
   system(stop.c_str());
+  
 
 
 }
@@ -107,8 +124,9 @@ int main(int argc, char **argv)
    ros::NodeHandle n;
    
    ros::ServiceServer service = n.advertiseService("/mapping_status", server); 
-   ros::param::param<std::string>("mapsaver_bringup_path",mapsaver_bringup_path,"/home/jimmy/jimmy_catkin_ws/src/operation/src/mapsaver_bringup.sh");
-   ros::param::param<std::string>("mapsaver_stop_path",mapsaver_stop_path,"/home/jimmy/jimmy_catkin_ws/src/operation/src/mapsaver_stop.sh");
+   ros::param::param<std::string>("mapsaver_bringup_path",mapsaver_bringup_path,"/home/jimmy/api_ws/src/operation/src/mapsaver_bringup.sh");
+   ros::param::param<std::string>("mapsaver_pause_path",mapsaver_pause_path,"/home/jimmy/api_ws/src/operation/src/mapsaver_pause.sh");
+   ros::param::param<std::string>("mapsaver_stop_path",mapsaver_stop_path,"/home/jimmy/api_ws/src/operation/src/mapsaver_stop.sh");
      
    ROS_INFO("Provide service which can be called to tell the server to start mapping, pause, or stop.");  
    printf("now we are in parent progress");

@@ -4,6 +4,8 @@
 #include <turtlesim/Spawn.h>
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PointStamped.h>
+
+
 #define pi 3.1415926
 
 
@@ -54,12 +56,13 @@ int main(int argc, char** argv){
   ros::Rate rate(1.0);
   while (node.ok()){
     tf::StampedTransform transform_listener;
-
+    static int i=0;
     try {
         listener.waitForTransform("/picture_frame", "/base_footprint", ros::Time(0), ros::Duration(10.0) );
         listener.lookupTransform("/picture_frame", "/base_footprint", ros::Time(0), transform_listener);
     } catch (tf::TransformException ex) {
-        ROS_ERROR("%s",ex.what());
+        i=i+1;
+        ROS_ERROR("%d: %s",i, ex.what());
         ros::Duration(1.0).sleep();
         continue;
 }
