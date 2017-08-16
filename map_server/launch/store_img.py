@@ -25,44 +25,45 @@ import time
 
 def listener():
     
-    rospy.init_node('talker', anonymous=True)
+    rospy.init_node('convertimg', anonymous=True)
     rate = rospy.Rate(10) # 10hz
-    x0=341.47684
-    y0=348.20615
-    #x
-    grid_length=800.0
-    #y
-    grid_width=544.0
-    android_length=3200
-    android_width=2176
-    resolution=0.05
+    # rospy.sleep(3)
+    convert()
+    rospy.loginfo("finished!")
+    return 0
 
-    factor=grid_width/android_width
-    factor=1
-    print factor
-    init_y=-grid_width*resolution+y0*factor*resolution
-    init_x=-x0*factor*resolution
-    print "init_x:",init_x, "init_y: ", init_y
-    # with open(arg+'map.json','w') as fw:
-    #     fw.write(json.dumps(map_json,sort_keys=True,indent=4, separators=(',', ': ')))
-
-    # sub = rospy.Subscriber("map_status", Int32, convert)
-    rospy.spin()
-
-def convert(data):
+def convert():
     arg="map_test"
-    if len(sys.argv)>1:
-        arg=sys.argv[1]
-    print(arg)
+    #need two arg. first is the path(default is /var/www/maps), the second is the unique id of the map. The third is the name of the map.
+    if len(sys.argv)>3:
+        folder_path=sys.argv[1]#id
+        map_id=sys.argv[2]
+        map_name=sys.argv[3]
+
+    arg=folder_path+'/'+map_id+'/'+map_id
+    rospy.loginfo(arg+".pgm")
+
+    #save pgm to jpg,jpeg.
     im=Image.open(arg+".pgm")
-    print("test") 
     im.save(arg+".jpg")
     im.save(arg+".jpeg")
 
+    
+    #read yaml
     fr_yaml=open(arg+'.yaml','r')
     x=yaml.load(fr_yaml)
+    data=x
 
-    rospy.loginfo(x['origin'][1])
+    fr_yaml.close()
+
+    #rewrite yaml path
+    fw_yaml=open(arg+'.yaml','w')
+    path=arg+'.yaml'
+    rospy.loginfo(path)
+    data['image']=path
+    yaml.dump(data,fw_yaml)
+    fw_yaml.close()
+
 
     pic_size=im.size
     x_size=pic_size[0]
@@ -78,13 +79,15 @@ def convert(data):
         'originY': x['origin'][2],
         'resolution': x['resolution']},
     'obstacleFileName' : "unknown.json",
-    'name': arg,
-   
+    'name': map_name,
+    'id': map_id,
+    'path': folder_path,   
     'pgmFileName' : arg+'.pgm',
-    'pngFileName' : arg+'.png',
+    'jpgFileName' : arg+'.jpg',
+    'jpegFileName' : arg+'.jpeg',
     'yamlFileName' : arg+'.yaml',
     }
-    with open(arg+'map.json','w') as fw:
+    with open(arg+'.json','w') as fw:
         fw.write(json.dumps(map_json,sort_keys=True,indent=4, separators=(',', ': ')))
 
 

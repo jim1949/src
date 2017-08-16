@@ -29,6 +29,9 @@ std::string mapsaver_bringup_path,mapsaver_pause_path,mapsaver_stop_path;
 
 struct Param{
 int type;
+std::string map_path;
+std::string map_name;
+std::string map_id;
 
 };
 
@@ -41,7 +44,7 @@ ROS_INFO("type: %d",param->type);
 std::string sh="sh ";
 std::string bringup=sh+mapsaver_bringup_path;
 std::string pause=sh+mapsaver_pause_path;
-std::string stop=sh+mapsaver_stop_path;
+std::string stop=sh+mapsaver_stop_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
 std::cout<<stop;
 
 if (param->type==-1) {
@@ -76,6 +79,9 @@ bool server(operation::mapping_status::Request &req, operation::mapping_status::
 {
 Param *param=new Param();
 param->type=req.data;
+param->map_name=req.map_name;
+param->map_id=req.map_id;
+param->map_path=req.map_path;
 ret=pthread_create(&id,NULL,thread,param);
 if(ret!=0){
 printf ("Create pthread error!\n");

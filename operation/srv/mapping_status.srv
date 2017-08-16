@@ -1,5 +1,7 @@
 int32 data
-
+string map_id
+string map_name
+string map_path
 ---
 float64[] data
 string errormsg

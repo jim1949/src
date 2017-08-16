@@ -25,7 +25,7 @@ import time
 
 def listener():
     
-    rospy.init_node('talker', anonymous=True)
+    rospy.init_node('convertimg', anonymous=True)
     rate = rospy.Rate(10) # 10hz
     # rospy.sleep(3)
     
