@@ -177,7 +177,7 @@ int main(int argc, char** argv)
 
   if(*mapname.rbegin() == '/')
     mapname += "map";
-  ROS_INFO(mapname.c_str());
+  ROS_INFO("%s",mapname.c_str());
 
   
   MapGenerator mg(mapname);
