@@ -62,7 +62,7 @@ int main(int argc, char** argv){
         listener.lookupTransform("/picture_frame", "/base_footprint", ros::Time(0), transform_listener);
     } catch (tf::TransformException ex) {
         i=i+1;
-        ROS_ERROR("%d: %s",i, ex.what());
+        if (i>1) ROS_ERROR("%d: %s",i, ex.what());
         ros::Duration(1.0).sleep();
         continue;
 }
