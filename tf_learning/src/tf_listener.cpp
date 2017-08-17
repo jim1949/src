@@ -51,7 +51,7 @@ void Scan_info::scancallback(const sensor_msgs::LaserScanConstPtr& msg){
         if (msg->ranges[i]>3.0){range=0.0;}
         else {range=msg->ranges[i];}
         // printf("ranges:[%d]%f, ",i,msg->ranges[i]);
-        float sigma=1.5*i*pi/1081;
+        float sigma=1.5*i*pi/num;
         test_msg.x=range*cos(sigma-3*pi/4);
        
         test_msg.y=range*sin(sigma-3*pi/4);
