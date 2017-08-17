@@ -46,7 +46,7 @@ void Scan_info::scancallback(const sensor_msgs::LaserScanConstPtr& msg){
         basic_msgs::points test_msg;
         Scan_info::laser_point_vector.data.clear();
         // ROS_INFO(" laser num: %d\n", num);
-        for (int i=0;i<num;i=i+45){
+        for (int i=0;i<num;i=i+1){
             float range;
         if (msg->ranges[i]>3.0){range=0.0;}
         else {range=msg->ranges[i];}
