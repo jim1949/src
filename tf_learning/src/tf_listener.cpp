@@ -52,9 +52,9 @@ void Scan_info::scancallback(const sensor_msgs::LaserScanConstPtr& msg){
         else {range=msg->ranges[i];}
         // printf("ranges:[%d]%f, ",i,msg->ranges[i]);
         float sigma=i*pi/num;
-        test_msg.x=range*sin(sigma);
+        test_msg.x=range*cos(sigma-pi/2);
        
-        test_msg.y=range*cos(sigma);
+        test_msg.y=range*sin(sigma-pi/2);
         
         Scan_info::laser_point_vector.data.push_back(test_msg);
 
