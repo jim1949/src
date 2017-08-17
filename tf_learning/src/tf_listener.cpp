@@ -137,7 +137,7 @@ int main(int argc, char** argv){
     int i=1;
     tf::TransformListener listener(ros::Duration(10));
     // geometry_msgs::PointStamped laser_point;
-    ros::Subscriber scan_sub=n.subscribe("base_scan",100,&Scan_info::scancallback,scaninfo);
+    ros::Subscriber scan_sub=n.subscribe("scan",100,&Scan_info::scancallback,scaninfo);
     ros::Publisher scan_pub=n.advertise<basic_msgs::laser_points>("laser_points",1000);
     ros::Publisher laser_pub=n.advertise<basic_msgs::laser_points>("laser_pose_picture",1000);
    
