@@ -17,17 +17,120 @@ nav_pose_set.srv:
 #include <ros/ros.h>
 #include <basic_msgs/nav_pose_set.h>
 #include <basic_msgs/wall_pose_set.h>
+#include <geometry_msgs/Pose.h>
 #include <tf/transform_listener.h>
 #include <stdio.h>
+#include <json/json.h>
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
 
+
+#pragma comment(lib, "json_mtd.lib")
+ 
+#include <cstdio>
+using namespace std; 
+Json::Value transfer_json(basic_msgs::nav_pose_set::Request &req){
+    Json::Value root;
+    int map_id=req.nav_pose.mapid;
+    string map_name=req.nav_pose.mapname;
+    int nav_id=req.nav_pose.id;
+    string nav_name=req.nav_pose.name;
+    geometry_msgs::Pose nav_pose=req.nav_pose.worldposition;
+    
+    int type=req.nav_pose.type;
+    root["type"]=type;
+    root["map_id"]=map_id;
+    root["map_name"]=map_name;
+    root["nav_id"]=nav_id;
+    root["nav_name"]=nav_name;
+    root["nav_pose"]["position"]["x"]=nav_pose.position.x;
+    root["nav_pose"]["position"]["y"]=nav_pose.position.y;
+    root["nav_pose"]["position"]["z"]=nav_pose.position.z;
+
+    root["nav_pose"]["orientation"]["x"]=nav_pose.orientation.x;
+    root["nav_pose"]["orientation"]["y"]=nav_pose.orientation.y;
+    root["nav_pose"]["orientation"]["z"]=nav_pose.orientation.z;
+    root["nav_pose"]["orientation"]["w"]=nav_pose.orientation.w;
+    return root;
+
+}
+void delete_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
+    ofstream ofs; 
+    string path="/var/www/nav_manager/";
+    char file_id[4],mapfile_id[4];
+    sprintf(file_id,"%d",req.nav_pose.id);
+    sprintf(mapfile_id,"%d",req.nav_pose.mapid);
+
+    string folder_build_command="rm "+path+mapfile_id+"/nav_pose/"+file_id+".json";
+    system(folder_build_command.c_str());
+}
+
+void add_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
+    ofstream ofs; 
+    string path="/var/www/nav_manager/";
+    char file_id[4],mapfile_id[4];
+    sprintf(file_id,"%d",req.nav_pose.id);
+    sprintf(mapfile_id,"%d",req.nav_pose.mapid);
+
+    string json_path=path+"/"+mapfile_id+"/nav_pose/"+file_id+".json";
+    string folder_build_command="mkdir -p "+path+"/"+mapfile_id+"/nav_pose/";
+    system(folder_build_command.c_str());
+    ofs.open(json_path.c_str());
+    ofs<<root.toStyledString();
+    ofs.close();
+}
+
+void update_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
+    ofstream ofs; 
+    string path="/var/www/nav_manager/";
+    char file_id[4],mapfile_id[4];
+    sprintf(file_id,"%d",req.nav_pose.id);
+    sprintf(mapfile_id,"%d",req.nav_pose.mapid);
+
+    // There is a bug here, when we don't have the file, and update it, we will create a new file. But personally, I don't think this will be a problem.
+    string json_path=path+mapfile_id+"/nav_pose/"+file_id+".json";
+    string folder_build_command="rm "+json_path;
+    system(folder_build_command.c_str());
+
+    ofs.open(json_path.c_str());
+    ofs<<root.toStyledString();
+    ofs.close();
+    
+
+}
 
 bool nav_server(basic_msgs::nav_pose_set::Request &req, basic_msgs::nav_pose_set::Response &res){
-ROS_INFO("I got the message!");
-ROS_INFO("name:%s",req.nav_pose.name.c_str());
-char s[200];
-sprintf(s,"got the message! pose.x: %f",req.nav_pose.worldposition.position.x);
-res.errormsg=s;
-return true;
+    ROS_INFO("I got the message!");
+    ROS_INFO("name:%s",req.nav_pose.name.c_str());
+    Json::Value root;
+    char s[200];
+
+    root=transfer_json(req);
+    // 1:delete,2:add,3:update.
+    if (root["type"]==1)
+    {
+        delete_json(req,root);
+        sprintf(s,"got the delete message! pose.x: %f",req.nav_pose.worldposition.position.x);
+        
+    }
+    else if(root["type"]==2){
+        add_json(req,root);
+        sprintf(s,"got the add message! pose.x: %f",req.nav_pose.worldposition.position.x);
+    }
+    else if(root["type"]==3){
+        update_json(req,root);
+        sprintf(s,"got the update message! pose.x: %f",req.nav_pose.worldposition.position.x);
+    }
+    else{
+        sprintf(s,"wrong type for type=0");
+    }
+
+    // ----response
+    
+    
+    res.errormsg=s;
+    return true;
 
 }
 
@@ -49,6 +152,26 @@ ros::init(argc, argv, "nav_and_wall_positions_node");
 ros::NodeHandle n;
 ros::ServiceServer nav_service=n.advertiseService("/nav_pose_set",nav_server);
 ros::ServiceServer wall_service=n.advertiseService("/wall_pose_set",wall_server);
+
+Json::Value root;
+Json::FastWriter writer;
+Json::Value person;
+
+person["name"] = "hello world";
+person["age"] = 100;
+root.append(person);
+
+ofstream ofs;
+ofs.open("/home/jimmy/api_ws/src/tf_learning/src/test1.json");
+ofs<<root.toStyledString();
+ofs.close();
+
+// std::string json_file = writer.write(root);
+// FILE* yaml = fopen("Test.json", "w");
+// fprintf(yaml, json_file);
+
+// fclose(yaml);
+
 ros::spin();
 return 0;
 }

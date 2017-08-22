@@ -263,7 +263,7 @@ add_executable(nw_listener
 )
 add_dependencies(nw_listener ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(nw_listener
-  ${catkin_LIBRARIES}
+  ${catkin_LIBRARIES} jsoncpp
 )
 
 add_executable(nw_callservice
@@ -272,4 +272,12 @@ add_executable(nw_callservice
 add_dependencies(nw_callservice ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(nw_callservice
   ${catkin_LIBRARIES}
+)
+
+add_executable(jsontest
+  src/jsontest.cpp
+)
+add_dependencies(jsontest ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(jsontest
+  ${catkin_LIBRARIES} jsoncpp
 )
