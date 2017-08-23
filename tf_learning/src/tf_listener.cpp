@@ -100,6 +100,7 @@ void transformPoint(const tf::TransformListener& listener, geometry_msgs::PointS
 
     geometry_msgs::PointStamped base_point;
     basic_msgs::points point;
+    listener.waitForTransform("picture_frame", "base_link", ros::Time(), ros::Duration(10.0) );
     listener.transformPoint("picture_frame", laser_point, base_point);
     point.x=base_point.point.x*20;
     point.y=base_point.point.y*20;

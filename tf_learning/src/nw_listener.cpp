@@ -44,7 +44,7 @@ geometry_msgs::Pose transform_point(geometry_msgs::Pose &nav_pose_picture){
     navpose_picture.point=nav_pose_picture.position;
     flag=false;
     try{
-
+    listener.waitForTransform("picture_frame", "map", ros::Time(), ros::Duration(10.0) );
     listener.transformPoint("/map", navpose_picture, navpose);
     flag=true;
     }
