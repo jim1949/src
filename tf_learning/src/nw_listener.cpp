@@ -18,6 +18,7 @@ nav_pose_set.srv:
 #include <basic_msgs/nav_pose_set.h>
 #include <basic_msgs/wall_pose_set.h>
 #include <geometry_msgs/Pose.h>
+#include <geometry_msgs/PointStamped.h>
 #include <tf/transform_listener.h>
 #include <stdio.h>
 #include <json/json.h>
@@ -26,17 +27,48 @@ nav_pose_set.srv:
 #include <cstdlib>
 
 
+
 #pragma comment(lib, "json_mtd.lib")
  
 #include <cstdio>
 using namespace std; 
+bool flag=false;
+geometry_msgs::Pose transform_point(geometry_msgs::Pose &nav_pose_picture){
+    
+    tf::TransformListener listener;
+    geometry_msgs::PointStamped navpose_picture;
+    geometry_msgs::PointStamped navpose;
+    geometry_msgs::Pose nav_pose;
+    navpose_picture.header.frame_id="picture_frame";
+    navpose_picture.header.stamp=ros::Time();
+    navpose_picture.point=nav_pose_picture.position;
+    flag=false;
+    try{
+
+    listener.transformPoint("map", navpose_picture, navpose);
+    flag=true;
+    }
+    catch(tf::TransformException& ex){
+    flag=false;
+    ROS_ERROR("Received an exception trying to transform a point from \"picture_frame\" to \"map\": %s", ex.what());
+    }
+
+    nav_pose.position=navpose.point;
+    nav_pose.orientation=nav_pose_picture.orientation;
+
+    return nav_pose;
+
+
+}
 Json::Value transfer_json(basic_msgs::nav_pose_set::Request &req){
     Json::Value root;
     int map_id=req.nav_pose.mapid;
     string map_name=req.nav_pose.mapname;
     int nav_id=req.nav_pose.id;
     string nav_name=req.nav_pose.name;
-    geometry_msgs::Pose nav_pose=req.nav_pose.worldposition;
+    geometry_msgs::Pose nav_pose_picture=req.nav_pose.worldposition;
+
+    geometry_msgs::Pose nav_pose=transform_point(nav_pose_picture);
     
     int type=req.nav_pose.type;
     root["type"]=type;
@@ -95,8 +127,7 @@ void update_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
 
     ofs.open(json_path.c_str());
     ofs<<root.toStyledString();
-    ofs.close();
-    
+    ofs.close();    
 
 }
 
@@ -127,8 +158,7 @@ bool nav_server(basic_msgs::nav_pose_set::Request &req, basic_msgs::nav_pose_set
     }
 
     // ----response
-    
-    
+     
     res.errormsg=s;
     return true;
 
