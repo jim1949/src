@@ -60,7 +60,7 @@ geometry_msgs::Pose transform_point(geometry_msgs::Pose &nav_pose_picture){
 
 
 }
-Json::Value transfer_json(basic_msgs::nav_pose_set::Request &req){
+Json::Value transfer_nav_json(basic_msgs::nav_pose_set::Request &req){
     Json::Value root;
     int map_id=req.nav_pose.mapid;
     string map_name=req.nav_pose.mapname;
@@ -87,7 +87,7 @@ Json::Value transfer_json(basic_msgs::nav_pose_set::Request &req){
     return root;
 
 }
-void delete_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
+void delete_nav_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
     ofstream ofs; 
     string path="/var/www/nav_manager/";
     char file_id[4],mapfile_id[4];
@@ -98,7 +98,7 @@ void delete_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
     system(folder_build_command.c_str());
 }
 
-void add_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
+void add_nav_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
     ofstream ofs; 
     string path="/var/www/nav_manager/";
     char file_id[4],mapfile_id[4];
@@ -113,7 +113,7 @@ void add_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
     ofs.close();
 }
 
-void update_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
+void update_nav_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
     ofstream ofs; 
     string path="/var/www/nav_manager/";
     char file_id[4],mapfile_id[4];
@@ -131,26 +131,67 @@ void update_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
 
 }
 
+void delete_wall_json(basic_msgs::wall_pose_set::Request &req,Json::Value root){
+    ofstream ofs; 
+    string path="/var/www/nav_manager/";
+    char file_id[4],mapfile_id[4];
+    sprintf(file_id,"%d",req.wall_pose.id);
+    sprintf(mapfile_id,"%d",req.wall_pose.mapid);
+
+    string folder_build_command="rm "+path+mapfile_id+"/wall_pose/"+file_id+".json";
+    system(folder_build_command.c_str());
+}
+void add_wall_json(basic_msgs::wall_pose_set::Request &req,Json::Value root){
+    ofstream ofs; 
+    string path="/var/www/nav_manager/";
+    char file_id[4],mapfile_id[4];
+    sprintf(file_id,"%d",req.wall_pose.id);
+    sprintf(mapfile_id,"%d",req.wall_pose.mapid);
+
+    string json_path=path+"/"+mapfile_id+"/wall_pose/"+file_id+".json";
+    string folder_build_command="mkdir -p "+path+"/"+mapfile_id+"/wall_pose/";
+    system(folder_build_command.c_str());
+    ofs.open(json_path.c_str());
+    ofs<<root.toStyledString();
+    ofs.close();
+}
+void update_wall_json(basic_msgs::wall_pose_set::Request &req,Json::Value root){
+    ofstream ofs; 
+    string path="/var/www/nav_manager/";
+    char file_id[4],mapfile_id[4];
+    sprintf(file_id,"%d",req.wall_pose.id);
+    sprintf(mapfile_id,"%d",req.wall_pose.mapid);
+
+    // There is a bug here, when we don't have the file, and update it, we will create a new file. But personally, I don't think this will be a problem.
+    string json_path=path+mapfile_id+"/wall_pose/"+file_id+".json";
+    string folder_build_command="rm "+json_path;
+    system(folder_build_command.c_str());
+
+    ofs.open(json_path.c_str());
+    ofs<<root.toStyledString();
+    ofs.close();   
+}
+
 bool nav_server(basic_msgs::nav_pose_set::Request &req, basic_msgs::nav_pose_set::Response &res){
-    ROS_INFO("I got the message!");
+    ROS_INFO("I got the nav_pose message!");
     ROS_INFO("name:%s",req.nav_pose.name.c_str());
     Json::Value root;
     char s[200];
 
-    root=transfer_json(req);
+    root=transfer_nav_json(req);
     // 1:delete,2:add,3:update.
     if (root["type"]==1)
     {
-        delete_json(req,root);
+        delete_nav_json(req,root);
         sprintf(s,"got the delete message! pose.x: %f",req.nav_pose.worldposition.position.x);
         
     }
     else if(root["type"]==2){
-        add_json(req,root);
+        add_nav_json(req,root);
         sprintf(s,"got the add message! pose.x: %f",req.nav_pose.worldposition.position.x);
     }
     else if(root["type"]==3){
-        update_json(req,root);
+        update_nav_json(req,root);
         sprintf(s,"got the update message! pose.x: %f",req.nav_pose.worldposition.position.x);
     }
     else{
@@ -166,15 +207,35 @@ bool nav_server(basic_msgs::nav_pose_set::Request &req, basic_msgs::nav_pose_set
 
 
 bool wall_server(basic_msgs::wall_pose_set::Request &req,basic_msgs::wall_pose_set::Response &res){
-ROS_INFO("I got the message!");
-ROS_INFO("name:%s",req.wall_pose.name.c_str());
-char s[200];
-ROS_INFO("x :%f",req.wall_pose.worldposition[0].position.x); 
-ROS_INFO("x :%f",req.wall_pose.worldposition[1].position.x); 
-ROS_INFO("x :%f",req.wall_pose.worldposition[2].position.x); 
-sprintf(s,"got the message! pose[0].x: %f, pose[1].x: %f",req.wall_pose.worldposition[0].position.x, req.wall_pose.worldposition[1].position.x);
-res.errormsg=s;
-return true;
+    ROS_INFO("I got the wall_pose message!");
+    ROS_INFO("name:%s",req.wall_pose.name.c_str());
+    Json::Value root;
+    char s[200];
+
+    root=transfer_wall_json(req);
+    // 1:delete,2:add,3:update.
+    if (root["type"]==1)
+    {
+        delete_wall_json(req,root);
+        sprintf(s,"got the delete message! ");
+        
+    }
+    else if(root["type"]==2){
+        add_wall_json(req,root);
+        sprintf(s,"got the add message! ");
+    }
+    else if(root["type"]==3){
+        update_wall_json(req,root);
+        sprintf(s,"got the update message!");
+    }
+    else{
+        sprintf(s,"wrong type for type=0");
+    }
+
+    // ----response
+     
+    res.errormsg=s;
+    return true;
 }
 
 int main(int argc,char **argv){
