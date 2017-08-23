@@ -43,6 +43,7 @@ geometry_msgs::Pose transform_point(geometry_msgs::Pose &nav_pose_picture){
     navpose_picture.header.stamp=ros::Time();
     navpose_picture.point=nav_pose_picture.position;
     flag=false;
+    while(flag==false){
     try{
 
     listener.transformPoint("/map", navpose_picture, navpose);
@@ -52,7 +53,7 @@ geometry_msgs::Pose transform_point(geometry_msgs::Pose &nav_pose_picture){
     flag=false;
     ROS_ERROR("Received an exception trying to transform a point from \"picture_frame\" to \"map\": %s", ex.what());
     }
-
+    }
     nav_pose.position=navpose.point;
     nav_pose.orientation=nav_pose_picture.orientation;
 
