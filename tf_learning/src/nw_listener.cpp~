@@ -39,13 +39,13 @@ geometry_msgs::Pose transform_point(geometry_msgs::Pose &nav_pose_picture){
     geometry_msgs::PointStamped navpose_picture;
     geometry_msgs::PointStamped navpose;
     geometry_msgs::Pose nav_pose;
-    navpose_picture.header.frame_id="/picture_frame";
+    navpose_picture.header.frame_id="picture_frame";
     navpose_picture.header.stamp=ros::Time();
     navpose_picture.point=nav_pose_picture.position;
     flag=false;
     try{
 
-    listener.transformPoint("/map", navpose_picture, navpose);
+    listener.transformPoint("map", navpose_picture, navpose);
     flag=true;
     }
     catch(tf::TransformException& ex){
