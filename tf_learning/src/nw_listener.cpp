@@ -87,6 +87,36 @@ Json::Value transfer_nav_json(basic_msgs::nav_pose_set::Request &req){
     return root;
 
 }
+Json::Value transfer_wall_json(basic_msgs::wall_pose_set::Request &req){
+    // still need to edit...
+    Json::Value root;
+    Json::Value poses;
+    Json::Value pose;
+    int map_id=req.wall_pose.mapid;
+    string map_name=req.wall_pose.mapname;
+    int wall_id=req.wall_pose.id;
+    string wall_name=req.wall_pose.name;
+    int type=req.wall_pose.type;
+    int num=req.wall_pose.worldposition.size();
+    ROS_INFO("size of wall pose is:%d",num);
+    for (int i=0;i<num;i++){
+        pose["x"]=req.wall_pose.worldposition[i].position.x;
+        pose["y"]=req.wall_pose.worldposition[i].position.y;
+        pose["z"]=req.wall_pose.worldposition[i].position.z;
+        poses.append(pose);
+    }
+
+    
+    root["type"]=type;
+    root["map_id"]=map_id;
+    root["map_name"]=map_name;
+    root["wall_id"]=wall_id;
+    root["wall_name"]=wall_name;
+    root["wall_poses"]=poses;
+    return root;
+
+}
+
 void delete_nav_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
     ofstream ofs; 
     string path="/var/www/nav_manager/";
