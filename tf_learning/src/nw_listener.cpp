@@ -41,18 +41,23 @@ geometry_msgs::Pose transform_point(geometry_msgs::Pose &nav_pose_picture){
     geometry_msgs::Pose nav_pose;
     navpose_picture.header.frame_id="/picture_frame";
     navpose_picture.header.stamp=ros::Time();
-    navpose_picture.point=nav_pose_picture.position;
+    navpose_picture.point.x=(nav_pose_picture.position.x)/20;
+    navpose_picture.point.y=(nav_pose_picture.position.y)/20;
+    navpose_picture.point.z=(nav_pose_picture.position.z)/20;
+
     flag=false;
+    while(flag==false){
     try{
     listener.waitForTransform("picture_frame", "map", ros::Time(), ros::Duration(10.0) );
     listener.transformPoint("/map", navpose_picture, navpose);
+    ROS_INFO("transform from a point from picture_frame to map without any error ");
     flag=true;
     }
     catch(tf::TransformException& ex){
     flag=false;
     ROS_ERROR("Received an exception trying to transform a point from \"picture_frame\" to \"map\": %s", ex.what());
     }
-
+    }
     nav_pose.position=navpose.point;
     nav_pose.orientation=nav_pose_picture.orientation;
 
