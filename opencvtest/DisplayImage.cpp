@@ -1,5 +1,7 @@
 #include <cv.h>
 #include <highgui.h>
+// #include "highgui.hpp"
+// #include "opencv2/imgproc/imgproc.hpp"
 
 using namespace cv;
 int main( int argc, char** argv )

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>tf_learning</name>
+  <name>cv_test</name>
   <version>0.0.0</version>
-  <description>The tf_learning package</description>
+  <description>The cv_test package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/tf_learning</url> -->
+  <!-- <url type="website">http://wiki.ros.org/cv_test</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->
@@ -40,19 +40,18 @@
   <!-- Use test_depend for packages you need only for testing: -->
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>roscpp</build_depend>
-  <build_depend>rospy</build_depend>
-  <build_depend>tf</build_depend>
- 
-  <build_depend>turtlesim</build_depend>
+  <build_depend>basic_msgs</build_depend>
   <build_depend>cv_bridge</build_depend>
-
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>image_transport</run_depend>
+  <run_depend>basic_msgs</run_depend>
   <run_depend>cv_bridge</run_depend>
-  <run_depend>turtlesim</run_depend>
-  
   <run_depend>roscpp</run_depend>
-  <run_depend>rospy</run_depend>
-  <run_depend>tf</run_depend>
+  <run_depend>std_msgs</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

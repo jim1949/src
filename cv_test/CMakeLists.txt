@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(tf_learning)
+project(cv_test)
 
 ## Add support for C++11, supported in ROS Kinetic and newer
 # add_definitions(-std=c++11)
@@ -7,17 +7,17 @@ project(tf_learning)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-
+find_package(catkin REQUIRED COMPONENTS
+  basic_msgs
+  cv_bridge
+  roscpp
+  std_msgs
+  image_transport 
+  sensor_msgs
+)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  rospy
-  tf
-  turtlesim
-  cv_bridge
-)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -41,7 +41,7 @@ find_package(catkin REQUIRED COMPONENTS
 ##     * add a run_depend tag for "message_runtime"
 ## * In this file (CMakeLists.txt):
 ##   * add "message_generation" and every package in MSG_DEP_SET to
-
+##     find_package(catkin REQUIRED COMPONENTS ...)
 ##   * add "message_runtime" and every package in MSG_DEP_SET to
 ##     catkin_package(CATKIN_DEPENDS ...)
 ##   * uncomment the add_*_files sections below as needed
@@ -72,10 +72,9 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
-# #   DEPENDENCIES
-#    std_msgs  # Or other packages containing msgs
-#    basic_msgs
-#  )
+#   DEPENDENCIES
+#   basic_msgs#   std_msgs
+# )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -107,10 +106,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  # INCLUDE_DIRS include
-  # LIBRARIES tf_learning
-  # CATKIN_DEPENDS roscpp rospy tf turtlesim 
-  # DEPENDS system_lib
+#  INCLUDE_DIRS include
+#  LIBRARIES cv_test
+#  CATKIN_DEPENDS basic_msgs cv_bridge roscpp std_msgs
+#  DEPENDS system_lib
 )
 
 ###########
@@ -119,25 +118,25 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(include
-$(catkin_INCLUDE_DIRS)
+# include_directories(include)
+include_directories(
+  ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/tf_learning.cpp
+#   src/${PROJECT_NAME}/cv_test.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# 调用同一工作区间自定义消息类型注明依赖关系.
-# add_dependencies(tf_learning basic_msgs_gencpp)
+# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/tf_learning_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/cv_test_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -194,93 +193,24 @@ $(catkin_INCLUDE_DIRS)
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_tf_learning.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_cv_test.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+# //将src中的文件添加成名字为grayImage的可执行文件  
+add_executable(getImage src/getImage.cpp)   
+#  //将相关的库和可执行文件链接 
+target_link_libraries(getImage ${catkin_LIBRARIES})  
+# //给可执行文件添加依赖包
+add_dependencies(getImage cv_test_generate_messages_cpp)    
 
-
-add_executable(turtle_tf_broadcaster
-  src/turtle_tf_broadcaster.cpp
+add_executable(rosopencv
+  src/rosopencv.cpp
 )
-add_dependencies(turtle_tf_broadcaster ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(turtle_tf_broadcaster
+add_dependencies(rosopencv ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(rosopencv
   ${catkin_LIBRARIES}
-)
-
-add_executable(turtle_tf_listener
-  src/turtle_tf_listener.cpp
-)
-add_dependencies(turtle_tf_listener ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(turtle_tf_listener
-  ${catkin_LIBRARIES}
-)
-
-add_executable(frame_tf_broadcaster
-  src/frame_tf_broadcaster.cpp
-)
-add_dependencies(frame_tf_broadcaster ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(frame_tf_broadcaster
-  ${catkin_LIBRARIES}
-)
-
-add_executable(world_tf_broadcaster
-  src/world_tf_broadcaster.cpp
-)
-add_dependencies(world_tf_broadcaster ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(world_tf_broadcaster
-  ${catkin_LIBRARIES}
-)
-
-add_executable(world_tf_listener
-  src/world_tf_listener.cpp
-)
-add_dependencies(world_tf_listener ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(world_tf_listener
-  ${catkin_LIBRARIES}
-)
-
-add_executable(tf_listener
-  src/tf_listener.cpp
-)
-add_dependencies(tf_listener ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(tf_listener
-  ${catkin_LIBRARIES}
-)
-
-add_executable(nw_tf_listener
-  src/nw_tf_listener.cpp
-)
-add_dependencies(nw_tf_listener ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(nw_tf_listener
-  ${catkin_LIBRARIES}
-)
-
-add_executable(nw_listener
-  src/nw_listener.cpp
-)
-add_dependencies(nw_listener ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-link_directories(nw_listener /usr/local/lib)
-target_link_libraries(nw_listener
-  ${catkin_LIBRARIES} jsoncpp
-)
-
-add_executable(nw_callservice
-  src/nw_callservice.cpp
-)
-add_dependencies(nw_callservice ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(nw_callservice
-  ${catkin_LIBRARIES}
-)
-
-add_executable(jsontest
-  src/jsontest.cpp
-)
-add_dependencies(jsontest ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-link_directories(jsontest /usr/local/lib)
-target_link_libraries(jsontest
-  ${catkin_LIBRARIES} jsoncpp
 )
