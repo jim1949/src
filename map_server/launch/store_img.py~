@@ -40,12 +40,13 @@ def convert():
         map_id=sys.argv[2]
         map_name=sys.argv[3]
         arg=folder_path+'/'+map_id+'/'+map_id
-    rospy.loginfo(arg+".pgm")
+        rospy.loginfo(arg+".pgm")
 
     #save pgm to jpg,jpeg.
     im=Image.open(arg+".pgm")
     im.save(arg+".jpg")
     im.save(arg+".jpeg")
+    im.save(arg+"_edit.jpeg")
 
     
     #read yaml

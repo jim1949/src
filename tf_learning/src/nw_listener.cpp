@@ -174,6 +174,7 @@ void delete_wall_json(basic_msgs::wall_pose_set::Request &req,Json::Value root){
     sprintf(mapfile_id,"%d",req.wall_pose.mapid);
 
     string folder_build_command="rm "+path+mapfile_id+"/wall_pose/"+file_id+".json";
+	
     system(folder_build_command.c_str());
 }
 void add_wall_json(basic_msgs::wall_pose_set::Request &req,Json::Value root){
@@ -181,10 +182,13 @@ void add_wall_json(basic_msgs::wall_pose_set::Request &req,Json::Value root){
     string path="/var/www/nav_manager/";
     char file_id[4],mapfile_id[4];
     sprintf(file_id,"%d",req.wall_pose.id);
+    ROS_INFO("mapid:%d",req.wall_pose.mapid);
+    ROS_INFO("mapid:%d",root["map_id"].asInt());
     sprintf(mapfile_id,"%d",req.wall_pose.mapid);
 
-    string json_path=path+"/"+mapfile_id+"/wall_pose/"+file_id+".json";
-    string folder_build_command="mkdir -p "+path+"/"+mapfile_id+"/wall_pose/";
+    string json_path=path+mapfile_id+"/wall_pose/"+file_id+".json";
+    ROS_INFO("wall_pose json_path:%s",json_path.c_str());
+    string folder_build_command="mkdir -p "+path+mapfile_id+"/wall_pose/";
     system(folder_build_command.c_str());
     ofs.open(json_path.c_str());
     ofs<<root.toStyledString();

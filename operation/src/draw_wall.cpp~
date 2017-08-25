@@ -72,12 +72,14 @@ bool server(operation::edit_wall_set::Request &req, operation::edit_wall_set::Re
 
         path="/var/www/maps/"+map_id_path+"/"+map_id_path+"_edit.pgm";
         imwrite(path.c_str(),img);
+        imshow("haha", img);
+        waitKey();
         
     }
 
 
     res.successed=1;
-    return true;
+    exit(1);
 
 }
 int main(int argc, char** argv)
