@@ -200,17 +200,12 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-# //将src中的文件添加成名字为grayImage的可执行文件  
-add_executable(getImage src/getImage.cpp)   
-#  //将相关的库和可执行文件链接 
-target_link_libraries(getImage ${catkin_LIBRARIES})  
-# //给可执行文件添加依赖包
-add_dependencies(getImage cv_test_generate_messages_cpp)    
-
-add_executable(rosopencv
-  src/rosopencv.cpp
-)
-add_dependencies(rosopencv ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(rosopencv
-  ${catkin_LIBRARIES} jsoncpp
-)
+# # //将src中的文件添加成名字为grayImage的可执行文件  
+# add_executable(getImage src/getImage.cpp)   
+# #  //将相关的库和可执行文件链接 
+# target_link_libraries(getImage ${catkin_LIBRARIES})  
+# # //给可执行文件添加依赖包
+# add_dependencies(getImage cv_test_generate_messages_cpp)    
+# target_link_libraries(rosopencv
+#   ${catkin_LIBRARIES} jsoncpp
+# )

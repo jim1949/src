@@ -50,6 +50,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 add_message_files(
   FILES
+  edit_wall.msg
   wallpose_vec.msg
   wall_pose.msg
   laser_points.msg
@@ -68,6 +69,7 @@ add_message_files(
 
 ## Generate services in the 'srv' folder
 add_service_files(FILES
+  edit_wall_set.srv
   wall_pose_set.srv
   nav_pose_set.srv
 )

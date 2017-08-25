@@ -10,6 +10,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   message_generation
   geometry_msgs
+  basic_msgs
+  cv_bridge
 )
 
 ## System dependencies are found with CMake's conventions
@@ -56,6 +58,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
+  edit_wall_set.srv
   mapping_name.srv
   mapping_status.srv
   nav_points_info.srv
@@ -76,6 +79,7 @@ generate_messages(
     DEPENDENCIES 
     std_msgs
     geometry_msgs
+    basic_msgs
 )
 
 ################################################
@@ -110,7 +114,7 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES operation
-  CATKIN_DEPENDS roscpp rospy std_msgs message_runtime geometry_msgs
+  CATKIN_DEPENDS roscpp rospy std_msgs message_runtime geometry_msgs basic_msgs
   DEPENDS system_lib
 )
 
@@ -190,3 +194,12 @@ add_dependencies(operation_second_node operation_gencpp)
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+
+add_executable(draw_wall
+  src/draw_wall.cpp
+)
+add_dependencies(draw_wall ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(draw_wall
+  ${catkin_LIBRARIES} jsoncpp
+)
