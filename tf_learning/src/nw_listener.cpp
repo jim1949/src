@@ -89,6 +89,7 @@ Json::Value transfer_nav_json(basic_msgs::nav_pose_set::Request &req){
     root["nav_pose"]["orientation"]["y"]=nav_pose.orientation.y;
     root["nav_pose"]["orientation"]["z"]=nav_pose.orientation.z;
     root["nav_pose"]["orientation"]["w"]=nav_pose.orientation.w;
+    ROS_INFO("map_id:%d",map_id);
     return root;
 
 }
@@ -282,25 +283,6 @@ ros::init(argc, argv, "nav_and_wall_positions_node");
 ros::NodeHandle n;
 ros::ServiceServer nav_service=n.advertiseService("/nav_pose_set",nav_server);
 ros::ServiceServer wall_service=n.advertiseService("/wall_pose_set",wall_server);
-
-Json::Value root;
-Json::FastWriter writer;
-Json::Value person;
-
-person["name"] = "hello world";
-person["age"] = 100;
-root.append(person);
-
-ofstream ofs;
-ofs.open("/home/jimmy/api_ws/src/tf_learning/src/test1.json");
-ofs<<root.toStyledString();
-ofs.close();
-
-// std::string json_file = writer.write(root);
-// FILE* yaml = fopen("Test.json", "w");
-// fprintf(yaml, json_file);
-
-// fclose(yaml);
 
 ros::spin();
 return 0;
