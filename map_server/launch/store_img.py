@@ -57,7 +57,7 @@ def convert():
     fr_yaml.close()
 
     #rewrite yaml path
-    fw_yaml=open(arg+'.yaml','w')
+    fw_yaml=open(arg+'.pgm','w')
     path=arg+'.yaml'
     rospy.loginfo(path)
     data['image']=path
