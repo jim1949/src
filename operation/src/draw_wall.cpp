@@ -30,7 +30,7 @@ bool server(operation::edit_wall_set::Request &req, operation::edit_wall_set::Re
     ss<<map_id;
     ss>>map_id_path;
     ss.str("");
-    path="/var/www/maps/"+map_id_path+"/"+map_id_path+".pgm";
+    path="/var/www/maps/"+map_id_path+"/"+map_id_path+"_bk.pgm";
    
     // read the map file.
     Mat img = imread(path.c_str(),0); 
@@ -70,7 +70,7 @@ bool server(operation::edit_wall_set::Request &req, operation::edit_wall_set::Re
             fillPoly(img,ppt,npt,1,Scalar(0));
             }
 
-        path="/var/www/maps/"+map_id_path+"/"+map_id_path+"_edit.pgm";
+        path="/var/www/maps/"+map_id_path+"/"+map_id_path+".pgm";
         imwrite(path.c_str(),img);
         
     }

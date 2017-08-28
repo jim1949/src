@@ -46,7 +46,7 @@ def convert():
     im=Image.open(arg+".pgm")
     im.save(arg+".jpg")
     im.save(arg+".jpeg")
-    im.save(arg+"_edit.pgm")
+    im.save(arg+"_bk.pgm")
 
     
     #read yaml
