@@ -89,6 +89,7 @@ Json::Value transfer_nav_json(basic_msgs::nav_pose_set::Request &req){
     root["nav_pose"]["orientation"]["y"]=nav_pose.orientation.y;
     root["nav_pose"]["orientation"]["z"]=nav_pose.orientation.z;
     root["nav_pose"]["orientation"]["w"]=nav_pose.orientation.w;
+    ROS_INFO("map_id:%d",map_id);
     return root;
 
 }
@@ -139,9 +140,10 @@ void add_nav_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
     char file_id[4],mapfile_id[4];
     sprintf(file_id,"%d",req.nav_pose.id);
     sprintf(mapfile_id,"%d",req.nav_pose.mapid);
-
-    string json_path=path+"/"+mapfile_id+"/nav_pose/"+file_id+".json";
+    ROS_INFO("mapfile_id:%d",req.nav_pose.mapid);
+    string json_path=path+mapfile_id+"/nav_pose/"+file_id+".json";
     string folder_build_command="mkdir -p "+path+"/"+mapfile_id+"/nav_pose/";
+    ROS_INFO("%s",folder_build_command.c_str());
     system(folder_build_command.c_str());
     ofs.open(json_path.c_str());
     ofs<<root.toStyledString();
@@ -186,7 +188,7 @@ void add_wall_json(basic_msgs::wall_pose_set::Request &req,Json::Value root){
     ROS_INFO("mapid:%d",root["map_id"].asInt());
     sprintf(mapfile_id,"%d",req.wall_pose.mapid);
 
-    string json_path=path+"/"+mapfile_id+"/wall_pose/"+file_id+".json";
+    string json_path=path+mapfile_id+"/wall_pose/"+file_id+".json";
     ROS_INFO("wall_pose json_path:%s",json_path.c_str());
     string folder_build_command="mkdir -p "+path+mapfile_id+"/wall_pose/";
     system(folder_build_command.c_str());
@@ -219,6 +221,7 @@ bool nav_server(basic_msgs::nav_pose_set::Request &req, basic_msgs::nav_pose_set
 
     root=transfer_nav_json(req);
     // 1:delete,2:add,3:update.
+    ROS_INFO("type:%d",root["type"]);
     if (root["type"]==1)
     {
         delete_nav_json(req,root);
@@ -282,25 +285,6 @@ ros::init(argc, argv, "nav_and_wall_positions_node");
 ros::NodeHandle n;
 ros::ServiceServer nav_service=n.advertiseService("/nav_pose_set",nav_server);
 ros::ServiceServer wall_service=n.advertiseService("/wall_pose_set",wall_server);
-
-Json::Value root;
-Json::FastWriter writer;
-Json::Value person;
-
-person["name"] = "hello world";
-person["age"] = 100;
-root.append(person);
-
-ofstream ofs;
-ofs.open("/home/jimmy/api_ws/src/tf_learning/src/test1.json");
-ofs<<root.toStyledString();
-ofs.close();
-
-// std::string json_file = writer.write(root);
-// FILE* yaml = fopen("Test.json", "w");
-// fprintf(yaml, json_file);
-
-// fclose(yaml);
 
 ros::spin();
 return 0;

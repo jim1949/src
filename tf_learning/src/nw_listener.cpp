@@ -140,9 +140,10 @@ void add_nav_json(basic_msgs::nav_pose_set::Request &req,Json::Value root){
     char file_id[4],mapfile_id[4];
     sprintf(file_id,"%d",req.nav_pose.id);
     sprintf(mapfile_id,"%d",req.nav_pose.mapid);
-
-    string json_path=path+"/"+mapfile_id+"/nav_pose/"+file_id+".json";
+    ROS_INFO("mapfile_id:%d",req.nav_pose.mapid);
+    string json_path=path+mapfile_id+"/nav_pose/"+file_id+".json";
     string folder_build_command="mkdir -p "+path+"/"+mapfile_id+"/nav_pose/";
+    ROS_INFO("%s",folder_build_command.c_str());
     system(folder_build_command.c_str());
     ofs.open(json_path.c_str());
     ofs<<root.toStyledString();
@@ -220,6 +221,7 @@ bool nav_server(basic_msgs::nav_pose_set::Request &req, basic_msgs::nav_pose_set
 
     root=transfer_nav_json(req);
     // 1:delete,2:add,3:update.
+    ROS_INFO("type:%d",root["type"].asInt());
     if (root["type"]==1)
     {
         delete_nav_json(req,root);
