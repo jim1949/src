@@ -24,10 +24,10 @@ int main( int argc, char** argv )
   ss<<map_id;
   ss>>map_id_path;
   ss.str("");
-  path[0]="/var/www/nav_manager/"+map_id_path+"/nav_pose/14.json";
-  path[1]="/var/www/nav_manager/"+map_id_path+"/nav_pose/15.json";
-  path[2]="/var/www/nav_manager/"+map_id_path+"/nav_pose/16.json";
-  path[3]="/var/www/nav_manager/"+map_id_path+"/nav_pose/17.json";
+  path[0]="/var/www/nav_manager/"+map_id_path+"/nav_pose/3.json";
+  path[1]="/var/www/nav_manager/"+map_id_path+"/nav_pose/4.json";
+  path[2]="/var/www/nav_manager/"+map_id_path+"/nav_pose/5.json";
+  path[3]="/var/www/nav_manager/"+map_id_path+"/nav_pose/6.json";
   float f = 0.0;
   while (ros::ok())
   {
