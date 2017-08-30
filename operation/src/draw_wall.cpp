@@ -39,7 +39,7 @@ bool server(operation::edit_wall_set::Request &req, operation::edit_wall_set::Re
 
     for(int i=0;i<wall_num;i++){
         wall_id=req.edit_wall.wall_id[i];
-	stringstream os;
+	    stringstream os;
         os<<wall_id;
         os>>wall_id_path;
         os.str();

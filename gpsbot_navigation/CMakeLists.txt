@@ -58,6 +58,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
+  nav_flag.srv
   execute_nav_task.srv
   edit_nav_task.srv
   edit_wall_set.srv
@@ -126,6 +127,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # include_directories(include)
 include_directories(
+  include ${catkin_INCLUDE_DIRS}
   include ${catkin_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
@@ -197,5 +199,13 @@ add_executable(draw_points_and_nav
 )
 add_dependencies(draw_points_and_nav ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(draw_points_and_nav
+  ${catkin_LIBRARIES} jsoncpp
+)
+
+add_executable(edit_nav_task
+  src/edit_nav_task.cpp
+)
+add_dependencies(edit_nav_task ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(edit_nav_task
   ${catkin_LIBRARIES} jsoncpp
 )
