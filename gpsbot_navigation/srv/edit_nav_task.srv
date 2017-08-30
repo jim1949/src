@@ -1,7 +1,8 @@
-
 int32 map_id
 string map_name
+int32 type
 int32[] nav_id
+int32 task_id
 
 ---
 float64[] data

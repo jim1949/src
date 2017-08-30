@@ -58,12 +58,12 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
+  execute_nav_task.srv
+  edit_nav_task.srv
   edit_wall_set.srv
   mapping_name.srv
   mapping_status.srv
   nav_points_info.srv
-  path_info.srv
-  wall_info.srv
   #   Service2.srv
 )
 
@@ -192,10 +192,10 @@ include_directories(
 
 
 
-add_executable(points_and_lines
-  src/points_and_lines.cpp
+add_executable(draw_points_and_nav
+  src/draw_points_and_nav.cpp
 )
-add_dependencies(points_and_lines ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(points_and_lines
+add_dependencies(draw_points_and_nav ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(draw_points_and_nav
   ${catkin_LIBRARIES} jsoncpp
 )
