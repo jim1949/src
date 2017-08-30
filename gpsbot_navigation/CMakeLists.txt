@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(operation)
+project(gpsbot_navigation)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -113,7 +113,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES operation
+  LIBRARIES gpsbot_navigation
   CATKIN_DEPENDS roscpp rospy std_msgs message_runtime geometry_msgs basic_msgs
   DEPENDS system_lib
 )
@@ -131,23 +131,17 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(operation
-#   src/${PROJECT_NAME}/operation.cpp
+# add_library(gpsbot_navigation
+#   src/${PROJECT_NAME}/gpsbot_navigation.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(operation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(gpsbot_navigation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 
-add_executable(operation_main_node src/operation_main_node.cpp)  
-target_link_libraries(operation_main_node ${catkin_LIBRARIES})  
-add_dependencies(operation_main_node operation_gencpp)  
-  
-add_executable(operation_second_node src/operation_second_node.cpp)  
-target_link_libraries(operation_second_node ${catkin_LIBRARIES})  
-add_dependencies(operation_second_node operation_gencpp)
+
 #############
 ## Install ##
 #############
@@ -163,7 +157,7 @@ add_dependencies(operation_second_node operation_gencpp)
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS operation operation_node
+# install(TARGETS gpsbot_navigation gpsbot_navigation_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -188,7 +182,7 @@ add_dependencies(operation_second_node operation_gencpp)
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_operation.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_gpsbot_navigation.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
@@ -197,10 +191,11 @@ add_dependencies(operation_second_node operation_gencpp)
 # catkin_add_nosetests(test)
 
 
-add_executable(draw_wall
-  src/draw_wall.cpp
+
+add_executable(points_and_lines
+  src/points_and_lines.cpp
 )
-add_dependencies(draw_wall ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(draw_wall
+add_dependencies(points_and_lines ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(points_and_lines
   ${catkin_LIBRARIES} jsoncpp
 )

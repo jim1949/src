@@ -44,8 +44,8 @@ bool server(operation::edit_wall_set::Request &req, operation::edit_wall_set::Re
         os>>wall_id_path;
         os.str();
         path="/var/www/nav_manager/"+map_id_path+"/wall_pose/"+wall_id_path+".json";
-	ROS_INFO("%s",path.c_str());
-	ifstream is;
+	    ROS_INFO("%s",path.c_str());
+	    ifstream is;
         is.open(path.c_str());
         if (!reader.parse(is, root)) {ROS_ERROR("Parse the root of wall_pose in draw_wall ERROR.");} 
         wall_poses_num=root["wall_poses"].size();// 得到"wall_poses"的数组个数
@@ -55,7 +55,7 @@ bool server(operation::edit_wall_set::Request &req, operation::edit_wall_set::Re
         ROS_INFO("wall_num:%d,wall_poses_num:%d",wall_num,wall_poses_num);
         for(int j = 0; j < wall_poses_num; j++)  // 遍历数组  
         {
-	ROS_INFO("x:%f,y:%f",root["wall_poses"][j]["x"].asDouble(),root["wall_poses"][j]["y"].asDouble());
+	    ROS_INFO("x:%f,y:%f",root["wall_poses"][j]["x"].asDouble(),root["wall_poses"][j]["y"].asDouble());
         ptr[0][j]=Point(root["wall_poses"][j]["x"].asDouble(),root["wall_poses"][j]["y"].asDouble());
         } 
         is.close();
