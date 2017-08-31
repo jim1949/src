@@ -10,8 +10,9 @@ input:
 2.nav_task name. nav_task executation rate,nav_task start,pause,stop.
 
 functions:
-1.draw the nave poses in the task on the map.
-2.execute the task.
+1.ready to 
+2.draw the nave poses in the task on the map.
+3.execute the task.
 
 */
 
@@ -39,16 +40,18 @@ using namespace std;
 // };
 
 
-
-bool execute_server(gpsbot_navigation::execute_nav_task::Request& req,gpsbot_navigation::execute_nav_task::Response& res){
-ROS_INFO("execute");
-return true;
-}
-
 bool nav_flag_server(gpsbot_navigation::nav_flag::Request& req,gpsbot_navigation::nav_flag::Response& res){
 
+
 return true;
 }
+
+bool execute_server(gpsbot_navigation::execute_nav_task::Request& req,gpsbot_navigation::execute_nav_task::Response& res){
+  ROS_INFO("execute");
+  return true;
+}
+
+
 
 int main( int argc, char** argv )
 {
