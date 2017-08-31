@@ -91,7 +91,7 @@ bool edit_server(gpsbot_navigation::edit_nav_task::Request &req,gpsbot_navigatio
     ROS_INFO("Edit the nav task message!");
     ROS_INFO("map name:%s,map_id:%d,nav_task id:%d,type:%d",req.map_name.c_str(),req.map_id,req.task_id,req.type);
     Json::Value root;
-    
+    char s[200];
 
     root=transfer_json(req);
     // 1:delete,2:add,3:update.
@@ -115,8 +115,7 @@ bool edit_server(gpsbot_navigation::edit_nav_task::Request &req,gpsbot_navigatio
 
     // ----response
     
-    res.errormsg="successed response.";
-    res.successed=1;
+    res.errormsg=s;
     return true;
 }
 

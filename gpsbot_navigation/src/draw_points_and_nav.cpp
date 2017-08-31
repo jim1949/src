@@ -1,18 +1,44 @@
+/**
+# @Date    : 2017-08-10 09:24:31
+# @Author  : Jian Jiao (jim1949@163.com)
+# @Link    : http://github.com/jim1949
+# @Version : 1
+
+excute the navigation task of nav poses in the task (vector) service called from android.
+input: 
+1.nav_flag is ready.//set as a global flag in the service.
+2.nav_task name. nav_task executation rate,nav_task start,pause,stop.
+
+functions:
+1.draw the nave poses in the task on the map.
+2.execute the task.
+
+*/
+
 #include <ros/ros.h>
 #include <visualization_msgs/Marker.h>
 #include <geometry_msgs/Point.h>
-#include <cmath>
+#include <gpsbot_navigation/execute_nav_task.h>
+#include <stdio.h>
 #include <json/json.h>
 #include <iostream>
 #include <fstream>
-#include <sstream>
+#include <cstdlib>
+#pragma comment(lib, "json_mtd.lib")
+
+#include <cstdio>
 
 using namespace std;
+
+int nav_num;
+
+
 int main( int argc, char** argv )
 {
   ros::init(argc, argv, "points_and_lines");
   ros::NodeHandle n;
   ros::Publisher marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 10);//
+  // ros::ServiceServer execute_task=n.advertiseService("/execute_nav_task",execute_server);
   ros::Rate r(10);
   Json::Reader reader;
   Json::Value root;
