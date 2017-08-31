@@ -39,7 +39,7 @@ Json::Value transfer_json(gpsbot_navigation::edit_nav_task::Request &req){
     for(int i=0;i<num;i++){
         nav_poses.append(req.nav_id[i]);
     }
-    root.append(nav_poses);
+    root["nav_id"]=nav_poses;
     return root;
 }
 void delete_json(gpsbot_navigation::edit_nav_task::Request &req,Json::Value root){
@@ -61,7 +61,7 @@ void add_json(gpsbot_navigation::edit_nav_task::Request &req,Json::Value root){
     sprintf(task_id,"%d",req.task_id);
     sprintf(mapfile_id,"%d",req.map_id);
     string json_path=path+mapfile_id+"/"+task_id+".json";
-    string folder_build_command="mkdir -p "+path+"/"+mapfile_id;
+    string folder_build_command="mkdir -p "+path+mapfile_id;
     ROS_INFO("%s",folder_build_command.c_str());
     system(folder_build_command.c_str());
     ofs.open(json_path.c_str());
@@ -95,17 +95,17 @@ bool edit_server(gpsbot_navigation::edit_nav_task::Request &req,gpsbot_navigatio
 
     root=transfer_json(req);
     // 1:delete,2:add,3:update.
-    if (root["type"]==1)
+    if (root["type"].asInt()==1)
     {
         delete_json(req,root);
         sprintf(s,"got the delete message! ");
         
     }
-    else if(root["type"]==2){
+    else if(root["type"].asInt()==2){
         add_json(req,root);
         sprintf(s,"got the add message! ");
     }
-    else if(root["type"]==3){
+    else if(root["type"].asInt()==3){
         update_json(req,root);
         sprintf(s,"got the update message!");
     }

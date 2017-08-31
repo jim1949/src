@@ -129,6 +129,7 @@ catkin_package(
 include_directories(
   include ${catkin_INCLUDE_DIRS}
   include ${catkin_INCLUDE_DIRS}
+  include ${catkin_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -208,4 +209,12 @@ add_executable(edit_nav_task
 add_dependencies(edit_nav_task ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(edit_nav_task
   ${catkin_LIBRARIES} jsoncpp
+)
+
+add_executable(service_edit_nav_task
+  src/service_edit_nav_task.cpp
+)
+add_dependencies(service_edit_nav_task ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(service_edit_nav_task
+  ${catkin_LIBRARIES}
 )

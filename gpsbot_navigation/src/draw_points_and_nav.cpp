@@ -19,6 +19,7 @@ functions:
 #include <visualization_msgs/Marker.h>
 #include <geometry_msgs/Point.h>
 #include <gpsbot_navigation/execute_nav_task.h>
+#include <gpsbot_navigation/nav_flag.h>
 #include <stdio.h>
 #include <json/json.h>
 #include <iostream>
@@ -29,16 +30,34 @@ functions:
 #include <cstdio>
 
 using namespace std;
+// class nav_info{
+//   public:
+//     int nav_num;
+//     int waypoints[];
+//     bool execute_server(gpsbot_navigation::execute_nav_task::Request& req,gpsbot_navigation::execute_nav_task::Response& res);
+//     bool nav_flag_server(gpsbot_navigation::nav_flag::Request& req,gpsbot_navigation::nav_flag::Response& res);
+// };
 
-int nav_num;
 
+
+bool execute_server(gpsbot_navigation::execute_nav_task::Request& req,gpsbot_navigation::execute_nav_task::Response& res){
+ROS_INFO("execute");
+return true;
+}
+
+bool nav_flag_server(gpsbot_navigation::nav_flag::Request& req,gpsbot_navigation::nav_flag::Response& res){
+
+return true;
+}
 
 int main( int argc, char** argv )
 {
   ros::init(argc, argv, "points_and_lines");
   ros::NodeHandle n;
+  // nav_info nav;
   ros::Publisher marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 10);//
-  // ros::ServiceServer execute_task=n.advertiseService("/execute_nav_task",execute_server);
+  ros::ServiceServer execute_task=n.advertiseService("/execute_nav_task",execute_server);
+  ros::ServiceServer nav_flag=n.advertiseService("/nav_flag",nav_flag_server);
   ros::Rate r(10);
   Json::Reader reader;
   Json::Value root;

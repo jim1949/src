@@ -3,6 +3,7 @@
 int32 map_id
 string map_name
 int32 nav_flag
+basic_msgs/gridpose gridpose
 
 ---
 float64[] data
