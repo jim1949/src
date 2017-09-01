@@ -38,16 +38,58 @@ using namespace std;
 //     bool execute_server(gpsbot_navigation::execute_nav_task::Request& req,gpsbot_navigation::execute_nav_task::Response& res);
 //     bool nav_flag_server(gpsbot_navigation::nav_flag::Request& req,gpsbot_navigation::nav_flag::Response& res);
 // };
+//0：not ready,1:start,2:pause;3:stop;
+int nav_flag=0;
+int nav_map_id;
+string nav_map_name;
+
+int exe_map_id;
+string exe_map_name;
+int exe_task_id;
+int exe_rate;
+int exe_type;
+
+
 
 
 bool nav_flag_server(gpsbot_navigation::nav_flag::Request& req,gpsbot_navigation::nav_flag::Response& res){
+  ROS_INFO("navigation is ready! Localized already!");
+  nav_flag=req.nav_flag;
+  nav_map_id=req.map_id;
+  nav_map_name=req.map_name;
+  if (nav_flag==1){
+    ROS_INFO("Localized.");
+  }
+  else if(nav_flag==2){
+    ROS_INFO("Haven't localized.");
+  }
+  else{
+    ROS_INFO("Wrong nav_flag.")
 
+  }
+  
+  res.successed=1;
 
-return true;
+  return true;
 }
 
 bool execute_server(gpsbot_navigation::execute_nav_task::Request& req,gpsbot_navigation::execute_nav_task::Response& res){
-  ROS_INFO("execute");
+  ROS_INFO("execute the service.");
+
+  string path;
+
+  if (exe_map_id!=nav_map_id){ROS_INFO("exe_map_id:%d and nav_map_id:%d not matched.",exe_map_id,nav_map_id);}
+  if (exe_map_name!=nav_map_name){ROS_INFO("exe_map_name:%d and nav_map_name:%d not matched.",exe_map_name,nav_map_name);}
+  if (nav_flag==1){
+    ROS_INFO("localized already,start to navigate for task %d",exe_task_id);
+    exe_map_id=req.map_id;
+    exe_map_name=req.map_name;
+    exe_task_id=req.task_id;
+    exe_rate=req.rate;
+    exe_type=req.type;
+  
+  }
+  res.successed=1;
   return true;
 }
 
@@ -65,17 +107,17 @@ int main( int argc, char** argv )
   Json::Reader reader;
   Json::Value root;
 
-  int map_id=3;
-  string map_id_path;
-  string path[4];
-  stringstream ss;
-  ss<<map_id;
-  ss>>map_id_path;
-  ss.str("");
-  path[0]="/var/www/nav_manager/"+map_id_path+"/nav_pose/3.json";//
-  path[1]="/var/www/nav_manager/"+map_id_path+"/nav_pose/4.json";//
-  path[2]="/var/www/nav_manager/"+map_id_path+"/nav_pose/5.json";//
-  path[3]="/var/www/nav_manager/"+map_id_path+"/nav_pose/6.json";//
+  // int map_id=3;
+  // string map_id_path;
+  // string path[4];
+  // stringstream ss;
+  // ss<<map_id;
+  // ss>>map_id_path;
+  // ss.str("");
+  // path[0]="/var/www/nav_manager/"+map_id_path+"/nav_pose/3.json";//
+  // path[1]="/var/www/nav_manager/"+map_id_path+"/nav_pose/4.json";//
+  // path[2]="/var/www/nav_manager/"+map_id_path+"/nav_pose/5.json";//
+  // path[3]="/var/www/nav_manager/"+map_id_path+"/nav_pose/6.json";//
 
   while (ros::ok())
   {
@@ -126,7 +168,7 @@ int main( int argc, char** argv )
     {
       // ROS_INFO("path:%s",path[i].c_str());
       ifstream is;
-      is.open(path[i].c_str());
+      is.open(path[i].c_str()); 
       if (!reader.parse(is, root)) {ROS_ERROR("Parse the root of json path ERROR.");} 
 
       geometry_msgs::Point p;
