@@ -12,6 +12,8 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   basic_msgs
   cv_bridge
+  move_base_msgs
+  actionlib
 )
 
 ## System dependencies are found with CMake's conventions

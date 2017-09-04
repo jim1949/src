@@ -14,33 +14,36 @@ functions:
 2.draw the nave poses in the task on the map.
 3.execute the task.
 
+//todo:
+1.shutdown and change the goal at any time.
+
 */
 
 #include <ros/ros.h>
 #include <visualization_msgs/Marker.h>
-#include <geometry_msgs/Point.h>
+#include <geometry_msgs/Pose.h>
 #include <gpsbot_navigation/execute_nav_task.h>
 #include <gpsbot_navigation/nav_flag.h>
+#include <geometry_msgs/Twist.h>  
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
+#include <actionlib/client/simple_action_client.h>
+#include <move_base_msgs/MoveBaseAction.h>
+#include <signal.h>
 #include <stdio.h>
 #include <json/json.h>
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+
 #pragma comment(lib, "json_mtd.lib")
 
 #include <cstdio>
 
 using namespace std;
-// class nav_info{
-//   public:
-//     int nav_num;
-//     int waypoints[];
-//     bool execute_server(gpsbot_navigation::execute_nav_task::Request& req,gpsbot_navigation::execute_nav_task::Response& res);
-//     bool nav_flag_server(gpsbot_navigation::nav_flag::Request& req,gpsbot_navigation::nav_flag::Response& res);
-// };
+
 //0：not ready,1:start,2:pause;3:stop;
 //global parameter from navigation
-int nav_flag=0;
+int nav_flag_=0;
 int nav_map_id;
 string nav_map_name;
 
@@ -54,22 +57,40 @@ int exe_type;
 
 //global paramter store the navigation array
 vector<int> nav_id_vec;
+vector<geometry_msgs::Pose> p_vec_;
+//initial pose;
+geometry_msgs::PoseWithCovarianceStamped initial_pose;
 
+
+ros::Publisher cmdVelPub;
+
+//everything is ready flag.
+// int flag=false;
+
+void shutdown(int sig)
+{
+  cmdVelPub.publish(geometry_msgs::Twist());//使机器人停止运动
+  ROS_INFO("Navigation ended!");
+  ros::shutdown();
+}
+
+
+typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
 
 bool nav_flag_server(gpsbot_navigation::nav_flag::Request& req,gpsbot_navigation::nav_flag::Response& res){
   ROS_INFO("navigation is ready! Localized already!");
-  nav_flag=req.nav_flag;
+  nav_flag_=req.nav_flag;
   nav_map_id=req.map_id;
   nav_map_name=req.map_name;
-  if (nav_flag==1){
+  if (nav_flag_==1){
     ROS_INFO("Localized.");
   }
-  else if(nav_flag==2){
+  else if(nav_flag_==2){
     ROS_INFO("Haven't localized.");
   }
   else{
-    ROS_INFO("Wrong nav_flag.")
+    ROS_INFO("Wrong nav_flag.");
 
   }
   
@@ -84,9 +105,9 @@ bool execute_server(gpsbot_navigation::execute_nav_task::Request& req,gpsbot_nav
   string path;
 
   if (exe_map_id!=nav_map_id){ROS_ERROR("exe_map_id:%d and nav_map_id:%d not matched.",exe_map_id,nav_map_id);}
-  if (exe_map_name!=nav_map_name){ROS_ERROR("exe_map_name:%d and nav_map_name:%d not matched.",exe_map_name,nav_map_name);}
-  if (nav_flag==1){
-    ROS_INFO("localized already,start to navigate for task %d",exe_task_id);
+  if (exe_map_name!=nav_map_name){ROS_ERROR("exe_map_name:%s and nav_map_name:%s not matched.",exe_map_name.c_str(),nav_map_name.c_str());}
+  if (nav_flag_==1){
+    ROS_INFO("nav_flag is 1,localized already,start to navigate for task %d",exe_task_id);
     exe_map_id=req.map_id;
     exe_map_name=req.map_name;
     exe_task_id=req.task_id;
@@ -99,8 +120,8 @@ bool execute_server(gpsbot_navigation::execute_nav_task::Request& req,gpsbot_nav
 }
 
 
-void draw_nav_pose(vector<int> nav_id_vec){
-
+vector<geometry_msgs::Pose> draw_nav_pose(vector<int> nav_id_vec,ros::Publisher& marker_pub){
+        // flag=false;
         visualization_msgs::Marker points, line_strip, line_list;
         points.header.frame_id = line_strip.header.frame_id = line_list.header.frame_id = "/map";
         points.header.stamp = line_strip.header.stamp = line_list.header.stamp = ros::Time::now();
@@ -135,34 +156,48 @@ void draw_nav_pose(vector<int> nav_id_vec){
         // Line list is red
         line_list.color.r = 1.0;
         line_list.color.a = 1.0;
-
+        p_vec_.clear();
         // Create the vertices for the points and lines
         for (uint32_t i = 0; i < nav_id_vec.size(); i++)
         {
           // ROS_INFO("path:%s",path[i].c_str());
-          string path;
-          char map_id_path[8],;
-          sprintf(map_id_path,"%d",exe_map_id);
-          sprintf(nav_id_path,"%d",nav_id_vec[i]);
+          string path,map_id_path,nav_id_path;
+          stringstream ss,os;
+          ss<<exe_map_id;
+          ss>>map_id_path;
+          os<<nav_id_vec[i];
+          os>>nav_id_path;
+
+          Json::Reader reader;
+          Json::Value root;
+
+          // char map_id_path[8],nav_id_path[8];
+          // sprintf(map_id_path,"%d",exe_map_id);
+          // sprintf(nav_id_path,"%d",nav_id_vec[i]);
           // path="http://192.168.31.130:82/nav_manager/3/nav_pose/4.json"
-          path="/var/www/nav_manager/"+exe_map_id+"/nav_pose/"+nav_id_path;
+          path="/var/www/nav_manager/"+map_id_path+"/nav_pose/"+nav_id_path;
           ifstream is;
           is.open(path.c_str()); 
           if (!reader.parse(is, root)) {ROS_ERROR("Parse the root of json path ERROR.");} 
 
-          geometry_msgs::Point p;
-          p.x = root["nav_pose"]["position"]["x"].asDouble();
-          p.y = root["nav_pose"]["position"]["y"].asDouble();
-          p.z = root["nav_pose"]["position"]["z"].asDouble();
+          geometry_msgs::Pose p;
+          p.position.x = root["nav_pose"]["position"]["x"].asDouble();
+          p.position.y = root["nav_pose"]["position"]["y"].asDouble();
+          p.position.z = root["nav_pose"]["position"]["z"].asDouble();
+          p.orientation.w=1;
+          p.orientation.x=0;
+          p.orientation.y=0;
+          p.orientation.z=0;
           // ROS_INFO("x:%f,y:%f,z:%f",p.x,p.y,p.z);
 
-          points.points.push_back(p);
-          line_strip.points.push_back(p);
+          p_vec_.push_back(p);
+          points.points.push_back(p.position);
+          line_strip.points.push_back(p.position);
 
           // The line list needs two points for each line
-          line_list.points.push_back(p);
-          p.z += 1.0;
-          line_list.points.push_back(p);
+          line_list.points.push_back(p.position);
+          p.position.z += 1.0;
+          line_list.points.push_back(p.position);
 
         }
 
@@ -170,40 +205,149 @@ void draw_nav_pose(vector<int> nav_id_vec){
         marker_pub.publish(points);
         marker_pub.publish(line_strip);
         marker_pub.publish(line_list);
-
-        return p;
+        // flag=true;
+        return p_vec_;
     
+}
+
+void callback(const geometry_msgs::PoseWithCovarianceStamped& msg){
+  //update initial pose;
+  initial_pose=msg;
+
+}
+
+void doneCb(const actionlib::SimpleClientGoalState& state,
+            const move_base_msgs::MoveBaseResultConstPtr& result)
+{
+  ROS_INFO("Finished in state [%s]", state.toString().c_str());
+
+}
+ 
+// Called once when the goal becomes active
+void activeCb()
+{
+  ROS_INFO("Goal just went active");
+}
+ 
+// Called every time feedback is received for the goal
+void feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
+{ static  int i=0;
+  ROS_INFO("Got Feedback of length %d",i++);
+}
+ 
+
+
+bool nav_start(vector<geometry_msgs::Pose> p_vec_,MoveBaseClient& client,int nav_rate,ros::NodeHandle& n){
+
+  //arg in navigation.
+  int n_locations=p_vec_.size();
+  int n_goals=0;
+  int n_successes=0;
+  int i=0;
+  int start_time=ros::Time::now().toSec();
+  float running_time=0;
+  int n_rate=0;
+  bool finished_within_time,getinitialpose_within_time;
+  move_base_msgs::MoveBaseGoal goal;
+
+  //0.make sure we have initial pose,no time limited
+  ROS_INFO("waiting for the initialpose message");
+  getinitialpose_within_time=ros::topic::waitForMessage<geometry_msgs::PoseWithCovarianceStamped>("initialpose");
+
+  ros::Subscriber sub=n.subscribe("initialpose",1,callback);
+
+  //循环条件：nav_flag=2,<循环rate,not shutdown.
+  while((nav_flag_==2) && (n_rate<nav_rate) &&(ros::ok())){
+  //1.if done, restart from beginning.
+  if (i>=n_locations) i=0;
+  i++;
+  //2.calculate the distance.
+
+  //3.send goal to move_base.
+  goal.target_pose.pose=p_vec_[i];
+  goal.target_pose.header.frame_id="map";
+  goal.target_pose.header.stamp=ros::Time::now();
+  client.sendGoal(goal, &doneCb, &activeCb, &feedbackCb);
+
+  // client.sendGoal(goal);
+  //4.wait for result. finished on time? get state. cancel goal.
+  finished_within_time=client.waitForResult(ros::Duration(300));
+  if (!finished_within_time) {
+    ROS_INFO("Timed out to achieve goal %d.",i);
+    client.cancelGoal();
+  }
+  else {
+    
+    if (client.getState()==actionlib::SimpleClientGoalState::SUCCEEDED){
+      ROS_INFO("Goal %d SUCCESS!",i);
+      ROS_INFO("Goal pose: x:%f, y:%f, z:%f",p_vec_[i].position.x,p_vec_[i].position.y,p_vec_[i].position.z);
+      n_successes+=1;
+
+    }
+    else {
+      ROS_INFO("Goal %d Failed! with state:%s",i,client.getState().toString().c_str());
+
+    }
+  }
+  //5.get the running time.
+  running_time=ros::Time::now().toSec()-start_time;
+  running_time=running_time/60.0;
+
+  //6.shutdown. cmd_vel publish.
+
+  signal(SIGINT, shutdown);
+  }
+    return true;
 }
 
 //task_id->task->pose_id
 int main( int argc, char** argv )
 {
-  ros::init(argc, argv, "points_and_lines");
+  ros::init(argc, argv, "points_and_lines",ros::init_options::NoSigintHandler);
   ros::NodeHandle n;
   // nav_info nav;
   ros::Publisher marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 10);//
+  ros::Publisher initialpose_pub=n.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1);
   ros::ServiceServer execute_task=n.advertiseService("/execute_nav_task",execute_server);
   ros::ServiceServer nav_flag=n.advertiseService("/nav_flag",nav_flag_server);
+  MoveBaseClient client("move_base",true);//true: don't need ros::spin().
+  
   ros::Rate r(10);
   Json::Reader reader;
   Json::Value root;
+
+  //read the initialpose from yaml.
+
+
+  //---
+
+  ros::Duration(3).sleep();
 
   while (ros::ok())
   {
     //parameter definition
     //marker definition
-    if ((nav_flag==1)&&(exe_type==1)){
+    if (nav_flag_ == 1){
+      ROS_INFO("got the initial pose");
+      //write the initialpose back to yaml.
+
+
+      //---
+      nav_flag_=2;
+    }
+    
+    while ((nav_flag_== 2)&&(exe_type == 1)){
       nav_id_vec.clear();
-      string map_id_path,task_json;
+      string map_id_path,task_json,task_id_path;
       stringstream ss,os;
       ss<<nav_map_id;
       ss>>map_id_path;
       os<<exe_task_id;
-      os>>exe_task_id;
+      os>>task_id_path;
 
-      task_json="/var/www/task_manager"+map_id_path+"/"+task_id+".json";
+      task_json="/var/www/task_manager"+map_id_path+"/"+task_id_path+".json";
       ifstream is;
-      is.open(task_id.c_str()); 
+      is.open(task_json.c_str()); 
       if (!reader.parse(is, root)) {ROS_ERROR("Parse the root of json path of task manager ERROR.");
       if (root["map_id"].asInt()!=exe_map_id){ROS_ERROR("In the task:%d, exe_map_id:%d and task_map_id:%d not matched",exe_task_id,exe_map_id,root["map_id"].asInt());}
       
@@ -213,15 +357,16 @@ int main( int argc, char** argv )
         nav_id_vec.push_back(root["nav_id"][i].asInt());
       }
       //vector needs to write here.
-      geometry_msgs::Point p;
-      p=draw_nav_pose(nav_id_vec);
-      nav_flag=2;
+      vector<geometry_msgs::Pose> p_vec_;
+      //draw the navigation points in the rviz.
+      p_vec_=draw_nav_pose(nav_id_vec,marker_pub);
+
+      //start navigation.
+      nav_start(p_vec_,client,exe_rate,n);
+
+
     }
-      while(nav_flag==2)
-      {
-
-
-      }
 
   }
+}
 }
