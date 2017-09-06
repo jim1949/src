@@ -1,5 +1,7 @@
 #include "ros/ros.h"  
 #include <gpsbot_navigation/edit_nav_task.h>
+#include <gpsbot_navigation/nav_flag.h>
+#include <gpsbot_navigation/execute_nav_task.h>
 #include <stdio.h>
 #include <json/json.h>
 #include <iostream>
@@ -15,7 +17,12 @@ int main(int argc, char **argv)
   
   ros::NodeHandle n;  
   ros::ServiceClient client = n.serviceClient<gpsbot_navigation::edit_nav_task>("/edit_nav_task");  
+  ros::ServiceClient client1 = n.serviceClient<gpsbot_navigation::nav_flag>("/nav_flag");  
+  ros::ServiceClient client2 = n.serviceClient<gpsbot_navigation::execute_nav_task>("/execute_nav_task");  
+
   gpsbot_navigation::edit_nav_task srv;
+  gpsbot_navigation::execute_nav_task srv2;
+  gpsbot_navigation::nav_flag srv1;
 // int32 map_id
 // string map_name
 // int32 type
@@ -41,6 +48,26 @@ int main(int argc, char **argv)
   else  
   {  
     ROS_ERROR("Failed to call service /edit_nav_task");  
+    return 1;  
+  }  
+    if (client1.call(srv1))  
+  {  
+//     ROS_INFO("errormsg: %s", srv.response.errormsg);  
+    ROS_INFO("successed:%d",(int)srv1.response.successed);
+  }  
+  else  
+  {  
+    ROS_ERROR("Failed to call service /execute_nav_task");  
+    return 1;  
+  }  
+    if (client2.call(srv2))  
+  {  
+//     ROS_INFO("errormsg: %s", srv.response.errormsg);  
+    ROS_INFO("successed:%d",(int)srv2.response.successed);
+  }  
+  else  
+  {  
+    ROS_ERROR("Failed to call service /nav_flag");  
     return 1;  
   }  
   
