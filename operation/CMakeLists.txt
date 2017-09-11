@@ -58,6 +58,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
+  navigation_status.srv
   edit_wall_set.srv
   mapping_name.srv
   mapping_status.srv
@@ -127,6 +128,7 @@ catkin_package(
 # include_directories(include)
 include_directories(
   include ${catkin_INCLUDE_DIRS}
+  include ${catkin_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -141,9 +143,9 @@ include_directories(
 # add_dependencies(operation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 
-add_executable(operation_main_node src/operation_main_node.cpp)  
-target_link_libraries(operation_main_node ${catkin_LIBRARIES})  
-add_dependencies(operation_main_node operation_gencpp)  
+add_executable(operation_mapbuild src/operation_mapbuild.cpp)  
+target_link_libraries(operation_mapbuild ${catkin_LIBRARIES})  
+add_dependencies(operation_mapbuild operation_gencpp)  
   
 add_executable(operation_second_node src/operation_second_node.cpp)  
 target_link_libraries(operation_second_node ${catkin_LIBRARIES})  
@@ -203,4 +205,12 @@ add_executable(draw_wall
 add_dependencies(draw_wall ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(draw_wall
   ${catkin_LIBRARIES} jsoncpp
+)
+
+add_executable(operation_mapnav
+  src/operation_mapnav.cpp
+)
+add_dependencies(operation_mapnav ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(operation_mapnav
+  ${catkin_LIBRARIES}
 )

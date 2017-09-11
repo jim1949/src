@@ -132,6 +132,7 @@ include_directories(
   include ${catkin_INCLUDE_DIRS}
   include ${catkin_INCLUDE_DIRS}
   include ${catkin_INCLUDE_DIRS}
+  include ${catkin_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -219,4 +220,12 @@ add_executable(service_edit_nav_task
 add_dependencies(service_edit_nav_task ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(service_edit_nav_task
   ${catkin_LIBRARIES}
+)
+
+add_executable(draw_points_nav_test
+  src/draw_points_nav_test.cpp
+)
+add_dependencies(draw_points_nav_test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(draw_points_nav_test
+  ${catkin_LIBRARIES} jsoncpp
 )
