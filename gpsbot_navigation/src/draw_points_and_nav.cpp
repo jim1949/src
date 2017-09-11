@@ -83,6 +83,7 @@ bool nav_flag_server(gpsbot_navigation::nav_flag::Request& req,gpsbot_navigation
   nav_flag_=req.nav_flag;
   nav_map_id=req.map_id;
   nav_map_name=req.map_name;
+  ROS_INFO("nav_flag:%d",nav_flag_);
   if (nav_flag_==1){
     ROS_INFO("Localized.");
   }
@@ -100,28 +101,33 @@ bool nav_flag_server(gpsbot_navigation::nav_flag::Request& req,gpsbot_navigation
 }
 
 bool execute_server(gpsbot_navigation::execute_nav_task::Request& req,gpsbot_navigation::execute_nav_task::Response& res){
-  ROS_INFO("execute the service.");
+  ROS_INFO("execute the service.map_Id:%d, map_name:%s, task_id:%d. type:%d",req.map_id,req.map_name.c_str(),req.task_id,req.type);
 
   string path;
-
-  if (exe_map_id!=nav_map_id){ROS_ERROR("exe_map_id:%d and nav_map_id:%d not matched.",exe_map_id,nav_map_id);}
-  if (exe_map_name!=nav_map_name){ROS_ERROR("exe_map_name:%s and nav_map_name:%s not matched.",exe_map_name.c_str(),nav_map_name.c_str());}
-  if (nav_flag_==1){
-    ROS_INFO("nav_flag is 1,localized already,start to navigate for task %d",exe_task_id);
+  ROS_INFO("nav_flag:%d",nav_flag_);
+  if (nav_flag_==2){
+    
     exe_map_id=req.map_id;
     exe_map_name=req.map_name;
     exe_task_id=req.task_id;
     exe_rate=req.rate;
     exe_type=req.type;
+    ROS_INFO("nav_flag is 1,localized already,start to navigate for task %d",exe_task_id);
+    if (exe_map_id!=nav_map_id){ROS_ERROR("exe_map_id:%d and nav_map_id:%d not matched.",exe_map_id,nav_map_id);}
+    else {ROS_INFO("exe_map_id:%d and nav_map_id:%d  matched.",exe_map_id,nav_map_id);}
+    if (exe_map_name!=nav_map_name){ROS_ERROR("exe_map_name:%s and nav_map_name:%s not matched.",exe_map_name.c_str(),nav_map_name.c_str());}
+    else {ROS_INFO("exe_map_name:%s and nav_map_name:%s matched.",exe_map_name.c_str(),nav_map_name.c_str());}
+    res.successed=1;
   
   }
-  res.successed=1;
+  
   return true;
 }
 
 
 vector<geometry_msgs::Pose> draw_nav_pose(vector<int> nav_id_vec,ros::Publisher& marker_pub){
         // flag=false;
+        ROS_INFO("start to draw.");
         visualization_msgs::Marker points, line_strip, line_list;
         points.header.frame_id = line_strip.header.frame_id = line_list.header.frame_id = "/map";
         points.header.stamp = line_strip.header.stamp = line_list.header.stamp = ros::Time::now();
@@ -206,6 +212,7 @@ vector<geometry_msgs::Pose> draw_nav_pose(vector<int> nav_id_vec,ros::Publisher&
         marker_pub.publish(line_strip);
         marker_pub.publish(line_list);
         // flag=true;
+        ROS_INFO("draw finished");
         return p_vec_;
     
 }
@@ -305,6 +312,7 @@ int main( int argc, char** argv )
 {
   ros::init(argc, argv, "points_and_lines",ros::init_options::NoSigintHandler);
   ros::NodeHandle n;
+  ROS_INFO("start draw points and navigation");
   // nav_info nav;
   ros::Publisher marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 10);//
   ros::Publisher initialpose_pub=n.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1);
@@ -324,14 +332,15 @@ int main( int argc, char** argv )
   ros::Duration(3).sleep();
 
   while (ros::ok())
-  {
+  { ros::spinOnce();
     //parameter definition
     //marker definition
+   
     if (nav_flag_ == 1){
       ROS_INFO("got the initial pose");
       //write the initialpose back to yaml.
 
-
+      ROS_INFO("nav_flag:%d,exe_type:%d",nav_flag_,exe_type);
       //---
       nav_flag_=2;
     }
@@ -364,7 +373,7 @@ int main( int argc, char** argv )
       //start navigation.
       nav_start(p_vec_,client,exe_rate,n);
 
-
+      ros::spinOnce();
     }
 
   }
