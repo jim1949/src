@@ -208,7 +208,7 @@ target_link_libraries(draw_wall
 )
 
 add_executable(operation_mapnav
-  src/operation_mapnav.cpp
+  src/operation_map_edit.cpp
 )
 add_dependencies(operation_mapnav ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(operation_mapnav

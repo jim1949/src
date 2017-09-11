@@ -5,13 +5,19 @@ import rospy
 
 
 from geometry_msgs.msg import Pose, PoseWithCovarianceStamped, Point, Quaternion, Twist  
-#include <gpsbot_navigation/execute_nav_task.h>
-#include <gpsbot_navigation/nav_flag.h>
+
 from gpsbot_navigation.srv import execute_nav_task,nav_flag
 
 
 def talker():
 
+    rospy.wait_for_service('nav_flag')
+    try:
+        nav_flag = rospy.ServiceProxy('nav_flag', nav_flag)
+        resp1 = nav_flag(x, y)
+        return resp1.sum
+    except rospy.ServiceException, e:
+        print "Service call failed: %s"%e
     pub = rospy.Publisher('/initialpose',PoseWithCovarianceStamped, queue_size=10)
     rospy.init_node('talker', anonymous=True)
     rate = rospy.Rate(1) # 10hz

@@ -1,0 +1,5 @@
+<launch>
+    <node name="operation_draw_wall" pkg="operation" type="draw_wall" output="screen"/>
+    <node name="operation_nw_listener" pkg="tf_learning" type="nw_listener" output="screen"/>
+
+</launch>

@@ -130,9 +130,9 @@ int main(int argc, char **argv)
    ros::NodeHandle n;
    
    ros::ServiceServer service = n.advertiseService("/navigation_status", server); 
-   ros::param::param<std::string>("maploader_bringup_path",maploader_bringup_path,"/home/relaybot/api_ws/src/operation/src/maploader_bringup.sh");
-   ros::param::param<std::string>("maploader_pause_path",maploader_pause_path,"/home/relaybot/api_ws/src/operation/src/maploader_pause.sh");
-   ros::param::param<std::string>("maploader_stop_path",maploader_stop_path,"/home/relaybot/api_ws/src/operation/src/maploader_stop.sh");
+   ros::param::param<std::string>("maploader_bringup_path",maploader_bringup_path,"/home/relaybot/api_ws/src/operation/src/nav_sh/maploader_bringup.sh");
+   ros::param::param<std::string>("maploader_pause_path",maploader_pause_path,"/home/relaybot/api_ws/src/operation/src/nav_sh/maploader_pause.sh");
+   ros::param::param<std::string>("maploader_stop_path",maploader_stop_path,"/home/relaybot/api_ws/src/operation/src/nav_sh/maploader_stop.sh");
      
    ROS_INFO("Provide service which can be called to tell the server to start navigation, pause, or stop.");  
    printf("now we are in parent progress");
