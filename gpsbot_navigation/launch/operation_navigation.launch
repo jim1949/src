@@ -1,0 +1,6 @@
+<launch>
+
+    <node name="edit_nav_task" pkg="gpsbot_navigation" type="edit_nav_task" output="screen"/>
+    <node name="draw_points_and_nav" pkg="gpsbot_navigation" type="draw_points_and_nav" output="screen"/>
+
+</launch>

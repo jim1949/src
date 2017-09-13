@@ -1,3 +1,4 @@
 #!/bin/bash
+roslaunch gpsbot_nav gpsbot_mapping.launch &
 roslaunch map_server multi_map_saver.launch &
 roslaunch operation operation_buildmap.launch

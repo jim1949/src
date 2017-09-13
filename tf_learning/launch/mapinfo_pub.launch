@@ -1,11 +1,11 @@
 <launch>
       <!--broadcaste the picture frame-->
-      <node name="picture_frame_node" pkg="tf_learning" type="world_tf_broadcaster" output="screen" />
+      <node name="picture_frame_broadcaster" pkg="tf_learning" type="world_tf_broadcaster" output="screen" />
 
       <!--publish the pose of the robot in the picture frame.-->
-      <node name="robot_pose_in_picture_frame_node" pkg="tf_learning" type="world_tf_listener" output="screen" /> 
+      <node name="pose_in_picture_frame_node" pkg="tf_learning" type="world_tf_listener" output="screen" /> 
 
       <!--publish the pose of laser points in the picture frame.-->
-      <node name="laser_points_in_picture_frame_node" pkg="tf_learning" type="tf_listener" output="screen" /> 
+      <node name="lasers_in_picture_frame_node" pkg="tf_learning" type="tf_listener" output="screen" /> 
 
 </launch>
