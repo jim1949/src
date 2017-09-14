@@ -1,7 +1,7 @@
 #!/bin/bash
 # kill -9 `pgrep -f ros`
 
-
+echo "mapsaver save, complete saving the map."
 #complete the mapping process.
 
 mkdir $1/$2 
@@ -17,6 +17,7 @@ rosnode kill base_link_to_laser4
 rosnode kill joint_state_publisher
 
 rosnode kill move_base
+rosnode kill velocity_smoother
 rosnode kill nodelet_manager
 rosnode kill robot_pose_publisher
 rosnode kill robot_state_publisher
@@ -25,8 +26,6 @@ rosnode kill slam_gmapping
 
 rosnode kill map_saver 
 rosnode kill convert_img_ros 
-
-rosnode kill velocity_smoother
 
 rosnode kill lasers_in_picture_frame_node
 
