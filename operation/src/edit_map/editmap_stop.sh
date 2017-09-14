@@ -29,4 +29,6 @@ rosnode kill sick_tim551_2050001
 rosnode kill velocity_smoother
 rosnode cleanup 
 
+echo "rosnode kill finished."
+
 

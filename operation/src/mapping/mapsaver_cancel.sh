@@ -3,6 +3,7 @@
 
 
 #stop all except rosbridge_websocket.
+echo "mapsaver cancel."
 rm -r $1/$2 
 
 rosnode kill arduino
@@ -24,7 +25,7 @@ rosnode kill lasers_in_picture_frame_node
 rosnode kill picture_frame_broadcaster
 rosnode kill pose_in_picture_frame_node
 rosnode cleanup 
-
+echo "rosnode kill finished."
 
 
 #sh /home/relaybot/api_ws/src/operation/src/choice_action/gmapping_stop.sh

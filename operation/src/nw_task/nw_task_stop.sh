@@ -27,7 +27,7 @@ rosnode kill sick_tim551_2050001
 
 rosnode kill velocity_smoother
 rosnode cleanup 
-
+echo "rosnode kill finished."
 
 
 #sh /home/relaybot/api_ws/src/operation/src/choice_action/gmapping_stop.sh

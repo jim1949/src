@@ -24,10 +24,13 @@ functions:
 #include <geometry_msgs/Pose.h>
 #include <gpsbot_navigation/execute_nav_task.h>
 #include <gpsbot_navigation/nav_flag.h>
+#include <basic_msgs/gridpose.h>
 #include <geometry_msgs/Twist.h>  
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <actionlib/client/simple_action_client.h>
 #include <move_base_msgs/MoveBaseAction.h>
+
+#include <tf/transform_listener.h>
 #include <signal.h>
 #include <stdio.h>
 #include <json/json.h>
@@ -44,7 +47,7 @@ using namespace std;
 
 //0：not ready,1:start,2:pause;3:stop;
 //global parameter from navigation
-bool recieve_initialpose=false;
+
 
 int nav_flag_=0;
 int nav_map_id;
@@ -61,8 +64,8 @@ int exe_type;
 //global paramter store the navigation array
 vector<int> nav_id_vec;
 vector<geometry_msgs::Pose> p_vec_;
-//initial pose;
-geometry_msgs::PoseWithCovarianceStamped initial_pose;
+
+basic_msgs::gridpose grid_pose;
 
 
 ros::Publisher cmdVelPub;
@@ -86,9 +89,11 @@ bool nav_flag_server(gpsbot_navigation::nav_flag::Request& req,gpsbot_navigation
   nav_flag_=req.nav_flag;
   nav_map_id=req.map_id;
   nav_map_name=req.map_name;
+  grid_pose=req.gridpose;
   ROS_INFO("nav_flag:%d",nav_flag_);
   if (nav_flag_==1){
     ROS_INFO("Localized.");
+    ROS_INFO("grid_pose: %f,%f,%f",grid_pose.x,grid_pose.y,grid_pose.angle);
   }
   else if(nav_flag_==2){
     ROS_INFO("Haven't localized.");
@@ -223,12 +228,11 @@ vector<geometry_msgs::Pose> draw_nav_pose(vector<int> nav_id_vec,ros::Publisher&
 void callback(const geometry_msgs::PoseWithCovarianceStamped& msg){
   //update initial pose;
   initial_pose=msg;
-  recieve_initialpose=true;
+ 
 
 }
 
-void doneCb(const actionlib::SimpleClientGoalState& state,
-            const move_base_msgs::MoveBaseResultConstPtr& result)
+void doneCb(const actionlib::SimpleClientGoalState& state,const move_base_msgs::MoveBaseResultConstPtr& result)
 {
   ROS_INFO("Finished in state [%s]", state.toString().c_str());
 
@@ -240,12 +244,69 @@ void activeCb()
   ROS_INFO("Goal just went active");
 }
  
-// Called every time feedback is received for the goal
+// Called every time feedback is recieved for the goal
 void feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
-{ static  int i=0;
+{ 
+  static  int i=0;
   ROS_INFO("Got Feedback of length %d",i++);
 }
- 
+
+geometry_msgs::PoseStamped::pose::orientation eulerToQuaternion(float angle){
+  float t1 = 0;
+  float t2 = 0;
+  float t3 = angle;
+  geometry_msgs::PoseStamped::pose::orientation orientation;
+  
+  // Calculate the quaternion given roll, pitch, and yaw (rotation order XYZ -- 1:X, 2:Y, 3:Z)
+  orientation.w = -sin(t1 / 2.0) * sin(t2 / 2.0) * sin(t3 / 2.0) + cos(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0);
+  orientation.x = sin(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0) + sin(t2 / 2.0) * sin(t3 / 2.0) * cos(t1 / 2.0);
+  orientation.y = -sin(t1 / 2.0) * sin(t3 / 2.0) * cos(t2 / 2.0) + sin(t2 / 2.0) * cos(t1 / 2.0) * cos(t3 / 2.0);
+  orientation.z = sin(t1 / 2.0) * sin(t2 / 2.0) * cos(t3 / 2.0) + sin(t3 / 2.0) * cos(t2 / 2.0) * cos(t2 / 2.0);
+
+  return orientation;
+  
+}
+
+geometry_msgs::PoseWithCovarianceStamped transformInitalpose(basic_msgs::gridpose grid_pose){
+    bool flag=false;
+    //euler to quaternion.
+    float t1 = 0;
+    float t2 = 0;
+    float t3 = grid_pose.angle;
+    tf::TransformListener listener;
+    geometry_msgs::PoseStamped gridpose_picture;
+    geometry_msgs::PoseStamped gridpose;
+    geometry_msgs::PoseWithCovarianceStamped initial_pose;
+
+    gridpose_picture.header.frame_id="/picture_frame";
+    gridpose_picture.header.stamp=ros::Time();
+    gridpose_picture.pose.position.x=(grid_pose.x)/20;
+    gridpose_picture.pose.position.y=(grid_pose.y)/20;
+
+    gridpose_picture.pose.orientation.w = -sin(t1 / 2.0) * sin(t2 / 2.0) * sin(t3 / 2.0) + cos(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0);
+    gridpose_picture.pose.orientation.x = sin(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0) + sin(t2 / 2.0) * sin(t3 / 2.0) * cos(t1 / 2.0);
+    gridpose_picture.pose.orientation.y = -sin(t1 / 2.0) * sin(t3 / 2.0) * cos(t2 / 2.0) + sin(t2 / 2.0) * cos(t1 / 2.0) * cos(t3 / 2.0);
+    gridpose_picture.pose.orientation.z = sin(t1 / 2.0) * sin(t2 / 2.0) * cos(t3 / 2.0) + sin(t3 / 2.0) * cos(t2 / 2.0) * cos(t2 / 2.0);
+
+    
+    while(flag==false){
+    try{
+    listener.waitForTransform("picture_frame", "map", ros::Time(), ros::Duration(10.0) );
+    listener.transformPose("/map", gridpose_picture, gridpose);
+    ROS_INFO("transform from a point from picture_frame to map without any error ");
+    flag=true;
+    }
+    catch(tf::TransformException& ex){
+    flag=false;
+    ROS_ERROR("Received an exception trying to transform a point from \"picture_frame\" to \"map\": %s", ex.what());
+    }
+    }
+    initial_pose.pose.pose=gridpose.pose;
+    initial_pose.header=
+
+    return initial_pose;
+
+}
 
 
 bool nav_start(vector<geometry_msgs::Pose> p_vec_,MoveBaseClient& client,int nav_rate,ros::NodeHandle& n){
@@ -268,47 +329,48 @@ bool nav_start(vector<geometry_msgs::Pose> p_vec_,MoveBaseClient& client,int nav
   ros::Subscriber sub=n.subscribe("initialpose",1,callback);
 
   //循环条件：nav_flag=2,<循环rate,not shutdown.
-  while((nav_flag_==2) && (n_rate<nav_rate) &&(ros::ok())){
-  //1.if done, restart from beginning.
-  if (i>=n_locations) i=0;
-  i++;
-  //2.calculate the distance.
+  while((nav_flag_==2) && (n_rate<nav_rate) &&(ros::ok()))
+  {
+      //1.if done, restart from beginning.
+      if (i>=n_locations) i=0;
+      i++;
+      //2.calculate the distance.
 
-  //3.send goal to move_base.
-  goal.target_pose.pose=p_vec_[i];
-  goal.target_pose.header.frame_id="map";
-  goal.target_pose.header.stamp=ros::Time::now();
-//  client.sendGoal(goal, &doneCb, &activeCb, &feedbackCb);
+      //3.send goal to move_base.
+      goal.target_pose.pose=p_vec_[i];
+      goal.target_pose.header.frame_id="map";
+      goal.target_pose.header.stamp=ros::Time::now();
+      //  client.sendGoal(goal, &doneCb, &activeCb, &feedbackCb);
 
-  client.sendGoal(goal);
-  //4.wait for result. finished on time? get state. cancel goal.
-  finished_within_time=client.waitForResult(ros::Duration(300));
-  if (!finished_within_time) {
-    ROS_INFO("Timed out to achieve goal %d.",i);
-    client.cancelGoal();
+      client.sendGoal(goal);
+      //4.wait for result. finished on time? get state. cancel goal.
+      finished_within_time=client.waitForResult(ros::Duration(300));
+      if (!finished_within_time) {
+        ROS_INFO("Timed out to achieve goal %d.",i);
+        client.cancelGoal();
+      }
+      else {
+        
+        if (client.getState()==actionlib::SimpleClientGoalState::SUCCEEDED){
+          ROS_INFO("Goal %d SUCCESS!",i);
+          ROS_INFO("Goal pose: x:%f, y:%f, z:%f",p_vec_[i].position.x,p_vec_[i].position.y,p_vec_[i].position.z);
+          n_successes+=1;
+
+        }
+        else {
+          ROS_INFO("Goal %d Failed! with state:%s",i,client.getState().toString().c_str());
+
+        }
+      }
+      //5.get the running time.
+      running_time=ros::Time::now().toSec()-start_time;
+      running_time=running_time/60.0;
+
+      //6.shutdown. cmd_vel publish.
+
+      signal(SIGINT, shutdown);
   }
-  else {
-    
-    if (client.getState()==actionlib::SimpleClientGoalState::SUCCEEDED){
-      ROS_INFO("Goal %d SUCCESS!",i);
-      ROS_INFO("Goal pose: x:%f, y:%f, z:%f",p_vec_[i].position.x,p_vec_[i].position.y,p_vec_[i].position.z);
-      n_successes+=1;
-
-    }
-    else {
-      ROS_INFO("Goal %d Failed! with state:%s",i,client.getState().toString().c_str());
-
-    }
-  }
-  //5.get the running time.
-  running_time=ros::Time::now().toSec()-start_time;
-  running_time=running_time/60.0;
-
-  //6.shutdown. cmd_vel publish.
-
-  signal(SIGINT, shutdown);
-  }
-    return true;
+  return true;
 }
 
 //task_id->task->pose_id
@@ -327,6 +389,8 @@ int main( int argc, char** argv )
   ros::Rate r(10);
   Json::Reader reader;
   Json::Value root;
+  //initial pose;
+  geometry_msgs::PoseWithCovarianceStamped initial_pose;
 
   //read the initialpose from yaml.
 
@@ -343,7 +407,8 @@ int main( int argc, char** argv )
     if (nav_flag_ == 1){
       ROS_INFO("got the initial pose");
       //publish the initial pose.
-      recieve_initialpose=false;
+
+      initial_pose=transformInitalpose(grid_pose);
       initialpose_pub.publish(initial_pose);
 
       ROS_INFO("nav_flag:%d,exe_type:%d",nav_flag_,exe_type);
