@@ -1,0 +1,9 @@
+<launch>
+  <!-- ros opertion mapbuild launch-->
+
+  <node name="operation_mapbuild" pkg="operation" type="operation_mapbuild" respawn="false" output="screen">
+
+  </node>
+
+
+</launch>

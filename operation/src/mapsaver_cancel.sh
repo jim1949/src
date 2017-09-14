@@ -3,10 +3,8 @@
 
 
 #stop all except rosbridge_websocket.
-rosnode kill map_saver 
-rosnode kill convert_img_ros 
-rosnode kill 
-rosnode cleanup &
+rm -r $1/$2 
+
 
 
 

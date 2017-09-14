@@ -8,4 +8,4 @@
 #sleep 5
 #roslaunch operation operation_buildmap.launch
 
-roslaunch operation mapping.launch
+roslaunch operation edit_map.launch

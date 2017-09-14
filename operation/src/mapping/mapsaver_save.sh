@@ -2,11 +2,36 @@
 # kill -9 `pgrep -f ros`
 
 
-#stop all except rosbridge_websocket.
+#complete the mapping process.
+
+mkdir $1/$2 
+
+sleep 0.5
+cp $1/now/map.pgm $1/$2/$2.pgm 
+
+cp $1/now/map.yaml $1/$2/$2.yaml &
+rosrun map_server store_img.py $1 $2 $3 &
+
+rosnode kill arduino
+rosnode kill base_link_to_laser4
+rosnode kill joint_state_publisher
+
+rosnode kill move_base
+rosnode kill velocity_smoother
+rosnode kill nodelet_manager
+rosnode kill robot_pose_publisher
+rosnode kill robot_state_publisher
+rosnode kill sick_tim551_2050001
+rosnode kill slam_gmapping
+
 rosnode kill map_saver 
 rosnode kill convert_img_ros 
-rosnode kill 
-rosnode cleanup &
+
+rosnode kill lasers_in_picture_frame_node
+
+rosnode kill picture_frame_broadcaster
+rosnode kill pose_in_picture_frame_node
+rosnode cleanup 
 
 
 

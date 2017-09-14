@@ -1,0 +1,6 @@
+<launch>
+  <!-- ros opertion mapbuild launch-->
+
+  <include file="$(find operation)/launch/operation_mapbuild.launch"/>
+
+</launch>

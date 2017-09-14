@@ -7,6 +7,6 @@ mkdir $1/$2
 sleep 0.5
 cp $1/now/map.pgm $1/$2/$2.pgm 
 
-cp $1/now/map.yaml $1/$2/$2.yaml &
-rosrun map_server store_img.py $1 $2 $3 &
+cp $1/now/map.yaml $1/$2/$2.yaml 
+rosrun map_server store_img.py $1 $2 $3 
 # kill -9 `ps -x | grep tf_learning|grep -v grep |  awk '{print $1}'`

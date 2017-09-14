@@ -47,11 +47,6 @@ std::string bringup=sh+mapsaver_bringup_path;
 std::string pause=sh+mapsaver_pause_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
 std::string save=sh+mapsaver_save_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
 std::string cancel=sh+mapsaver_cancel_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
-
-std::string edit_map_start=sh+
-
-
-
 std::cout<<save;
 
 if (param->type==-1) {
