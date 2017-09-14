@@ -2,6 +2,8 @@
 #rosnode kill picture_frame_broadcaster
 #rosnode kill pose_in_picture_frame_node 
 #rosnode kill lasers_in_picture_frame_node 
+
+echo "mapsaver pause."
 mkdir $1/$2 
 
 sleep 0.5

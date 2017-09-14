@@ -48,7 +48,11 @@ std::string pause=sh+mapsaver_pause_path+" "+param->map_path+" "+param->map_id+"
 std::string save=sh+mapsaver_save_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
 std::string cancel=sh+mapsaver_cancel_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
 
-std::string edit_map_start=sh+
+std::string edit_map_start=sh+editmap_bringup_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
+std::string edit_map_stop=sh+editmap_stop_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
+
+std::string task_start=sh++" "+param->map_path+" "+param->map_id+" "+param->map_name;
+std::string task_stop=sh+" "+param->map_path+" "+param->map_id+" "+param->map_name;
 
 
 
@@ -77,7 +81,22 @@ else if (param->type==2){
 else if (param->type==3){
   ROS_INFO("cancel the map ...");
   system(cancel.c_str()); 
-
+}
+else if (param->type==4){
+  ROS_INFO("edit the map ...");
+  system(edit_map_start.c_str()); 
+}
+else if (param->type==5){
+  ROS_INFO("stop editting the map ...");
+  system(edit_map_stop.c_str()); 
+}
+else if (param->type==6){
+  ROS_INFO("start task ...");
+  system(task_start.c_str()); 
+}
+else if (param->type==7){
+  ROS_INFO("stop task ...");
+  system(task_stop.c_str()); 
 }
 
 }
@@ -121,6 +140,34 @@ else if (req.data==3){
 
 res.successed=true;
 res.errormsg="cancel mapping";
+
+}
+
+else if (req.data==4){
+
+res.successed=true;
+res.errormsg="editmap start.";
+
+}
+
+else if (req.data==5){
+
+res.successed=true;
+res.errormsg="editmap stop";
+
+}
+
+else if (req.data==6){
+
+res.successed=true;
+res.errormsg="task start";
+
+}
+
+else if (req.data==7){
+
+res.successed=true;
+res.errormsg="task stop";
 
 }
 else {

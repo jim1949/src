@@ -206,11 +206,3 @@ add_dependencies(draw_wall ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED
 target_link_libraries(draw_wall
   ${catkin_LIBRARIES} jsoncpp
 )
-
-add_executable(operation_mapnav
-  src/operation_map_edit.cpp
-)
-add_dependencies(operation_mapnav ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(operation_mapnav
-  ${catkin_LIBRARIES}
-)

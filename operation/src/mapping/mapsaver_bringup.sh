@@ -7,5 +7,6 @@
 #roslaunch map_server multi_map_saver.launch &
 #sleep 5
 #roslaunch operation operation_buildmap.launch
-
+echo "mapsaver bringup start."
 roslaunch operation mapping.launch
+

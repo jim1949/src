@@ -1,7 +1,7 @@
 #!/bin/bash
 # kill -9 `pgrep -f ros`
 
-
+echo "mapsaver save, complete saving the map."
 #complete the mapping process.
 
 mkdir $1/$2 

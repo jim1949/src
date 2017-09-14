@@ -1,7 +1,7 @@
 #!/bin/bash
 # kill -9 `pgrep -f ros`
 
-
+echo "[shell] nw_task stop. "
 #complete the mapping process.
 
 rosnode kill amcl
