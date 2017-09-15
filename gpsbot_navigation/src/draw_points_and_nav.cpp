@@ -30,6 +30,10 @@ functions:
 #include <actionlib/client/simple_action_client.h>
 #include <move_base_msgs/MoveBaseAction.h>
 
+#include <geometry_msgs/Pose.h>
+
+
+
 #include <tf/transform_listener.h>
 #include <signal.h>
 #include <stdio.h>
@@ -66,7 +70,7 @@ vector<int> nav_id_vec;
 vector<geometry_msgs::Pose> p_vec_;
 
 basic_msgs::gridpose grid_pose;
-
+geometry_msgs::Pose last_pose;
 
 ros::Publisher cmdVelPub;
 
@@ -254,6 +258,11 @@ void feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
   ROS_INFO("Got Feedback of length %d",i++);
 }
 
+void pose_callback(geometry_msgs::Pose& msg){
+last_pose=msg;
+
+}
+
 
 geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     geometry_msgs::PoseWithCovarianceStamped initial_pose;
@@ -374,6 +383,7 @@ int main( int argc, char** argv )
   // nav_info nav;
   ros::Publisher marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 10);//
   ros::Publisher initialpose_pub=n.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1);
+  ros::Subscriber pose_sub=n.subscribe("robot_pose",1,pose_callback);
   ros::ServiceServer execute_task=n.advertiseService("/execute_nav_task",execute_server);
   ros::ServiceServer nav_flag=n.advertiseService("/nav_flag",nav_flag_server);
   MoveBaseClient client("move_base",true);//true: don't need ros::spin().
