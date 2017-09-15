@@ -269,8 +269,8 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
 
     gridpose_picture.header.frame_id="/picture_frame";
     gridpose_picture.header.stamp=ros::Time();
-    gridpose_picture.pose.position.x=(grid_pose.x)/20;
-    gridpose_picture.pose.position.y=(grid_pose.y)/20;
+    gridpose_picture.pose.position.x=(grid_pose.x)/20.0;
+    gridpose_picture.pose.position.y=(grid_pose.y)/20.0;
 
     gridpose_picture.pose.orientation.w = -sin(t1 / 2.0) * sin(t2 / 2.0) * sin(t3 / 2.0) + cos(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0);
     gridpose_picture.pose.orientation.x = sin(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0) + sin(t2 / 2.0) * sin(t3 / 2.0) * cos(t1 / 2.0);

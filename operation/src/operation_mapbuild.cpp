@@ -51,8 +51,8 @@ std::string cancel=sh+mapsaver_cancel_path+" "+param->map_path+" "+param->map_id
 std::string edit_map_start=sh+editmap_bringup_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
 std::string edit_map_stop=sh+editmap_stop_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
 
-std::string task_start=sh+" "+param->map_path+" "+param->map_id+" "+param->map_name;
-std::string task_stop=sh+" "+param->map_path+" "+param->map_id+" "+param->map_name;
+std::string task_start=sh+task_bringup_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
+std::string task_stop=sh+task_stop_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
 
 
 
