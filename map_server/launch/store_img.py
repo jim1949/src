@@ -33,7 +33,7 @@ def listener():
     return 0
 
 def convert():
-    arg="map_test"
+    arg='/var/www/maps/now/now'
     #need two arg. first is the path(default is /var/www/maps), the second is the unique id of the map. The third is the name of the map.
     if len(sys.argv)>3:
         folder_path=sys.argv[1]#id
@@ -43,11 +43,14 @@ def convert():
         rospy.loginfo(arg+".pgm")
 
     #save pgm to jpg,jpeg.
-    im=Image.open(arg+".pgm")
+
+    fp=open(arg+".pgm",'r')
+    im=Image.open(fp)
+    
     im.save(arg+".jpg")
     im.save(arg+".jpeg")
-    im.save(arg+".pgm")
     im.save(arg+"_bk.pgm")
+    fp.close()
 
     
     #read yaml
@@ -58,7 +61,7 @@ def convert():
     fr_yaml.close()
 
     #rewrite yaml path
-    fw_yaml=open(arg+'.pgm','w')
+    fw_yaml=open(arg+'.yaml','w')
     path=arg+'.yaml'
     rospy.loginfo(path)
     data['image']=arg+'.pgm'

@@ -43,11 +43,15 @@ def convert():
         rospy.loginfo(arg+".pgm")
 
     #save pgm to jpg,jpeg.
-    im=Image.open(arg+".pgm")
+
+    fp=open(arg+".pgm",'r')
+    im=Image.open(fp)
+    fp.close()
     im.save(arg+".jpg")
     im.save(arg+".jpeg")
     im.save(arg+".pgm")
     im.save(arg+"_bk.pgm")
+    
 
     
     #read yaml

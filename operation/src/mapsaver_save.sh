@@ -28,7 +28,7 @@ rosnode kill map_saver
 rosnode kill convert_img_ros 
 
 rosnode kill velocity_smoother
-rosnode cleanup 
+#rosnode cleanup 
 
 
 

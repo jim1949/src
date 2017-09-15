@@ -9,5 +9,4 @@
 #roslaunch operation operation_buildmap.launch
 
 echo "[shell] nw_task bringup start. "
-echo $1/$2/$2.yaml
 roslaunch operation navigation.launch map_file:=$1/$2/$2.yaml
