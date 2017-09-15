@@ -73,6 +73,9 @@ ros::Publisher cmdVelPub;
 //everything is ready flag.
 // int flag=false;
 
+//covariance
+double covariance_[36]={0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.06853891945200942};
+
 void shutdown(int sig)
 {
   cmdVelPub.publish(geometry_msgs::Twist());//使机器人停止运动
@@ -225,11 +228,11 @@ vector<geometry_msgs::Pose> draw_nav_pose(vector<int> nav_id_vec,ros::Publisher&
     
 }
 
-void callback(const geometry_msgs::PoseWithCovarianceStamped& msg){
+bool callback(const geometry_msgs::PoseWithCovarianceStamped& msg){
   //update initial pose;
-  initial_pose=msg;
+  // initial_pose=msg;
  
-
+  return true;
 }
 
 void doneCb(const actionlib::SimpleClientGoalState& state,const move_base_msgs::MoveBaseResultConstPtr& result)
@@ -251,23 +254,9 @@ void feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
   ROS_INFO("Got Feedback of length %d",i++);
 }
 
-geometry_msgs::PoseStamped::pose::orientation eulerToQuaternion(float angle){
-  float t1 = 0;
-  float t2 = 0;
-  float t3 = angle;
-  geometry_msgs::PoseStamped::pose::orientation orientation;
-  
-  // Calculate the quaternion given roll, pitch, and yaw (rotation order XYZ -- 1:X, 2:Y, 3:Z)
-  orientation.w = -sin(t1 / 2.0) * sin(t2 / 2.0) * sin(t3 / 2.0) + cos(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0);
-  orientation.x = sin(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0) + sin(t2 / 2.0) * sin(t3 / 2.0) * cos(t1 / 2.0);
-  orientation.y = -sin(t1 / 2.0) * sin(t3 / 2.0) * cos(t2 / 2.0) + sin(t2 / 2.0) * cos(t1 / 2.0) * cos(t3 / 2.0);
-  orientation.z = sin(t1 / 2.0) * sin(t2 / 2.0) * cos(t3 / 2.0) + sin(t3 / 2.0) * cos(t2 / 2.0) * cos(t2 / 2.0);
 
-  return orientation;
-  
-}
-
-geometry_msgs::PoseWithCovarianceStamped transformInitalpose(basic_msgs::gridpose grid_pose){
+geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
+    geometry_msgs::PoseWithCovarianceStamped initial_pose;
     bool flag=false;
     //euler to quaternion.
     float t1 = 0;
@@ -276,7 +265,7 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(basic_msgs::gridpos
     tf::TransformListener listener;
     geometry_msgs::PoseStamped gridpose_picture;
     geometry_msgs::PoseStamped gridpose;
-    geometry_msgs::PoseWithCovarianceStamped initial_pose;
+
 
     gridpose_picture.header.frame_id="/picture_frame";
     gridpose_picture.header.stamp=ros::Time();
@@ -291,19 +280,22 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(basic_msgs::gridpos
     
     while(flag==false){
     try{
-    listener.waitForTransform("picture_frame", "map", ros::Time(), ros::Duration(10.0) );
-    listener.transformPose("/map", gridpose_picture, gridpose);
-    ROS_INFO("transform from a point from picture_frame to map without any error ");
-    flag=true;
+      listener.waitForTransform("picture_frame", "map", ros::Time(), ros::Duration(10.0) );
+      listener.transformPose("/map", gridpose_picture, gridpose);
+      ROS_INFO("transform from a point from picture_frame to map without any error ");
+      flag=true;
     }
     catch(tf::TransformException& ex){
-    flag=false;
-    ROS_ERROR("Received an exception trying to transform a point from \"picture_frame\" to \"map\": %s", ex.what());
+      flag=false;
+      ROS_ERROR("Received an exception trying to transform a point from \"picture_frame\" to \"map\": %s", ex.what());
     }
     }
     initial_pose.pose.pose=gridpose.pose;
-    initial_pose.header=
-
+    initial_pose.header=gridpose.header;
+    for (int i=0;i<36;i++){
+    initial_pose.pose.covariance[i]=covariance_[i];
+    }
+    // initial_pose.pose.covariance
     return initial_pose;
 
 }
@@ -322,11 +314,11 @@ bool nav_start(vector<geometry_msgs::Pose> p_vec_,MoveBaseClient& client,int nav
   bool finished_within_time,getinitialpose_within_time;
   move_base_msgs::MoveBaseGoal goal;
 
-  //0.make sure we have initial pose,no time limited
-  ROS_INFO("waiting for the initialpose message");
-  getinitialpose_within_time=ros::topic::waitForMessage<geometry_msgs::PoseWithCovarianceStamped>("initialpose");
+  // //0.make sure we have initial pose,no time limited
+  // ROS_INFO("waiting for the initialpose message");
+  // ros::topic::waitForMessage<geometry_msgs::PoseWithCovarianceStamped>("initialpose");
 
-  ros::Subscriber sub=n.subscribe("initialpose",1,callback);
+  // ros::Subscriber sub=n.subscribe("initialpose",1,callback);
 
   //循环条件：nav_flag=2,<循环rate,not shutdown.
   while((nav_flag_==2) && (n_rate<nav_rate) &&(ros::ok()))
@@ -408,7 +400,7 @@ int main( int argc, char** argv )
       ROS_INFO("got the initial pose");
       //publish the initial pose.
 
-      initial_pose=transformInitalpose(grid_pose);
+      initial_pose=transformInitalpose();
       initialpose_pub.publish(initial_pose);
 
       ROS_INFO("nav_flag:%d,exe_type:%d",nav_flag_,exe_type);
