@@ -33,7 +33,7 @@ functions:
 #include <geometry_msgs/Pose.h>
 
 
-
+#include "geometry_msgs/Quaternion.h"
 #include <tf/transform_listener.h>
 #include <signal.h>
 #include <stdio.h>
@@ -258,7 +258,7 @@ void feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
   ROS_INFO("Got Feedback of length %d",i++);
 }
 
-void pose_callback(geometry_msgs::Pose& msg){
+void pose_callback(const geometry_msgs::Pose& msg){
 last_pose=msg;
 
 }
@@ -266,11 +266,19 @@ last_pose=msg;
 
 geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     geometry_msgs::PoseWithCovarianceStamped initial_pose;
+    tf::Quaternion quat;
     bool flag=false;
     //euler to quaternion.
-    float t1 = 0;
-    float t2 = 0;
-    float t3 = grid_pose.angle;
+    double t1 = 0;
+    double t2 = 0;
+    double t3 = grid_pose.angle;
+    tf::quaternionMsgToTF(last_pose.orientation,quat);
+    double roll, pitch, yaw;
+    tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
+    t3=roll+t3;
+
+    // the tf::Quaternion has a method to acess roll pitch and yaw
+
     tf::TransformListener listener;
     geometry_msgs::PoseStamped gridpose_picture;
     geometry_msgs::PoseStamped gridpose;
