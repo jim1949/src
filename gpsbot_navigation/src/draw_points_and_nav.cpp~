@@ -30,6 +30,10 @@ functions:
 #include <actionlib/client/simple_action_client.h>
 #include <move_base_msgs/MoveBaseAction.h>
 
+#include <geometry_msgs/Pose.h>
+
+
+#include "geometry_msgs/Quaternion.h"
 #include <tf/transform_listener.h>
 #include <signal.h>
 #include <stdio.h>
@@ -66,7 +70,7 @@ vector<int> nav_id_vec;
 vector<geometry_msgs::Pose> p_vec_;
 
 basic_msgs::gridpose grid_pose;
-
+geometry_msgs::Pose last_pose;
 
 ros::Publisher cmdVelPub;
 
@@ -254,14 +258,27 @@ void feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
   ROS_INFO("Got Feedback of length %d",i++);
 }
 
+void pose_callback(const geometry_msgs::Pose& msg){
+last_pose=msg;
+
+}
+
 
 geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     geometry_msgs::PoseWithCovarianceStamped initial_pose;
+    tf::Quaternion quat;
     bool flag=false;
     //euler to quaternion.
-    float t1 = 0;
-    float t2 = 0;
-    float t3 = grid_pose.angle;
+    double t1 = 0;
+    double t2 = 0;
+    double t3 = grid_pose.angle;
+    tf::quaternionMsgToTF(last_pose.orientation,quat);
+    double roll, pitch, yaw;
+    tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
+    t3=roll+t3;
+
+    // the tf::Quaternion has a method to acess roll pitch and yaw
+
     tf::TransformListener listener;
     geometry_msgs::PoseStamped gridpose_picture;
     geometry_msgs::PoseStamped gridpose;
@@ -269,8 +286,8 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
 
     gridpose_picture.header.frame_id="/picture_frame";
     gridpose_picture.header.stamp=ros::Time();
-    gridpose_picture.pose.position.x=(grid_pose.x)/20;
-    gridpose_picture.pose.position.y=(grid_pose.y)/20;
+    gridpose_picture.pose.position.x=(grid_pose.x)/20.0;
+    gridpose_picture.pose.position.y=(grid_pose.y)/20.0;
 
     gridpose_picture.pose.orientation.w = -sin(t1 / 2.0) * sin(t2 / 2.0) * sin(t3 / 2.0) + cos(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0);
     gridpose_picture.pose.orientation.x = sin(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0) + sin(t2 / 2.0) * sin(t3 / 2.0) * cos(t1 / 2.0);
@@ -374,6 +391,7 @@ int main( int argc, char** argv )
   // nav_info nav;
   ros::Publisher marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 10);//
   ros::Publisher initialpose_pub=n.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1);
+  ros::Subscriber pose_sub=n.subscribe("robot_pose",1,pose_callback);
   ros::ServiceServer execute_task=n.advertiseService("/execute_nav_task",execute_server);
   ros::ServiceServer nav_flag=n.advertiseService("/nav_flag",nav_flag_server);
   MoveBaseClient client("move_base",true);//true: don't need ros::spin().

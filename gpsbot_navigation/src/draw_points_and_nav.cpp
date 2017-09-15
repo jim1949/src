@@ -275,7 +275,7 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     tf::quaternionMsgToTF(last_pose.orientation,quat);
     double roll, pitch, yaw;
     tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
-    t3=roll+t3;
+    t3=roll-t3;
 
     // the tf::Quaternion has a method to acess roll pitch and yaw
 
