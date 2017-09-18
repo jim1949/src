@@ -235,7 +235,7 @@ vector<geometry_msgs::Pose> draw_nav_pose(vector<int> nav_id_vec,ros::Publisher&
 bool callback(const geometry_msgs::PoseWithCovarianceStamped& msg){
   //update initial pose;
   // initial_pose=msg;
- 
+  ROS_INFO("got the initial_pose!!!");
   return true;
 }
 
@@ -259,6 +259,7 @@ void feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
 }
 
 void pose_callback(const geometry_msgs::Pose& msg){
+ROS_INFO("Got the last pose from robot_pose");
 last_pose=msg;
 
 }
@@ -273,22 +274,26 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     geometry_msgs::PoseStamped gridpose_picture,lastpose_picture;
     geometry_msgs::PoseStamped gridpose,lastpose;
 
-	
+    lastpose.header.stamp=ros::Time();
+    lastpose.header.frame_id="/map";
+    lastpose.pose=last_pose;
 
     while(flag==false){
     try{
       listener.waitForTransform("map", "picture_frame", ros::Time(), ros::Duration(10.0) );
-      listener.transformPose("/map", last_pose, last_pose_frame);
-      ROS_INFO("transform from a point from picture_frame to map without any error ");
+      listener.transformPose("/map", lastpose, lastpose_picture);
+      ROS_INFO("1:transform from a point from map to picture_frame without any error ");
       
       flag=true;
     }
     catch(tf::TransformException& ex){
       flag=false;
-      ROS_ERROR("Received an exception trying to transform a point from \"picture_frame\" to \"map\": %s", ex.what());
+      ROS_ERROR("1:Received an exception trying to transform a point from \"map\" to \"picture_frame\": %s", ex.what());
+    }
     }
 
 
+    flag==false;
 
     static int sq=1;
 
@@ -297,11 +302,11 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     double t2 = 0;
     double t3 = grid_pose.angle;
 
-    tf::quaternionMsgToTF(last_pose.orientation,quat);
+    tf::quaternionMsgToTF(lastpose_picture.pose.orientation,quat);
     double roll, pitch, yaw;
     tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
     ROS_INFO("t3:%f,roll:%f",t3,roll);
-    t3=roll+t3;
+    t3=roll-t3;
     
 
     // the tf::Quaternion has a method to acess roll pitch and yaw
@@ -318,8 +323,8 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     
     while(flag==false){
     try{
-      listener.waitForTransform("picture_frame", "map", ros::Time(), ros::Duration(10.0) );
-      listener.transformPose("/map", gridpose_picture, gridpose);
+      listener2.waitForTransform("picture_frame", "map", ros::Time(), ros::Duration(10.0) );
+      listener2.transformPose("/map", gridpose_picture, gridpose);
       ROS_INFO("transform from a point from picture_frame to map without any error ");
       
       flag=true;
