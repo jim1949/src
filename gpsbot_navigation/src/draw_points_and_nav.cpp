@@ -265,25 +265,46 @@ last_pose=msg;
 
 
 geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
+    bool flag=false;
     geometry_msgs::PoseWithCovarianceStamped initial_pose;
     tf::Quaternion quat;
-    bool flag=false;
+
+    tf::TransformListener listener,listener2;
+    geometry_msgs::PoseStamped gridpose_picture,lastpose_picture;
+    geometry_msgs::PoseStamped gridpose,lastpose;
+
+	
+
+    while(flag==false){
+    try{
+      listener.waitForTransform("map", "picture_frame", ros::Time(), ros::Duration(10.0) );
+      listener.transformPose("/map", last_pose, last_pose_frame);
+      ROS_INFO("transform from a point from picture_frame to map without any error ");
+      
+      flag=true;
+    }
+    catch(tf::TransformException& ex){
+      flag=false;
+      ROS_ERROR("Received an exception trying to transform a point from \"picture_frame\" to \"map\": %s", ex.what());
+    }
+
+
+
+    static int sq=1;
+
     //euler to quaternion.
     double t1 = 0;
     double t2 = 0;
     double t3 = grid_pose.angle;
+
     tf::quaternionMsgToTF(last_pose.orientation,quat);
     double roll, pitch, yaw;
     tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
-    t3=roll-t3;
+    ROS_INFO("t3:%f,roll:%f",t3,roll);
+    t3=roll+t3;
+    
 
     // the tf::Quaternion has a method to acess roll pitch and yaw
-
-    tf::TransformListener listener;
-    geometry_msgs::PoseStamped gridpose_picture;
-    geometry_msgs::PoseStamped gridpose;
-
-
     gridpose_picture.header.frame_id="/picture_frame";
     gridpose_picture.header.stamp=ros::Time();
     gridpose_picture.pose.position.x=(grid_pose.x)/20.0;
@@ -300,6 +321,7 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
       listener.waitForTransform("picture_frame", "map", ros::Time(), ros::Duration(10.0) );
       listener.transformPose("/map", gridpose_picture, gridpose);
       ROS_INFO("transform from a point from picture_frame to map without any error ");
+      
       flag=true;
     }
     catch(tf::TransformException& ex){
@@ -311,6 +333,7 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     initial_pose.header=gridpose.header;
     for (int i=0;i<36;i++){
     initial_pose.pose.covariance[i]=covariance_[i];
+    initial_pose.header.seq=sq++;
     }
     // initial_pose.pose.covariance
     return initial_pose;
@@ -415,7 +438,7 @@ int main( int argc, char** argv )
     //marker definition
    
     if (nav_flag_ == 1){
-      ROS_INFO("got the initial pose");
+      ROS_INFO("Got the initial pose!");
       //publish the initial pose.
 
       initial_pose=transformInitalpose();
@@ -427,6 +450,7 @@ int main( int argc, char** argv )
     }
     
     while ((nav_flag_== 2)&&(exe_type == 1)){
+      ROS_INFO("Start navigation.");
       nav_id_vec.clear();
       string map_id_path,task_json,task_id_path;
       stringstream ss,os;
