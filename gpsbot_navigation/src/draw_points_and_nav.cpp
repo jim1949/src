@@ -281,7 +281,7 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     while(flag==false){
     try{
       listener.waitForTransform("map", "picture_frame", ros::Time(), ros::Duration(10.0) );
-      listener.transformPose("/map", lastpose, lastpose_picture);
+      listener.transformPose("map", lastpose, lastpose_picture);
       ROS_INFO("1:transform from a point from map to picture_frame without any error ");
       
       flag=true;
@@ -306,25 +306,25 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     double roll, pitch, yaw;
     tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
     ROS_INFO("t3:%f,roll:%f",t3,roll);
-    t3=roll-t3;
+    t3=roll+t3;
     
 
     // the tf::Quaternion has a method to acess roll pitch and yaw
-    gridpose_picture.header.frame_id="/picture_frame";
-    gridpose_picture.header.stamp=ros::Time();
-    gridpose_picture.pose.position.x=(grid_pose.x)/20.0;
-    gridpose_picture.pose.position.y=(grid_pose.y)/20.0;
+    lastpose_picture.header.frame_id="/picture_frame";
+    lastpose_picture.header.stamp=ros::Time();
+    lastpose_picture.pose.position.x=(grid_pose.x)/20.0;
+    lastpose_picture.pose.position.y=(grid_pose.y)/20.0;
 
-    gridpose_picture.pose.orientation.w = -sin(t1 / 2.0) * sin(t2 / 2.0) * sin(t3 / 2.0) + cos(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0);
-    gridpose_picture.pose.orientation.x = sin(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0) + sin(t2 / 2.0) * sin(t3 / 2.0) * cos(t1 / 2.0);
-    gridpose_picture.pose.orientation.y = -sin(t1 / 2.0) * sin(t3 / 2.0) * cos(t2 / 2.0) + sin(t2 / 2.0) * cos(t1 / 2.0) * cos(t3 / 2.0);
-    gridpose_picture.pose.orientation.z = sin(t1 / 2.0) * sin(t2 / 2.0) * cos(t3 / 2.0) + sin(t3 / 2.0) * cos(t2 / 2.0) * cos(t2 / 2.0);
+    lastpose_picture.pose.orientation.w = -sin(t1 / 2.0) * sin(t2 / 2.0) * sin(t3 / 2.0) + cos(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0);
+    lastpose_picture.pose.orientation.x = sin(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0) + sin(t2 / 2.0) * sin(t3 / 2.0) * cos(t1 / 2.0);
+    lastpose_picture.pose.orientation.y = -sin(t1 / 2.0) * sin(t3 / 2.0) * cos(t2 / 2.0) + sin(t2 / 2.0) * cos(t1 / 2.0) * cos(t3 / 2.0);
+    lastpose_picture.pose.orientation.z = sin(t1 / 2.0) * sin(t2 / 2.0) * cos(t3 / 2.0) + sin(t3 / 2.0) * cos(t2 / 2.0) * cos(t2 / 2.0);
 
     
     while(flag==false){
     try{
       listener2.waitForTransform("picture_frame", "map", ros::Time(), ros::Duration(10.0) );
-      listener2.transformPose("/map", gridpose_picture, gridpose);
+      listener2.transformPose("map", lastpose_picture, lastpose);
       ROS_INFO("transform from a point from picture_frame to map without any error ");
       
       flag=true;
@@ -334,11 +334,12 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
       ROS_ERROR("Received an exception trying to transform a point from \"picture_frame\" to \"map\": %s", ex.what());
     }
     }
-    initial_pose.pose.pose=gridpose.pose;
-    initial_pose.header=gridpose.header;
+    initial_pose.pose.pose=lastpose.pose;
+    initial_pose.header.frame_id="/map";
+    initial_pose.header.stamp=ros::Time();
+    initial_pose.header.seq=sq++;
     for (int i=0;i<36;i++){
     initial_pose.pose.covariance[i]=covariance_[i];
-    initial_pose.header.seq=sq++;
     }
     // initial_pose.pose.covariance
     return initial_pose;
