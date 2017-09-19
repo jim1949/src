@@ -31,11 +31,12 @@
   <node pkg="tf" type="static_transform_publisher" name="base_link_to_laser4" 
    args="0.3 0.0 0.2 0.0 0.0  0.0 /base_link /laser_frame 40" />
 
-
   <node name="robot_pose_publisher" pkg="robot_pose_publisher" type="robot_pose_publisher" />
+
   <include file="$(find tf_learning)/launch/mapinfo_pub.launch"/>
  
   <include file="$(find gpsbot_nav)/include/odom/teb_move_base.launch"/>
+
   <arg name="map_file" default="/var/www/maps/now/map.yaml"/>
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 

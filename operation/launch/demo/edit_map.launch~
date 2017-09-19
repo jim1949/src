@@ -38,7 +38,6 @@
 
   <node name="robot_pose_publisher" pkg="robot_pose_publisher" type="robot_pose_publisher" />
 
-<!--  <include file="$(find tf_learning)/launch/mapinfo_pub.launch"/>-->
 
  <include file="$(find operation)/launch/edit_wall_navpoints.launch"/>
 <!--  <include file="$(find map_server)/launch/multi_map_saver.launch"/>-->

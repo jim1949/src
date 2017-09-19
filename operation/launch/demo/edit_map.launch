@@ -1,7 +1,5 @@
 <launch>
-
-  <!-- navigation launch-->
- <!-- ros arduino bridge launch-->
+  <!-- ros arduino bridge launch-->
 
   <include file="$(find ros_arduino_python)/launch/demo.launch"/>
 
@@ -33,19 +31,15 @@
   <node pkg="tf" type="static_transform_publisher" name="base_link_to_laser4" 
    args="0.3 0.0 0.2 0.0 0.0  0.0 /base_link /laser_frame 40" />
 
-<!--  <include file="$(find gpsbot_nav)/include/odom/gmapping.launch"/>-->
-<!--  <include file="$(find gpsbot_nav)/include/odom/teb_move_base.launch"/>-->
-
   <node name="robot_pose_publisher" pkg="robot_pose_publisher" type="robot_pose_publisher" />
 
-
- <include file="$(find operation)/launch/edit_wall_navpoints.launch"/>
-<!--  <include file="$(find map_server)/launch/multi_map_saver.launch"/>-->
+  <include file="$(find tf_learning)/launch/mapinfo_pub.launch"/>
+ 
   <include file="$(find gpsbot_nav)/include/odom/teb_move_base.launch"/>
+
   <arg name="map_file" default="/var/www/maps/now/map.yaml"/>
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
-  
-  <include file="$(find tf_learning)/launch/mapinfo_pub.launch"/>
+
   <arg name="initial_pose_x" default="0.0"/> <!-- Use 17.0 for willow's map in simulation -->
   <arg name="initial_pose_y" default="0.0"/> <!-- Use 17.0 for willow's map in simulation -->
   <arg name="initial_pose_a" default="0.0"/>
@@ -54,5 +48,7 @@
     <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
     <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
   </include>
+
+ <include file="$(find operation)/launch/edit_wall_navpoints.launch"/>
 
 </launch>
