@@ -298,7 +298,6 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
 
     flag==false;
 
-    static int sq=1;
 
 
     //euler to quaternion.
