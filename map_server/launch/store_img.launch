@@ -1,0 +1,7 @@
+<launch>
+    <arg name="path" default="/var/www/maps/now/"/>
+    <arg name="map_file" default="map"/>
+    <node name="map_saver" pkg="map_server" type="map_saver" args="-f $(arg path)$(arg map_file)" />
+    <node name="convert_img_ros" pkg="map_server" type="convert_img.py" args="$(arg path)$(arg map_file)"  output="screen" />
+</launch>
+
