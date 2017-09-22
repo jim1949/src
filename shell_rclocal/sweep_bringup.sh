@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 source /opt/ros/indigo/setup.bash
 source /home/relaybot/catkin_ws/devel/setup.bash
 source /home/relaybot/api_ws/devel/setup.bash
