@@ -31,6 +31,7 @@ rosnode kill lasers_in_picture_frame_node
 
 rosnode kill picture_frame_broadcaster
 rosnode kill pose_in_picture_frame_node
+./home/relaybot/api_ws/src/shell_rclocal/clean.sh
 rosnode cleanup 
 
 

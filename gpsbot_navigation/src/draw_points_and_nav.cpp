@@ -44,8 +44,6 @@ functions:
 
 #pragma comment(lib, "json_mtd.lib")
 
-#include <cstdio>
-
 using namespace std;
 
 
@@ -196,10 +194,13 @@ vector<geometry_msgs::Pose> draw_nav_pose(vector<int> nav_id_vec,ros::Publisher&
           // sprintf(map_id_path,"%d",exe_map_id);
           // sprintf(nav_id_path,"%d",nav_id_vec[i]);
           // path="http://192.168.31.130:82/nav_manager/3/nav_pose/4.json"
-          path="/var/www/nav_manager/"+map_id_path+"/nav_pose/"+nav_id_path;
+          path="/var/www/nav_manager/"+map_id_path+"/nav_pose/"+nav_id_path+".json";
+          ROS_INFO("go to nav_id:%d",nav_id_vec[i]);
           ifstream is;
           is.open(path.c_str()); 
-          if (!reader.parse(is, root)) {ROS_ERROR("Parse the root of json path ERROR.");} 
+          if (!reader.parse(is, root)) {ROS_ERROR("Parse the root of json path ERROR.");
+          ROS_INFO("nav_manager json:%s",path.c_str());
+          } 
 
           geometry_msgs::Pose p;
           p.position.x = root["nav_pose"]["position"]["x"].asDouble();
@@ -235,7 +236,7 @@ vector<geometry_msgs::Pose> draw_nav_pose(vector<int> nav_id_vec,ros::Publisher&
 bool callback(const geometry_msgs::PoseWithCovarianceStamped& msg){
   //update initial pose;
   // initial_pose=msg;
- 
+  ROS_INFO("got the initial_pose!!!");
   return true;
 }
 
@@ -259,50 +260,74 @@ void feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
 }
 
 void pose_callback(const geometry_msgs::Pose& msg){
+ROS_INFO("Got the last pose from robot_pose");
 last_pose=msg;
 
 }
 
 
 geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
+    bool flag=false;
     geometry_msgs::PoseWithCovarianceStamped initial_pose;
     tf::Quaternion quat;
-    bool flag=false;
-	static int sq=1;
+
+    tf::TransformListener listener,listener2;
+    geometry_msgs::PoseStamped gridpose_picture,lastpose_picture;
+    geometry_msgs::PoseStamped gridpose,lastpose;
+
+    lastpose.header.stamp=ros::Time();
+    lastpose.header.frame_id="/map";
+    lastpose.pose=last_pose;
+
+    while(flag==false){
+    try{
+      listener.waitForTransform("map", "picture_frame", ros::Time(), ros::Duration(10.0) );
+      listener.transformPose("map", lastpose, lastpose_picture);
+      ROS_INFO("1:transform from a point from map to picture_frame without any error ");
+      
+      flag=true;
+    }
+    catch(tf::TransformException& ex){
+      flag=false;
+      ROS_ERROR("1:Received an exception trying to transform a point from \"map\" to \"picture_frame\": %s", ex.what());
+    }
+    }
+
+
+    flag==false;
+
+    static int sq=1;
+
     //euler to quaternion.
     double t1 = 0;
     double t2 = 0;
     double t3 = grid_pose.angle;
-	ROS_INFO("Orientation:last pose orientation:.x:%f,y:%f,z:%f,w:%f",last_pose.orientation.x,last_pose.orientation.y,last_pose.orientation.z,last_pose.orientation.w);
-    tf::quaternionMsgToTF(last_pose.orientation,quat);
+
+    tf::quaternionMsgToTF(lastpose_picture.pose.orientation,quat);
     double roll, pitch, yaw;
     tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
-    ROS_INFO("roll:%f,pitch:%f,yaw:%f",roll,pitch,yaw);
-    t3=-yaw-t3;
-	ROS_INFO("t3:%f, yaw:%f",t3,yaw);
+    ROS_INFO("t3:%f,roll:%f",t3,roll);
+    t3=roll+t3;
+    
+
     // the tf::Quaternion has a method to acess roll pitch and yaw
+    lastpose_picture.header.frame_id="/picture_frame";
+    lastpose_picture.header.stamp=ros::Time();
+    lastpose_picture.pose.position.x=(grid_pose.x)/20.0;
+    lastpose_picture.pose.position.y=(grid_pose.y)/20.0;
 
-    tf::TransformListener listener;
-    geometry_msgs::PoseStamped gridpose_picture;
-    geometry_msgs::PoseStamped gridpose;
-
-
-    gridpose_picture.header.frame_id="/picture_frame";
-    gridpose_picture.header.stamp=ros::Time();
-    gridpose_picture.pose.position.x=(grid_pose.x)/20.0;
-    gridpose_picture.pose.position.y=(grid_pose.y)/20.0;
-
-    gridpose_picture.pose.orientation.w = -sin(t1 / 2.0) * sin(t2 / 2.0) * sin(t3 / 2.0) + cos(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0);
-    gridpose_picture.pose.orientation.x = sin(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0) + sin(t2 / 2.0) * sin(t3 / 2.0) * cos(t1 / 2.0);
-    gridpose_picture.pose.orientation.y = -sin(t1 / 2.0) * sin(t3 / 2.0) * cos(t2 / 2.0) + sin(t2 / 2.0) * cos(t1 / 2.0) * cos(t3 / 2.0);
-    gridpose_picture.pose.orientation.z = sin(t1 / 2.0) * sin(t2 / 2.0) * cos(t3 / 2.0) + sin(t3 / 2.0) * cos(t2 / 2.0) * cos(t2 / 2.0);
+    lastpose_picture.pose.orientation.w = -sin(t1 / 2.0) * sin(t2 / 2.0) * sin(t3 / 2.0) + cos(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0);
+    lastpose_picture.pose.orientation.x = sin(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0) + sin(t2 / 2.0) * sin(t3 / 2.0) * cos(t1 / 2.0);
+    lastpose_picture.pose.orientation.y = -sin(t1 / 2.0) * sin(t3 / 2.0) * cos(t2 / 2.0) + sin(t2 / 2.0) * cos(t1 / 2.0) * cos(t3 / 2.0);
+    lastpose_picture.pose.orientation.z = sin(t1 / 2.0) * sin(t2 / 2.0) * cos(t3 / 2.0) + sin(t3 / 2.0) * cos(t2 / 2.0) * cos(t2 / 2.0);
 
     
     while(flag==false){
     try{
-      listener.waitForTransform("picture_frame", "map", ros::Time(), ros::Duration(10.0) );
-      listener.transformPose("/map", gridpose_picture, gridpose);
+      listener2.waitForTransform("picture_frame", "map", ros::Time(), ros::Duration(10.0) );
+      listener2.transformPose("map", lastpose_picture, lastpose);
       ROS_INFO("transform from a point from picture_frame to map without any error ");
+      
       flag=true;
     }
     catch(tf::TransformException& ex){
@@ -310,9 +335,10 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
       ROS_ERROR("Received an exception trying to transform a point from \"picture_frame\" to \"map\": %s", ex.what());
     }
     }
-    initial_pose.pose.pose=gridpose.pose;
-    initial_pose.header=gridpose.header;
-	initial_pose.header.seq=sq++;
+    initial_pose.pose.pose=lastpose.pose;
+    initial_pose.header.frame_id="/map";
+    initial_pose.header.stamp=ros::Time();
+    initial_pose.header.seq=sq++;
     for (int i=0;i<36;i++){
     initial_pose.pose.covariance[i]=covariance_[i];
     }
@@ -328,10 +354,10 @@ bool nav_start(vector<geometry_msgs::Pose> p_vec_,MoveBaseClient& client,int nav
   int n_locations=p_vec_.size();
   int n_goals=0;
   int n_successes=0;
-  int i=0;
+  
   int start_time=ros::Time::now().toSec();
   float running_time=0;
-  int n_rate=0;
+  
   bool finished_within_time,getinitialpose_within_time;
   move_base_msgs::MoveBaseGoal goal;
 
@@ -342,17 +368,21 @@ bool nav_start(vector<geometry_msgs::Pose> p_vec_,MoveBaseClient& client,int nav
   // ros::Subscriber sub=n.subscribe("initialpose",1,callback);
 
   //循环条件：nav_flag=2,<循环rate,not shutdown.
-  while((nav_flag_==2) && (n_rate<nav_rate) &&(ros::ok()))
+ for(int n_rate=0;(nav_flag_==2)&&(n_rate<nav_rate);n_rate++){
+   ROS_INFO("rate:%d",n_rate);
+  for(int i=0;(i<n_locations)&&(ros::ok());i++)
   {
       //1.if done, restart from beginning.
-      if (i>=n_locations) i=0;
-      i++;
+      if (i>=n_locations) 
+      i=0;
+      
       //2.calculate the distance.
 
       //3.send goal to move_base.
       goal.target_pose.pose=p_vec_[i];
       goal.target_pose.header.frame_id="map";
       goal.target_pose.header.stamp=ros::Time::now();
+      
       //  client.sendGoal(goal, &doneCb, &activeCb, &feedbackCb);
 
       client.sendGoal(goal);
@@ -380,9 +410,12 @@ bool nav_start(vector<geometry_msgs::Pose> p_vec_,MoveBaseClient& client,int nav
       running_time=running_time/60.0;
 
       //6.shutdown. cmd_vel publish.
-
+     
       signal(SIGINT, shutdown);
   }
+  }
+  exe_type=2;//execution is finished.
+  ROS_INFO("finish this task.");
   return true;
 }
 
@@ -418,19 +451,20 @@ int main( int argc, char** argv )
     //parameter definition
     //marker definition
    
-    if (nav_flag_ == 1){
-      ROS_INFO("got the initial pose");
-      //publish the initial pose.
+    // if (nav_flag_ == 1){
+    //   ROS_INFO("Got the initial pose!");
+    //   //publish the initial pose.
 
-      initial_pose=transformInitalpose();
-      initialpose_pub.publish(initial_pose);
+    //   initial_pose=transformInitalpose();
+    //   initialpose_pub.publish(initial_pose);
 
-      ROS_INFO("nav_flag:%d,exe_type:%d",nav_flag_,exe_type);
-      //---
-      nav_flag_=2;
-    }
-    
+    //   ROS_INFO("nav_flag:%d,exe_type:%d",nav_flag_,exe_type);
+    //   //---
+    //   nav_flag_=2;
+    // }
+    nav_flag_=2;
     while ((nav_flag_== 2)&&(exe_type == 1)){
+      // ROS_INFO("Start navigation.");
       nav_id_vec.clear();
       string map_id_path,task_json,task_id_path;
       stringstream ss,os;
@@ -439,10 +473,11 @@ int main( int argc, char** argv )
       os<<exe_task_id;
       os>>task_id_path;
 
-      task_json="/var/www/task_manager"+map_id_path+"/"+task_id_path+".json";
+      task_json="/var/www/task_manager/"+map_id_path+"/"+task_id_path+".json";
       ifstream is;
+      // ROS_INFO("task path:%s",task_json.c_str());
       is.open(task_json.c_str()); 
-      if (!reader.parse(is, root)) {ROS_ERROR("Parse the root of json path of task manager ERROR.");
+      if (!reader.parse(is, root)) {ROS_ERROR("Parse the root of json path of task manager ERROR.");}
       if (root["map_id"].asInt()!=exe_map_id){ROS_ERROR("In the task:%d, exe_map_id:%d and task_map_id:%d not matched",exe_task_id,exe_map_id,root["map_id"].asInt());}
       
       int num=root["nav_id"].size();
@@ -462,5 +497,5 @@ int main( int argc, char** argv )
     }
 
   }
-}
+
 }
