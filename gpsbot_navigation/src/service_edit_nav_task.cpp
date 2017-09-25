@@ -13,7 +13,7 @@ using namespace std;
   
 int main(int argc, char **argv)  
 {  
-  ros::init(argc, argv, "edit_nav_task");  
+  ros::init(argc, argv, "service_edit_nav_task");  
   
   ros::NodeHandle n;  
   ros::ServiceClient client = n.serviceClient<gpsbot_navigation::edit_nav_task>("/edit_nav_task");  
@@ -39,17 +39,27 @@ int main(int argc, char **argv)
   // // ROS_INFO(srv.request.map_path);
  
   // }
+  string name="company";
+  srv1.request.map_id=3;
+  srv1.request.map_name=name.c_str();
+  srv1.request.nav_flag=1;
   
-  if (client.call(srv))  
-  {  
-//     ROS_INFO("errormsg: %s", srv.response.errormsg);  
-    ROS_INFO("successed:%d",(int)srv.response.successed);
-  }  
-  else  
-  {  
-    ROS_ERROR("Failed to call service /edit_nav_task");  
-    return 1;  
-  }  
+  srv2.request.map_id=3;
+  srv2.request.map_name=name.c_str();
+  srv2.request.task_id=2;
+  srv2.request.rate=3;
+  srv2.request.type=1;
+  
+//   if (client.call(srv))  
+//   {  
+// //     ROS_INFO("errormsg: %s", srv.response.errormsg);  
+//     ROS_INFO("successed:%d",(int)srv.response.successed);
+//   }  
+//   else  
+//   {  
+//     ROS_ERROR("Failed to call service /edit_nav_task");  
+//     return 1;  
+//   }  
     if (client1.call(srv1))  
   {  
 //     ROS_INFO("errormsg: %s", srv.response.errormsg);  

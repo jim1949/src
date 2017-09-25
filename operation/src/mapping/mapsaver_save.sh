@@ -35,6 +35,7 @@ cd /home/relaybot/api_ws/src/shell_rclocal/
 
 
 
+
 #sh /home/relaybot/api_ws/src/operation/src/choice_action/gmapping_stop.sh
 #input: folder of now which can store map and related files. $1 is path name(/var/www/maps as default.), $2 is unique map id. $3 is map name.
 #function: move to folder of which with the same name and same name files within. 
