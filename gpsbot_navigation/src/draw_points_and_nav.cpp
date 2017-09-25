@@ -451,18 +451,18 @@ int main( int argc, char** argv )
     //parameter definition
     //marker definition
    
-    // if (nav_flag_ == 1){
-    //   ROS_INFO("Got the initial pose!");
-    //   //publish the initial pose.
+     if (nav_flag_ == 1){
+       ROS_INFO("Got the initial pose!");
+       //publish the initial pose.
 
-    //   initial_pose=transformInitalpose();
-    //   initialpose_pub.publish(initial_pose);
+       initial_pose=transformInitalpose();
+       initialpose_pub.publish(initial_pose);
 
-    //   ROS_INFO("nav_flag:%d,exe_type:%d",nav_flag_,exe_type);
-    //   //---
-    //   nav_flag_=2;
-    // }
-    nav_flag_=2;
+       ROS_INFO("nav_flag:%d,exe_type:%d",nav_flag_,exe_type);
+       //---
+       nav_flag_=2;
+    }
+   // nav_flag_=2;
     while ((nav_flag_== 2)&&(exe_type == 1)){
       // ROS_INFO("Start navigation.");
       nav_id_vec.clear();
