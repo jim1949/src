@@ -443,7 +443,7 @@ int main( int argc, char** argv )
       ifstream is;
       is.open(task_json.c_str()); 
       if (!reader.parse(is, root)) {ROS_ERROR("Parse the root of json path of task manager ERROR.");
-      if (root["map_id"].asInt()!=exe_map_id){ROS_ERROR("In the task:%d, exe_map_id:%d and task_map_id:%d not matched",exe_task_id,exe_map_id,root["map_id"].asInt());}
+//      if (root["map_id"].asInt()!=exe_map_id){ROS_ERROR("In the task:%d, exe_map_id:%d and task_map_id:%d not matched",exe_task_id,exe_map_id,root["map_id"].asInt());}
       
       int num=root["nav_id"].size();
       ROS_INFO("size of nav_id in task is:%d",num);

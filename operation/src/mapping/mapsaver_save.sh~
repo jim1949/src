@@ -7,7 +7,7 @@ echo "mapsaver save, complete saving the map." &
 mkdir $1/$2 &
 cp $1/now/map.pgm $1/$2/$2.pgm &
 cp $1/now/map.yaml $1/$2/$2.yaml &
-rosrun map_server store_img.py $1 $2 $3 &
+rosrun map_server store_img.py $1 $2 $3 
 
 rosnode kill arduino &
 rosnode kill base_link_to_laser4 &
@@ -22,7 +22,8 @@ rosnode kill sick_tim551_2050001 &
 rosnode kill slam_gmapping &
 
 rosnode kill map_saver &
-rosnode kill convert_img_ros & 
+rosnode kill convert_img_ros &
+rosnode kill amcl & 
 
 rosnode kill lasers_in_picture_frame_node &
 
