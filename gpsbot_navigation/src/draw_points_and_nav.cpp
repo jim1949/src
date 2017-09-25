@@ -260,7 +260,7 @@ void feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
 }
 
 void pose_callback(const geometry_msgs::Pose& msg){
-ROS_INFO("Got the last pose from robot_pose");
+
 last_pose=msg;
 
 }
