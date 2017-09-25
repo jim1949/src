@@ -66,37 +66,37 @@ if (param->type==-1) {
 if (param->type==0) {
  ROS_INFO("start to build the map ...");
 
-  // system(bringup.c_str());
+  system(bringup.c_str());
    }
 
 else if(param->type==1) {
   ROS_INFO("pause the map ...");
-  // system(pause.c_str());
+  system(pause.c_str());
 }
 else if (param->type==2){
   ROS_INFO("save the map ...");
-  // system(save.c_str()); 
+  system(save.c_str()); 
 
 }
 else if (param->type==3){
   ROS_INFO("cancel the map ...");
-  // system(cancel.c_str()); 
+  system(cancel.c_str()); 
 }
 else if (param->type==4){
   ROS_INFO("edit the map ...");
-  // system(edit_map_start.c_str()); 
+  system(edit_map_start.c_str()); 
 }
 else if (param->type==5){
   ROS_INFO("stop editting the map ...");
-  // system(edit_map_stop.c_str()); 
+  system(edit_map_stop.c_str()); 
 }
 else if (param->type==6){
   ROS_INFO("start task ...");
-  // system(task_start.c_str()); 
+  system(task_start.c_str()); 
 }
 else if (param->type==7){
   ROS_INFO("stop task ...");
-  // system(task_stop.c_str()); 
+  system(task_stop.c_str()); 
 }
 
 }
