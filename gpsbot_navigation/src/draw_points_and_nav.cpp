@@ -280,6 +280,8 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     double roll, pitch, yaw;
     tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
     ROS_INFO("roll:%f,pitch:%f,yaw:%f",roll,pitch,yaw);
+    if (pitch<0) ROS_INFO("Got a negative number for pitch.");
+    else ROS_INFO("Got a positive number for pitch.");
 
     yaw=yaw-t3;
 	  ROS_INFO("t3:%f, yaw:%f",t3,yaw);
