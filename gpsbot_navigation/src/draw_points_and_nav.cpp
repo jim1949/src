@@ -280,8 +280,9 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     double roll, pitch, yaw;
     tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
     ROS_INFO("roll:%f,pitch:%f,yaw:%f",roll,pitch,yaw);
-    t3=-yaw-t3;
-	ROS_INFO("t3:%f, yaw:%f",t3,yaw);
+
+    yaw=yaw-t3;
+	  ROS_INFO("t3:%f, yaw:%f",t3,yaw);
     // the tf::Quaternion has a method to acess roll pitch and yaw
 
     tf::TransformListener listener;
@@ -294,10 +295,10 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     gridpose_picture.pose.position.x=(grid_pose.x)/20.0;
     gridpose_picture.pose.position.y=(grid_pose.y)/20.0;
 
-    gridpose_picture.pose.orientation.w = -sin(t1 / 2.0) * sin(t2 / 2.0) * sin(t3 / 2.0) + cos(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0);
-    gridpose_picture.pose.orientation.x = sin(t1 / 2.0) * cos(t2 / 2.0) * cos(t3 / 2.0) + sin(t2 / 2.0) * sin(t3 / 2.0) * cos(t1 / 2.0);
-    gridpose_picture.pose.orientation.y = -sin(t1 / 2.0) * sin(t3 / 2.0) * cos(t2 / 2.0) + sin(t2 / 2.0) * cos(t1 / 2.0) * cos(t3 / 2.0);
-    gridpose_picture.pose.orientation.z = sin(t1 / 2.0) * sin(t2 / 2.0) * cos(t3 / 2.0) + sin(t3 / 2.0) * cos(t2 / 2.0) * cos(t2 / 2.0);
+    gridpose_picture.pose.orientation.w = -sin(t1 / 2.0) * sin(t2 / 2.0) * sin(yaw / 2.0) + cos(t1 / 2.0) * cos(t2 / 2.0) * cos(yaw / 2.0);
+    gridpose_picture.pose.orientation.x = sin(t1 / 2.0) * cos(t2 / 2.0) * cos(yaw / 2.0) + sin(t2 / 2.0) * sin(yaw / 2.0) * cos(t1 / 2.0);
+    gridpose_picture.pose.orientation.y = -sin(t1 / 2.0) * sin(yaw / 2.0) * cos(t2 / 2.0) + sin(t2 / 2.0) * cos(t1 / 2.0) * cos(yaw / 2.0);
+    gridpose_picture.pose.orientation.z = sin(t1 / 2.0) * sin(t2 / 2.0) * cos(yaw / 2.0) + sin(yaw / 2.0) * cos(t2 / 2.0) * cos(t2 / 2.0);
 
     
     while(flag==false){
