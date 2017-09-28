@@ -279,9 +279,10 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     tf::quaternionMsgToTF(last_pose.orientation,quat);
     double roll, pitch, yaw;
     tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
-    ROS_INFO("roll:%f,pitch:%f,yaw:%f",roll,pitch,yaw);
-    if (pitch>=0) ROS_INFO("Got a positive number for pitch.");
+    if (pitch>=0.0000000) ROS_INFO("Got a positive number for pitch.");
     else ROS_INFO("Got a negative number for pitch.");
+    ROS_INFO("roll:%f,pitch:%f,yaw:%f",roll,pitch,yaw);
+
 
     yaw=-yaw-t3;
 	  ROS_INFO("t3:%f, yaw:%f",t3,yaw);
@@ -453,7 +454,7 @@ int main( int argc, char** argv )
 
       task_json="/var/www/task_manager/"+map_id_path+"/"+task_id_path+".json";
       ifstream is;
-      // ROS_INFO("task path:%s",task_json.c_str());
+      ROS_INFO("task path:%s",task_json.c_str());
       is.open(task_json.c_str()); 
 
       if (!reader.parse(is, root)) {ROS_ERROR("Parse the root of json path of task manager ERROR.");}
