@@ -1,0 +1,9 @@
+<launch>
+  <!-- ros opertion mapbuild launch-->
+
+  <node name="upstart" pkg="operation" type="sweep_bringup.sh" respawn="false" output="screen">
+
+  </node>
+
+
+</launch>
