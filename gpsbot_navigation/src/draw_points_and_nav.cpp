@@ -22,19 +22,18 @@ functions:
 #include <ros/ros.h>
 #include <visualization_msgs/Marker.h>
 #include <geometry_msgs/Pose.h>
-#include <gpsbot_navigation/execute_nav_task.h>
-#include <gpsbot_navigation/nav_flag.h>
-#include <basic_msgs/gridpose.h>
 #include <geometry_msgs/Twist.h>  
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <actionlib/client/simple_action_client.h>
 #include <move_base_msgs/MoveBaseAction.h>
-
 #include <geometry_msgs/Pose.h>
-
-
 #include "geometry_msgs/Quaternion.h"
 #include <tf/transform_listener.h>
+
+#include <gpsbot_navigation/execute_nav_task.h>
+#include <gpsbot_navigation/nav_flag.h>
+#include <basic_msgs/gridpose.h>
+
 #include <signal.h>
 #include <stdio.h>
 #include <json/json.h>

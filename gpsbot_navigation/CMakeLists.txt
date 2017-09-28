@@ -66,7 +66,6 @@ add_service_files(
   execute_nav_task.srv
   edit_nav_task.srv
   edit_wall_set.srv
-  mapping_name.srv
   mapping_status.srv
   nav_points_info.srv
   #   Service2.srv
@@ -222,12 +221,4 @@ add_executable(service_edit_nav_task
 add_dependencies(service_edit_nav_task ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(service_edit_nav_task
   ${catkin_LIBRARIES}
-)
-
-add_executable(draw_points_nav_test
-  src/draw_points_nav_test.cpp
-)
-add_dependencies(draw_points_nav_test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(draw_points_nav_test
-  ${catkin_LIBRARIES} jsoncpp
 )
