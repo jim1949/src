@@ -21,7 +21,7 @@ rosnode kill picture_frame_broadcaster
 rosnode kill pose_in_picture_frame_node
 rosnode kill lasers_in_picture_frame_node
 
-
+rosnode kill operation_nw_listener
 rosnode kill robot_pose_publisher
 rosnode kill robot_state_publisher
 rosnode kill sick_tim551_2050001

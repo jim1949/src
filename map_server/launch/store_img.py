@@ -33,7 +33,7 @@ def listener():
     return 0
 
 def convert():
-    arg='/var/www/maps/now/now'
+    arg='/var/www/maps/now/map'
     #need two arg. first is the path(default is /var/www/maps), the second is the unique id of the map. The third is the name of the map.
     if len(sys.argv)>3:
         folder_path=sys.argv[1]#id
