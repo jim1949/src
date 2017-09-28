@@ -283,7 +283,7 @@ geometry_msgs::PoseWithCovarianceStamped transformInitalpose(){
     if (pitch>=0) ROS_INFO("Got a positive number for pitch.");
     else ROS_INFO("Got a negative number for pitch.");
 
-    yaw=yaw-t3;
+    yaw=-yaw-t3;
 	  ROS_INFO("t3:%f, yaw:%f",t3,yaw);
     // the tf::Quaternion has a method to acess roll pitch and yaw
 
