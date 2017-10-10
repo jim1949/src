@@ -1,0 +1,5 @@
+<launch>
+      <!--broadcaste the picture frame-->
+      <node name="picture_frame_broadcaster" pkg="tf_learning" type="world_tf_broadcaster" output="screen" />
+
+</launch>
