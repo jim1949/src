@@ -1,12 +1,9 @@
 #!/bin/bash
 
-#rosnode kill map_saver
-#rosnode kill convert_img_ros
-#rosnode kill operation_buildmap
-#echo "finish rosnode kill"
-#roslaunch map_server multi_map_saver.launch &
-#sleep 5
-#roslaunch operation operation_buildmap.launch
 echo "mapsaver bringup start."
-roslaunch operation mapping.launch
+roslaunch operation mapping.launch &
+sleep 15
+#This method is not a good way. because actually, we don't know whether the progress is finished or not. Still need to be fixed in the future.
+rostopic pub -1 /status std_msgs/Int32 0
+
 

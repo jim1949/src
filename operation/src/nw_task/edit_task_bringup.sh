@@ -1,11 +1,8 @@
 #!/bin/bash
 
-#rosnode kill map_saver
-#rosnode kill convert_img_ros
-#rosnode kill operation_buildmap
-#echo "finish rosnode kill"
-#roslaunch map_server multi_map_saver.launch &
-#sleep 5
-#roslaunch operation operation_buildmap.launch
-
-roslaunch operation navigation.launch
+# edit task.
+echo "task starts to be edited. "
+echo $1/$2/$2.yaml
+roslaunch operation edit_task.launch map_file:=$1/$2/$2.yaml &
+sleep 2
+rostopic pub -1 /status std_msgs/Int32 8

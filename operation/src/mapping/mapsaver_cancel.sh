@@ -29,6 +29,7 @@ cd /home/relaybot/api_ws/src/shell_rclocal/
 ./killnode.sh
 #rosnode cleanup 
 echo "rosnode kill finished."
+rostopic pub -1 /status std_msgs/Int32 3
 
 
 #sh /home/relaybot/api_ws/src/operation/src/choice_action/gmapping_stop.sh

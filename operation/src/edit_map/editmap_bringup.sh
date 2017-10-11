@@ -8,4 +8,6 @@
 #sleep 5
 #roslaunch operation operation_buildmap.launch
 echo "   edit_map bringup start. "
-roslaunch operation edit_map.launch map_file:=$1/$2/$2.yaml
+roslaunch operation edit_map.launch map_file:=$1/$2/$2.yaml &
+sleep 2
+rostopic pub -1 /status std_msgs/Int32 4

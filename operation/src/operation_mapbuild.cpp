@@ -26,7 +26,7 @@ int parameter=-1;
 pthread_t id;
 int i,ret;
 std::string mapsaver_bringup_path,mapsaver_pause_path,mapsaver_save_path,mapsaver_cancel_path;
-std::string editmap_bringup_path,editmap_stop_path,task_bringup_path,task_stop_path;
+std::string editmap_bringup_path,editmap_stop_path,task_bringup_path,task_stop_path,edit_task_bringup_path,edit_task_stop_path;
 
 struct Param{
 int type;
@@ -40,7 +40,6 @@ void *thread(void *ptr)
 {
 Param *param = (Param *)ptr;
 ROS_INFO("type: %d",param->type);
-// printf("%s",mapsaver_bringup_path.c_str());
 
 std::string sh="sh ";
 std::string bringup=sh+mapsaver_bringup_path;
@@ -54,9 +53,9 @@ std::string edit_map_stop=sh+editmap_stop_path+" "+param->map_path+" "+param->ma
 std::string task_start=sh+task_bringup_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
 std::string task_stop=sh+task_stop_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
 
+std::string edittask_bringup=sh+edit_task_bringup_path;
+std::string edittask_stop=sh+edit_task_stop_path;
 
-
-std::cout<<save;
 
 if (param->type==-1) {
   ROS_INFO("-1");
@@ -98,6 +97,14 @@ else if (param->type==7){
   ROS_INFO("stop task ...");
   system(task_stop.c_str()); 
 }
+else if (param->type==8){
+  ROS_INFO("start edit task ...");
+  system(edittask_bringup.c_str()); 
+}
+else if (param->type==9){
+  ROS_INFO("stop edit task ...");
+  system(edittask_stop.c_str()); 
+}
 
 }
 
@@ -118,62 +125,77 @@ exit (1);
 if (param->type==-1) {
 ROS_INFO("Not started mapping yet.");
 } 
-if (req.data==0) {
- ROS_INFO("0");
+switch(req.data){
+  case 0: {
+  ROS_INFO("0");
+    res.successed=true;
+    res.errormsg="start mapping";
+  }
+
+  case 1:{
+    ROS_INFO("1");
+    res.successed=true;
+    res.errormsg="pause mapping";
+  }
+  case 2:{
+
   res.successed=true;
-  res.errormsg="start mapping";
-   }
+  res.errormsg="save mapping";
 
-else if(req.data==1) {
-  ROS_INFO("1");
+  }
+
+  case 3:{
+
   res.successed=true;
-  res.errormsg="pause mapping";
-}
-else if (req.data==2){
+  res.errormsg="cancel mapping";
 
-res.successed=true;
-res.errormsg="save mapping";
+  }
 
-}
+  case 4:{
 
-else if (req.data==3){
+  res.successed=true;
+  res.errormsg="editmap start.";
 
-res.successed=true;
-res.errormsg="cancel mapping";
+  }
 
-}
+  case 5:{
 
-else if (req.data==4){
+  res.successed=true;
+  res.errormsg="editmap stop";
 
-res.successed=true;
-res.errormsg="editmap start.";
+  }
 
-}
+  case 6:{
 
-else if (req.data==5){
+  res.successed=true;
+  res.errormsg="task start";
 
-res.successed=true;
-res.errormsg="editmap stop";
+  }
 
-}
+  case 7:{
 
-else if (req.data==6){
+  res.successed=true;
+  res.errormsg="task stop";
 
-res.successed=true;
-res.errormsg="task start";
+  }
+  case 8:{
 
-}
+  res.successed=true;
+  res.errormsg="edit task start";
 
-else if (req.data==7){
+  }
 
-res.successed=true;
-res.errormsg="task stop";
+  case 9:{
 
-}
-else {
-  
-  res.successed=false;
-  res.errormsg="wrong call service,no such service.";
+  res.successed=true;
+  res.errormsg="edit task stop";
+
+  }
+  default: {
+    
+    res.successed=false;
+    res.errormsg="wrong call service,no such service.";
+  }
 }
 
 sleep(1);
@@ -200,6 +222,8 @@ int main(int argc, char **argv)
 //edit_map
    ros::param::param<std::string>("editmap_bringup_path",editmap_bringup_path,"/home/relaybot/api_ws/src/operation/src/edit_map/editmap_bringup.sh");
    ros::param::param<std::string>("editmap_stop_path",editmap_stop_path,"/home/relaybot/api_ws/src/operation/src/edit_map/editmap_stop.sh");
+   ros::param::param<std::string>("edit_task_bringup_path",edit_task_bringup_path,"/home/relaybot/api_ws/src/operation/src/nw_task/edit_task_bringup.sh");
+   ros::param::param<std::string>("edit_task_stop_path",edit_task_stop_path,"/home/relaybot/api_ws/src/operation/src/nw_task/edit_task_stop.sh");
    ros::param::param<std::string>("task_bringup_path",task_bringup_path,"/home/relaybot/api_ws/src/operation/src/nw_task/task_bringup.sh");
    ros::param::param<std::string>("task_stop_path",task_stop_path,"/home/relaybot/api_ws/src/operation/src/nw_task/task_stop.sh");
      

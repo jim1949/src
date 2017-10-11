@@ -13,3 +13,4 @@ cp $1/now/map.yaml $1/$2/$2.yaml
 rosrun map_server store_img.py $1 $2 $3 
 # kill -9 `ps -x | grep tf_learning|grep -v grep |  awk '{print $1}'`
 echo map saved to $1/$2/$2.pgm
+rostopic pub -1 /status std_msgs/Int32 1

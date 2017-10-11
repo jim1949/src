@@ -31,7 +31,7 @@ rosnode kill draw_points_and_nav
 rosnode kill velocity_smoother
 rosnode cleanup 
 echo "rosnode kill finished."
-
+rostopic pub -1 /status std_msgs/Int32 7
 
 #sh /home/relaybot/api_ws/src/operation/src/choice_action/gmapping_stop.sh
 #input: folder of now which can store map and related files. $1 is path name(/var/www/maps as default.), $2 is unique map id. $3 is map name.
