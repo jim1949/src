@@ -228,7 +228,7 @@ int main(int argc, char **argv)
    ros::param::param<std::string>("task_stop_path",task_stop_path,"/home/relaybot/api_ws/src/operation/src/nw_task/task_stop.sh");
      
    ROS_INFO("Provide service which can be called to tell the server to start mapping, pause,  save or cancel.");  
-   printf("now we are in parent progress");
+   ROS_INFO("now we are in parent progress");
    pthread_join(id,NULL);
    ros::spin();   
    ROS_INFO("Whole process is finished.");
