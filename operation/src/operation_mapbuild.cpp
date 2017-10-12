@@ -8,6 +8,7 @@ should be the monitor of mapping status:
       the map.)
   1)pause mapping(stop tf_learning.)
   2)save mapping(stop map_server.transfer the map folder to another folder with unique id.)
+  3)cancel mapping. kill all nodes in the mapsaver.
 
 */
 #include "ros/ros.h"  
@@ -24,6 +25,7 @@ pthread_t id;
 int i,ret;
 std::string mapsaver_bringup_path,mapsaver_pause_path,mapsaver_save_path,mapsaver_cancel_path;
 std::string editmap_bringup_path,editmap_stop_path,task_bringup_path,task_stop_path,edit_task_bringup_path,edit_task_stop_path;
+std::string ppl_task_bringup_path,ppl_task_stop_path;
 
 struct Param{
 int type;
@@ -52,7 +54,8 @@ std::string task_stop=sh+task_stop_path+" "+param->map_path+" "+param->map_id+" 
 
 std::string edittask_bringup=sh+edit_task_bringup_path;
 std::string edittask_stop=sh+edit_task_stop_path;
-
+std::string ppl_task_bringup=sh+ppl_task_bringup_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
+std::string ppl_task_stop=sh+ppl_task_stop_path+" "+param->map_path+" "+param->map_id+" "+param->map_name;
 
 if (param->type==-1) {
   ROS_INFO("-1");
@@ -102,6 +105,15 @@ else if (param->type==9){
   ROS_INFO("stop edit task ...");
   system(edittask_stop.c_str()); 
 }
+else if (param->type==10){
+  ROS_INFO("start automatic path plan task ...");
+  system(ppl_task_bringup.c_str()); 
+}
+else if (param->type==11){
+  ROS_INFO("stop path plan task ...");
+  system(ppl_task_stop.c_str()); 
+}
+
 
 }
 
@@ -173,6 +185,16 @@ switch(req.data){
     res.successed=true;
     res.errormsg="edit task stop";
     break;
+
+  case 10:
+    res.successed=true;
+    res.errormsg="add automatic path plan task.";
+    break;
+
+  case 11:
+    res.successed=true;
+    res.errormsg="stop creating the path plan task.";
+    break;
   
   default:    
     res.successed=false;
@@ -201,14 +223,18 @@ int main(int argc, char **argv)
    ros::param::param<std::string>("mapsaver_save_path",mapsaver_save_path,"/home/relaybot/api_ws/src/operation/src/mapping/mapsaver_save.sh");
    ros::param::param<std::string>("mapsaver_cancel_path",mapsaver_cancel_path,"/home/relaybot/api_ws/src/operation/src/mapping/mapsaver_cancel.sh");
 
-//edit_map
+  //edit_map
    ros::param::param<std::string>("editmap_bringup_path",editmap_bringup_path,"/home/relaybot/api_ws/src/operation/src/edit_map/editmap_bringup.sh");
    ros::param::param<std::string>("editmap_stop_path",editmap_stop_path,"/home/relaybot/api_ws/src/operation/src/edit_map/editmap_stop.sh");
    ros::param::param<std::string>("edit_task_bringup_path",edit_task_bringup_path,"/home/relaybot/api_ws/src/operation/src/nw_task/edit_task_bringup.sh");
    ros::param::param<std::string>("edit_task_stop_path",edit_task_stop_path,"/home/relaybot/api_ws/src/operation/src/nw_task/edit_task_stop.sh");
    ros::param::param<std::string>("task_bringup_path",task_bringup_path,"/home/relaybot/api_ws/src/operation/src/nw_task/task_bringup.sh");
    ros::param::param<std::string>("task_stop_path",task_stop_path,"/home/relaybot/api_ws/src/operation/src/nw_task/task_stop.sh");
-     
+
+   //
+   ros::param::param<std::string>("ppl_task_bringup_path",ppl_task_bringup_path,"/home/relaybot/api_ws/src/operation/src/ppl/ppl_task_bringup.sh");
+   ros::param::param<std::string>("ppl_task_stop_path",ppl_task_stop_path,"/home/relaybot/api_ws/src/operation/src/ppl/ppl_task_stop.sh");
+
    ROS_INFO("Provide service which can be called to tell the server to start mapping, pause,  save or cancel.");  
    ROS_INFO("now we are in parent progress");
    pthread_join(id,NULL);

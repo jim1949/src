@@ -18,7 +18,6 @@ nav_pose_set.srv:
 */
 #include <ros/ros.h>
 #include <basic_msgs/nav_pose_set.h>
-#include <basic_msgs/wall_pose_set.h>
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PointStamped.h>
 #include <tf/transform_listener.h>
@@ -176,10 +175,22 @@ bool flag=false;
 // }
 
 int main(int argc,char **argv){
-ros::init(argc, argv, "nav_and_wall_positions_node");
-ros::NodeHandle n;
-// ros::ServiceServer nav_service=n.advertiseService("/nav_pose_set",nav_server);
+    ros::init(argc, argv, "ppl_nw_listener_node");
+    ros::NodeHandle n;  
+    string map_path,map_id,map_name;
+    ROS_INFO("The map path arg in ppl:%d",argc);
+    if (argc==2){
+        map_path=argv[1];
+        map_id=argv[2];
+        map_name=argv[3];
+        ROS_INFO("map_path:%s,map_id:%s,map_name:%s",map_path.c_str(),map_id.c_str(),map_name.c_str());
 
-ros::spin();
-return 0;
+        //read the map.
+
+
+        //process.
+
+    }
+    ros::spin();
+    return 0;
 }
