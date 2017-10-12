@@ -15,6 +15,6 @@ echo "[$da]" >>/var/www/log/main_log/log_$da/websocket_log_$da
 echo "[$da]" >>/var/www/log/main_log/log_$da/operation_$da &
 sleep 2
 
-roslaunch rosbridge_server rosbridge_websocket.launch >> /var/www/log/main_log/log_$da/websocket_log_$da &
-sleep 5
-roslaunch operation operation_mapbuild.launch >> /var/www/log/main_log/log_$da/operation_$da
+#roslaunch rosbridge_server rosbridge_websocket.launch >> /var/www/log/main_log/log_$da/websocket_log_$da &
+#sleep 5
+#roslaunch operation operation_mapbuild.launch >> /var/www/log/main_log/log_$da/operation_$da
