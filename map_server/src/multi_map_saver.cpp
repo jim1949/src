@@ -107,15 +107,15 @@ class MapGenerator
       FILE* yaml = fopen(mapmetadatafile.c_str(), "w");
 
 
-      /*
-resolution: 0.100000
-origin: [0.000000, 0.000000, 0.000000]
-#
-negate: 0
-occupied_thresh: 0.65
-free_thresh: 0.196
+            /*
+      resolution: 0.100000
+      origin: [0.000000, 0.000000, 0.000000]
+      #
+      negate: 0
+      occupied_thresh: 0.65
+      free_thresh: 0.196
 
-       */
+            */
 
       geometry_msgs::Quaternion orientation = map->info.origin.orientation;
       tf::Matrix3x3 mat(tf::Quaternion(orientation.x, orientation.y, orientation.z, orientation.w));

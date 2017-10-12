@@ -7,5 +7,7 @@
 #roslaunch map_server multi_map_saver.launch &
 #sleep 5
 #roslaunch operation operation_buildmap.launch
-echo "[shell] edit_map bringup start. "
-roslaunch operation edit_map.launch map_file:=$1/$2/$2.yaml
+echo "   edit_map bringup start. "
+roslaunch operation edit_map.launch map_file:=$1/$2/$2.yaml &
+sleep 2
+rostopic pub -1 /mapping_status_feedback std_msgs/Int32 4

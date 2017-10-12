@@ -63,6 +63,7 @@ bool server(operation::edit_wall_set::Request &req, operation::edit_wall_set::Re
         int npt[]={wall_poses_num}; 
     
         if(wall_poses_num==2){
+         ROS_INFO("draw line.");
             line(img,ptr[0][0],ptr[0][1],Scalar(0), 2);
         }
         else if(wall_poses_num>2){ 

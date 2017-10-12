@@ -32,7 +32,8 @@ rosnode kill pose_in_picture_frame_node &
 sleep 2
 cd /home/relaybot/api_ws/src/shell_rclocal/
 ./killnode.sh
-
+echo map saved to $1/$2/$2.pgm
+rostopic pub -1 /mapping_status_feedback std_msgs/Int32 2
 
 
 

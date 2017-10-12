@@ -1,34 +1,29 @@
 #!/bin/bash
 # kill -9 `pgrep -f ros`
 
-echo "[shell] edit_map stop. "
+
 #need to save the pose.
 
+# need to kill these nodes
+
+# /map_server
+# /operation_draw_wall
+# /operation_nw_listener
+# /picture_frame_broadcaster
+
+
 #complete the mapping process.
-rosnode kill amcl
-rosnode kill arduino
-rosnode kill base_link_to_laser4
-rosnode kill joint_state_publisher
-rosnode kill map_server
-rosnode kill move_base
-rosnode kill nodelet_manager
 
- 
-rosnode kill operation_nw_listener
-rosnode kill operation_draw_wall
-
-rosnode kill picture_frame_broadcaster
-rosnode kill pose_in_picture_frame_node
-rosnode kill lasers_in_picture_frame_node
-
-rosnode kill operation_nw_listener
-rosnode kill robot_pose_publisher
-rosnode kill robot_state_publisher
-rosnode kill sick_tim551_2050001
-
-rosnode kill velocity_smoother
-rosnode cleanup 
+rosnode kill operation_nw_listener &
+rosnode kill operation_draw_wall &
+rosnode kill picture_frame_broadcaster &
+rosnode kill map_server &
+sleep 1
+cd /home/relaybot/api_ws/src/shell_rclocal/
+./killnode.sh
 
 echo "rosnode kill finished."
+echo "edit_map stop... " 
+rostopic pub -1 /mapping_status_feedback std_msgs/Int32 5
 
 
