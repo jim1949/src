@@ -9,9 +9,6 @@ should be the monitor of mapping status:
   1)pause mapping(stop tf_learning.)
   2)save mapping(stop map_server.transfer the map folder to another folder with unique id.)
 
-
-
-
 */
 #include "ros/ros.h"  
 #include "operation/mapping_status.h" 
@@ -126,76 +123,61 @@ if (param->type==-1) {
 ROS_INFO("Not started mapping yet.");
 } 
 switch(req.data){
-  case 0: {
-  ROS_INFO("0");
+  case 0: 
+    ROS_INFO("0");
     res.successed=true;
     res.errormsg="start mapping";
-  }
+    break;
 
-  case 1:{
+  case 1:
     ROS_INFO("1");
     res.successed=true;
     res.errormsg="pause mapping";
-  }
-  case 2:{
+    break;
+  case 2:
+    res.successed=true;
+    res.errormsg="save mapping";
+    break;
 
-  res.successed=true;
-  res.errormsg="save mapping";
+  case 3:
+    res.successed=true;
+    res.errormsg="cancel mapping";
+    break;
 
-  }
+  case 4:
 
-  case 3:{
+    res.successed=true;
+    res.errormsg="editmap start.";
+    break;
 
-  res.successed=true;
-  res.errormsg="cancel mapping";
+  case 5:
+    res.successed=true;
+    res.errormsg="editmap stop";
+    break;
+  case 6:
+    res.successed=true;
+    res.errormsg="task start";
+    break;
 
-  }
-
-  case 4:{
-
-  res.successed=true;
-  res.errormsg="editmap start.";
-
-  }
-
-  case 5:{
-
-  res.successed=true;
-  res.errormsg="editmap stop";
-
-  }
-
-  case 6:{
-
-  res.successed=true;
-  res.errormsg="task start";
-
-  }
-
-  case 7:{
-
-  res.successed=true;
-  res.errormsg="task stop";
-
-  }
-  case 8:{
-
-  res.successed=true;
-  res.errormsg="edit task start";
-
-  }
-
-  case 9:{
-
-  res.successed=true;
-  res.errormsg="edit task stop";
-
-  }
-  default: {
-    
+  case 7:
+    res.successed=true;
+    res.errormsg="task stop";
+    break;
+  
+  case 8:
+    res.successed=true;
+    res.errormsg="edit task start";
+    break;
+  
+  case 9:
+    res.successed=true;
+    res.errormsg="edit task stop";
+    break;
+  
+  default:    
     res.successed=false;
     res.errormsg="wrong call service,no such service.";
-  }
+    break;
 }
 
 sleep(1);

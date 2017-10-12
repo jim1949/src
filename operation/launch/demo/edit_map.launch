@@ -6,6 +6,7 @@
   <arg name="map_file" default="/var/www/maps/now/map.yaml"/>
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
- <include file="$(find operation)/launch/edit_wall_navpoints.launch"/>
+  <node name="operation_draw_wall" pkg="operation" type="draw_wall" output="screen"/>
+  <node name="operation_nw_listener" pkg="tf_learning" type="nw_listener" output="screen"/>
 
 </launch>

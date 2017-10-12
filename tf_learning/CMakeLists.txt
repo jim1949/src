@@ -119,7 +119,8 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(include
+include_directories(
+  include ${catkin_INCLUDE_DIRS}include
 $(catkin_INCLUDE_DIRS)
 )
 
@@ -283,4 +284,12 @@ add_dependencies(jsontest ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_
 link_directories(jsontest /usr/local/lib)
 target_link_libraries(jsontest
   ${catkin_LIBRARIES} jsoncpp
+)
+
+add_executable(ppl_nw_listener
+  src/ppl_nw_listener.cpp
+)
+add_dependencies(ppl_nw_listener ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ppl_nw_listener
+  ${catkin_LIBRARIES}
 )

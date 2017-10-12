@@ -9,7 +9,7 @@
 
 rosnode kill edit_nav_task
 echo "rosnode kill edit_nav_task"
-rostopic pub -1 /status std_msgs/Int32 9
+rostopic pub -1 /mapping_status_feedback std_msgs/Int32 9
 
 
 

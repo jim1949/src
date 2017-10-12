@@ -24,6 +24,6 @@ cd /home/relaybot/api_ws/src/shell_rclocal/
 
 echo "rosnode kill finished."
 echo "edit_map stop... " 
-rostopic pub -1 /status std_msgs/Int32 5
+rostopic pub -1 /mapping_status_feedback std_msgs/Int32 5
 
 
