@@ -120,6 +120,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
+  include ${catkin_INCLUDE_DIRS}
   include ${catkin_INCLUDE_DIRS}include
 $(catkin_INCLUDE_DIRS)
 )
@@ -291,5 +292,13 @@ add_executable(ppl_nw_listener
 )
 add_dependencies(ppl_nw_listener ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(ppl_nw_listener
+  ${catkin_LIBRARIES}
+)
+
+add_executable(picture2map
+  src/picture2map.cpp
+)
+add_dependencies(picture2map ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(picture2map
   ${catkin_LIBRARIES}
 )
