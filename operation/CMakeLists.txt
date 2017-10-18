@@ -202,7 +202,7 @@ add_dependencies(operation_second_node operation_gencpp)
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-FIND_PACKAGE( OpenCV 3 REQUIRED )
+FIND_PACKAGE( OpenCV REQUIRED )
 add_executable(draw_wall
   src/draw_wall.cpp
 )
