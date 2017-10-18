@@ -11,7 +11,7 @@ using namespace std;
 int main(){
     fstream myfile("ppl_src/robot_path.txt", ios_base::in);
     ofstream ofile;
-    ofile.open("/home/relaybot/api_ws/src/operation/src/ppl_src/robot_path.txt");
+    ofile.open("ppl_src/robot_path_map.txt");
     float ft_line;
 	int num;
     int count = 0;
@@ -30,9 +30,9 @@ int main(){
 		    }
             //x,y,w,z
 
-            for(i = 0; i < robot_path.size(); ++i){
+
             ofile << robot_path[i].x << " " << robot_path[i].y << " " << w[i] << " " << z[i] << endl;
-    }
+
     
         }
         cout<<endl;		
