@@ -106,10 +106,18 @@ find_package(catkin REQUIRED COMPONENTS
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
+
+###1.
 catkin_package(
-  # INCLUDE_DIRS include
-  # LIBRARIES tf_learning
-  # CATKIN_DEPENDS roscpp rospy tf turtlesim 
+    INCLUDE_DIRS include
+    LIBRARIES
+        pose_tf
+  CATKIN_DEPENDS   
+          roscpp
+          rospy
+          tf
+          turtlesim
+          cv_bridge
   # DEPENDS system_lib
 )
 
@@ -120,8 +128,9 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-  include ${catkin_INCLUDE_DIRS}include
-$(catkin_INCLUDE_DIRS)
+
+  include ${catkin_INCLUDE_DIRS}
+
 )
 
 ## Declare a C++ library
@@ -202,6 +211,10 @@ $(catkin_INCLUDE_DIRS)
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+include_directories( include ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_INCLUDE_DIRS}  )
+add_library(pose_tf src/pose_tf.cpp)
+target_link_libraries(pose_tf ${catkin_LIBRARIES})
 
 
 add_executable(turtle_tf_broadcaster
@@ -293,3 +306,15 @@ add_dependencies(ppl_nw_listener ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EX
 target_link_libraries(ppl_nw_listener
   ${catkin_LIBRARIES}
 )
+
+
+###2.
+add_executable(picture2map_test
+  src/picture2map_test.cpp
+)
+add_dependencies(picture2map_test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(picture2map_test
+  ${catkin_LIBRARIES}
+  pose_tf
+)
+

@@ -115,7 +115,7 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  INCLUDE_DIRS include
+  INCLUDE_DIRS include  
   LIBRARIES operation
   CATKIN_DEPENDS roscpp rospy std_msgs message_runtime geometry_msgs basic_msgs
   DEPENDS system_lib
@@ -129,11 +129,11 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # include_directories(include)
 include_directories(
-  include ${catkin_INCLUDE_DIRS}
-  include ${catkin_INCLUDE_DIRS}
-  include ${catkin_INCLUDE_DIRS}
-  include ${catkin_INCLUDE_DIRS}
+
+  include 
+
   ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -202,7 +202,7 @@ add_dependencies(operation_second_node operation_gencpp)
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-
+FIND_PACKAGE( OpenCV 3 REQUIRED )
 add_executable(draw_wall
   src/draw_wall.cpp
 )
@@ -216,5 +216,19 @@ add_executable(ppl
 )
 add_dependencies(ppl ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(ppl
-  ${catkin_LIBRARIES}
+  ${catkin_LIBRARIES} 
+  ${OpenCV_LIBS}
+  jsoncpp
 )
+
+
+# FIND_PACKAGE( OpenCV REQUIRED )
+# target_link_libraries(ppl
+#   ${catkin_LIBRARIES}
+#   ${OpenCV_LIBS}
+# )
+
+# FIND_PACKAGE( OpenCV REQUIRED )
+# add_executable( main main.cpp )
+# TARGET_LINK_LIBRARIES( main ${OpenCV_LIBS} ) 
+

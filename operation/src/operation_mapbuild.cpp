@@ -226,12 +226,14 @@ int main(int argc, char **argv)
   //edit_map
    ros::param::param<std::string>("editmap_bringup_path",editmap_bringup_path,"/home/relaybot/api_ws/src/operation/src/edit_map/editmap_bringup.sh");
    ros::param::param<std::string>("editmap_stop_path",editmap_stop_path,"/home/relaybot/api_ws/src/operation/src/edit_map/editmap_stop.sh");
+
+   //edit task
    ros::param::param<std::string>("edit_task_bringup_path",edit_task_bringup_path,"/home/relaybot/api_ws/src/operation/src/nw_task/edit_task_bringup.sh");
    ros::param::param<std::string>("edit_task_stop_path",edit_task_stop_path,"/home/relaybot/api_ws/src/operation/src/nw_task/edit_task_stop.sh");
    ros::param::param<std::string>("task_bringup_path",task_bringup_path,"/home/relaybot/api_ws/src/operation/src/nw_task/task_bringup.sh");
    ros::param::param<std::string>("task_stop_path",task_stop_path,"/home/relaybot/api_ws/src/operation/src/nw_task/task_stop.sh");
 
-   //
+   //ppl task
    ros::param::param<std::string>("ppl_task_bringup_path",ppl_task_bringup_path,"/home/relaybot/api_ws/src/operation/src/ppl/ppl_task_bringup.sh");
    ros::param::param<std::string>("ppl_task_stop_path",ppl_task_stop_path,"/home/relaybot/api_ws/src/operation/src/ppl/ppl_task_stop.sh");
 
