@@ -11,5 +11,5 @@
 echo "[shell] nw_task bringup start. "
 echo $1/$2/$2.yaml
 roslaunch operation navigation.launch map_file:=$1/$2/$2.yaml &
-sleep 2
+sleep 15
 rostopic pub -1 /mapping_status_feedback std_msgs/Int32 6
