@@ -25,9 +25,6 @@ rosnode kill robot_pose_publisher &
 rosnode kill robot_state_publisher &
 rosnode kill sick_tim551_2050001 &
 
-rosnode kill draw_points_and_nav &
-
-
 rosnode kill velocity_smoother &
 cd /home/relaybot/api_ws/src/shell_rclocal/
 ./killnode.sh 
