@@ -49,6 +49,6 @@
     <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
   </include>
 
-  <include file="$(find operation)/launch/task.launch"/>
+  <include file="$(find operation)/launch/edit_nav_task.launch"/>
 
 </launch>
