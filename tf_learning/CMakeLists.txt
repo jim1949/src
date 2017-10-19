@@ -128,6 +128,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
+  include ${catkin_INCLUDE_DIRS}
 
   include ${catkin_INCLUDE_DIRS}
 
@@ -318,3 +319,12 @@ target_link_libraries(picture2map_test
   pose_tf
 )
 
+
+
+add_executable(robot_path_tf
+  src/robot_path_tf.cpp
+)
+add_dependencies(robot_path_tf ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(robot_path_tf
+  ${catkin_LIBRARIES}
+)

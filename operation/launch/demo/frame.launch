@@ -1,0 +1,9 @@
+<launch>
+  <!-- provide frame of picture frame, and map frame.-->
+
+  <include file="$(find tf_learning)/launch/picture_frame_pub.launch"/>
+
+  <arg name="map_file" default="/var/www/maps/now/map.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+</launch>

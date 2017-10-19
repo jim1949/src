@@ -114,16 +114,28 @@ bool box_drawn = false;
 bool preprocess_mouse_down = false;
 //================================================================
 int main(int argc, char ** argv){
-    if (argc != 1){
-        src = imread(argv[1], IMREAD_GRAYSCALE);    
-    }else if (argc == 1){
-        cout << "Image read default" << endl;
-        // src = imread("full.png", IMREAD_GRAYSCALE);
-        src = imread("/home/relaybot/api_ws/src/operation/src/ppl_src/37.jpg", IMREAD_GRAYSCALE);
+    if (argc >3){        string map_path,map_id,map_name,path;
+        cout<<"argc: "<<argc<<endl;
+        map_path=argv[1];
+        map_id=argv[2];
+        map_name=argv[3];
+        ROS_INFO("Receive the map_path:%s map_id:%s map_name:%s",map_path.c_str(),map_id.c_str(),map_name.c_str());
+        path=map_path+"/"+map_id+"/"+map_id+".jpg";
+        ROS_INFO("path is:%s",path.c_str());
+        src=imread(path, IMREAD_GRAYSCALE );
+    
+    }else {
+        cout << "No enough map inputs for path planning." << endl;
+        return 0;
+        // src = imread("/home/relaybot/api_ws/src/operation/src/ppl_src/37.jpg", IMREAD_GRAYSCALE);//will be replaced until everythin is finished.
+        // src = imread(argv[1], IMREAD_GRAYSCALE);
+
+
     }
     if (!src.data){
         return -1;
         cout << "image read failed" << endl;
+        return 0;
     }
     //=================== Read file complete ==================//
 

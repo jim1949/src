@@ -10,8 +10,27 @@ functions:
 2.transform the nav positions to map frame, and store in json file or SQL file.
 3.draw wall_positions
 
+//
 nav_pose_set.srv:
+basic_msgs/nav_pose nav_pose(
 
+# navigation point in a map
+string birthtime
+float64 gridX
+float64 gridY
+float64 angle
+int32 id
+string name
+int32 mapid
+string mapname
+int32 type
+geometry_msgs/Pose worldposition
+)
+
+---
+float64[] data
+string errormsg
+bool  successed
 
 */
 #include <ros/ros.h>

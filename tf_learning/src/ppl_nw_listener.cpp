@@ -17,7 +17,6 @@ nav_pose_set.srv:
 
 */
 #include <ros/ros.h>
-#include <basic_msgs/nav_pose_set.h>
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PointStamped.h>
 #include <tf/transform_listener.h>
@@ -140,26 +139,22 @@ bool flag=false;
 
 // }
 
-// bool nav_server(basic_msgs::nav_pose_set::Request &req, basic_msgs::nav_pose_set::Response &res){
-//     ROS_INFO("I got the nav_pose message!");
-//     ROS_INFO("name:%s",req.nav_pose.name.c_str());
-//     Json::Value root;
-//     char s[200];
-
-//     root=transfer_nav_json(req);
-//     // 1:delete,2:add,3:update.
-//     ROS_INFO("type:%d",root["type"].asInt());
-//     if (root["type"]==1)
+// bool ppl_server(basic_msgs::ppl_set::Request &req, basic_msgs::ppl_set::Response &res){
+//     ROS_INFO("I got the map path for ppl message!");
+//     ROS_INFO("name:%s",req.map_path.name);
+//     string map_name,map_id;
+//     string map_path=path+mapfile_id+"/nav_pose/"+file_id+".json";
+//     if (req.map_path.type==1)
 //     {
 //         delete_nav_json(req,root);
 //         sprintf(s,"got the delete message! pose.x: %f",req.nav_pose.worldposition.position.x);
         
 //     }
-//     else if(root["type"]==2){
+//     else if(req.map_path.type==2){
 //         add_nav_json(req,root);
 //         sprintf(s,"got the add message! pose.x: %f",req.nav_pose.worldposition.position.x);
 //     }
-//     else if(root["type"]==3){
+//     else if(req.map_path.type==3){
 //         update_nav_json(req,root);
 //         sprintf(s,"got the update message! pose.x: %f",req.nav_pose.worldposition.position.x);
 //     }
@@ -169,28 +164,28 @@ bool flag=false;
 
 //     // ----response
      
-//     res.errormsg=s;
+//     res.errormsg="ddd";
 //     return true;
+ 
 
 // }
 
 int main(int argc,char **argv){
     ros::init(argc, argv, "ppl_nw_listener_node");
     ros::NodeHandle n;  
-    string map_path,map_id,map_name;
-    ROS_INFO("The map path arg in ppl:%d",argc);
-    if (argc==2){
+    if (argc<3){
+        ROS_INFO("No map path and name input. Will use the default map path:%s.jpg",argv[1]);
+    }
+    else {
+        string map_path,map_id,map_name,path;
         map_path=argv[1];
         map_id=argv[2];
         map_name=argv[3];
-        ROS_INFO("map_path:%s,map_id:%s,map_name:%s",map_path.c_str(),map_id.c_str(),map_name.c_str());
-
-        //read the map.
-
-
-        //process.
-
+        ROS_INFO("Receive the map_path:%s map_id:%s map_name:%s",map_path.c_str(),map_id.c_str(),map_name.c_str());
+        path=map_path+"/"+map_id+"/"+map_id+".jpg";
+        ROS_INFO("path is:%s",path.c_str());
     }
-    ros::spin();
+
+
     return 0;
 }

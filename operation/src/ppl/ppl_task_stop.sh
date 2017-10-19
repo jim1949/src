@@ -32,6 +32,6 @@ rosnode kill velocity_smoother &
 cd /home/relaybot/api_ws/src/shell_rclocal/
 ./killnode.sh 
 echo "rosnode kill finished."
-rostopic pub -1 /mapping_status_feedback std_msgs/Int32 7
+rostopic pub -1 /mapping_status_feedback std_msgs/Int32 11
 
 

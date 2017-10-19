@@ -10,6 +10,15 @@ should be the monitor of mapping status:
   2)save mapping(stop map_server.transfer the map folder to another folder with unique id.)
   3)cancel mapping. kill all nodes in the mapsaver.
 
+//mapping_status
+int32 data
+string map_id
+string map_name
+string map_path
+---
+float64[] data
+string errormsg
+bool  successed
 */
 #include "ros/ros.h"  
 #include "operation/mapping_status.h" 

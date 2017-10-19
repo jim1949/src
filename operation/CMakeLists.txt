@@ -129,6 +129,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # include_directories(include)
 include_directories(
+  include ${catkin_INCLUDE_DIRS}
 
   include 
 
@@ -209,6 +210,7 @@ add_executable(draw_wall
 add_dependencies(draw_wall ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(draw_wall
   ${catkin_LIBRARIES} jsoncpp
+    ${OpenCV_LIBS}
 )
 
 add_executable(ppl
@@ -231,4 +233,3 @@ target_link_libraries(ppl
 # FIND_PACKAGE( OpenCV REQUIRED )
 # add_executable( main main.cpp )
 # TARGET_LINK_LIBRARIES( main ${OpenCV_LIBS} ) 
-
