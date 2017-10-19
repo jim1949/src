@@ -327,4 +327,6 @@ add_executable(robot_path_tf
 add_dependencies(robot_path_tf ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(robot_path_tf
   ${catkin_LIBRARIES}
+  jsoncpp
+  pose_tf
 )
