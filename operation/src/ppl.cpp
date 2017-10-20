@@ -55,7 +55,8 @@ public:
     }
 };
 //============================= Function define ==================
-vector<Point> find_intersection_line(Mat map, vector<Point> line, char SLICE_MODE);
+double get_angle(const Mat &src);
+vector<Point> find_intersection_line(const Mat &map, vector<Point> line, char SLICE_MODE);
 vector<Point> xslice_gen(int y_current, int map_size_x);
 vector<Point> yslice_gen(int x_current, int map_size_y);
 void image_regulate(Mat &map, int fill_size);
@@ -142,8 +143,9 @@ int main(int argc, char ** argv){
     // map image rotation and edge sharpening
     Mat src_rotate,src_threshold;
     // angle = -10.5;       // Full office map rotation angle
-    angle = 39;             // Square office map rotation angle
+    // angle = 39;             // Square office map rotation angle
     // FLOOD_FILL_PT = Point(150,250);
+    angle = get_angle(src);
     FLOOD_FILL_PT = Point(450,300);
     src_rotate = rotate_img(src,angle);
 
@@ -199,6 +201,7 @@ int main(int argc, char ** argv){
         masked_img = preprocess_src.clone();
     }
     floodFill_1ch(masked_img, Point(450,300)); */
+    //========================= manual set param for image clutch reduction ========
     image_regulate(masked_img, 20);
     /* while(1){
         if(waitKey(15) == 27 ) break;
@@ -480,6 +483,50 @@ int main(int argc, char ** argv){
     return 0;
 }
 //============================== Function define ================
+double get_angle(const Mat &src){
+    Mat src_threshold;
+    Mat blurred_img(src.size(), CV_8UC1);
+
+    threshold(src,src_threshold,210,255,0);
+    blur( src_threshold, blurred_img, Size(3,3));
+    // namedWindow("Blurred image", WINDOW_AUTOSIZE);
+    // imshow("Blurred image", blurred_img);
+
+    // Apply canny edge algorithm to the map image
+    Mat canny_img(src.size(), CV_8UC1);
+    Canny(blurred_img, canny_img, 80, 100*2, 3);
+
+    imshow("source",src);
+    imshow("threshold image", src_threshold);
+    imshow("canny image",canny_img);
+
+    Mat color_canny;
+    cvtColor(canny_img, color_canny, CV_GRAY2BGR);
+    vector<Vec4i> lines;
+    int level;
+    for(level = 240; level > 0; level -= 5){
+        HoughLinesP(canny_img, lines, 1, CV_PI / 360, level, 30, 15);
+        if (lines.size() > 0 ) break;
+    }
+    
+    double theta = 0;
+    int max_distance = 0;
+    int max_distance_i = 0;
+    cout << " the size of lines is " << lines.size() << endl;
+    for( int i = 0; i < lines.size(); ++i){
+        // line(color_canny, Point(lines[i][0], lines[i][1]), Point(lines[i][2], lines[i][3]), Scalar(0,0,255),1,8);
+        // cout << " the point is " << Point(lines[i][0], lines[i][1]) << " and " << Point(lines[i][2], lines[i][3]) << endl;
+        // cout << " angle theta is " << theta << endl;
+        int distance = sqrt((lines[i][2] - lines[i][0]) * (lines[i][2] - lines[i][0]) + (lines[i][3] - lines[i][1]) * (lines[i][3] - lines[i][1]));
+        if( distance > max_distance){
+            max_distance = distance;
+            max_distance_i = i;
+        }
+    }
+    theta = atan2(lines[max_distance_i][3] - lines[max_distance_i][1], lines[max_distance_i][2] - lines[max_distance_i][0]) * 180 / Pi;
+    
+    return theta;
+}
 vector<cells> cell_decompose(Mat& map){
     vector<Point> yslice;
     vector<Point> intersect;   
@@ -566,7 +613,7 @@ vector<cells> cell_decompose(Mat& map){
 
     return cells_v;
 }
-vector<Point> find_intersection_line(Mat map, vector<Point> line, char SLICE_MODE){
+vector<Point> find_intersection_line(const Mat &map, vector<Point> line, char SLICE_MODE){
     // Point is of (y,x) == (rows, cols)
     vector<Point> intersection;    
     int i;
@@ -890,14 +937,12 @@ void coverage_path_planning(vector<cells> &cells_v, Mat &map){
             /* if(begin_of_cells.back() == 251){
                 cout << " (1) pt_left_most is " << pt_left_most << endl;
             } */
-            for(i = 0; i < robot_size/2; ++i){
+            /* for(i = 0; i < robot_size/2; ++i){
                 if(it->edge_rt[i].y > pt_left_most.y){
                     pt_left_most = it->edge_rt[i];
                 }
-            }
-            /* if(begin_of_cells.back() == 251){
-                cout << " (2) pt_left_most is " << pt_left_most << endl;
             } */
+            
             // offset corner to robot size and check to fit robot size on map
             pt_left_most.y = pt_left_most.y - robot_size;
             while(pt_left_most.y > it->edge_lt[pt_left_most.x - path_pt.x].y){
@@ -906,10 +951,7 @@ void coverage_path_planning(vector<cells> &cells_v, Mat &map){
                 }
                 --pt_left_most.y;
             }
-            /* if(begin_of_cells.back() == 251){
-                cout << " (3) pt_left_most is " << pt_left_most << endl;
-            }
-            cout << " the current cell vertical_traj_num " << vertical_traj_num << endl; */
+            
             
             if(vertical_traj_num < 1+0.3){
                 robot.path.push_back(pt_left_most);
