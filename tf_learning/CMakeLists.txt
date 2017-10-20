@@ -129,6 +129,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
   include ${catkin_INCLUDE_DIRS}
+  include ${catkin_INCLUDE_DIRS}
 
   include ${catkin_INCLUDE_DIRS}
 
@@ -330,4 +331,12 @@ target_link_libraries(robot_path_tf
   ${catkin_LIBRARIES}
   jsoncpp
   pose_tf
+)
+
+add_executable(test_marker
+  src/test_marker.cpp
+)
+add_dependencies(test_marker ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(test_marker
+  ${catkin_LIBRARIES}
 )
