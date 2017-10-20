@@ -91,8 +91,8 @@ Json::Value transfer_nav_json(basic_msgs::nav_pose_set::Request &req){
     string nav_name=req.nav_pose.name;
     geometry_msgs::Pose nav_pose_picture=req.nav_pose.worldposition;
 
-    const string frame1("/picture_frame");
-    const string frame2("/map");
+    const string frame1("picture_frame");
+    const string frame2("map");
     geometry_msgs::Pose nav_pose=transform_point(nav_pose_picture,frame1,frame2);
     
     int type=req.nav_pose.type;
