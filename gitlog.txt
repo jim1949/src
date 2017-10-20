@@ -1,0 +1,818 @@
+commit 5778e34156563f68475efdebfc8f26bbcec4e6d2
+Author: jim1949 <jim1949@163.com>
+Date:   Fri Oct 20 14:26:22 2017 +0800
+
+    update and add .asInt()
+
+commit ec18a0e2cb225aff1dd5111ebd74ff4a164f8561
+Author: jim1949 <jim1949@163.com>
+Date:   Fri Oct 20 14:22:34 2017 +0800
+
+    /picture_frame->picture_frame.
+
+commit 5d5723bdd5d0e45202ce9104cf98a37c0270d50d
+Author: jim1949 <jim1949@163.com>
+Date:   Fri Oct 20 14:16:20 2017 +0800
+
+    use my transform point function in edit map.
+
+commit ca8197edd56c8f3113dc4e4ce30b89128cb82ecd
+Author: jim1949 <jim1949@163.com>
+Date:   Fri Oct 20 11:41:10 2017 +0800
+
+    update ppl_task_bringup.sh
+
+commit 306a031cb8a29a8dfb5e2550a351d7dc1d24e896
+Author: magiczjp123 <magiczjp123@163.com>
+Date:   Fri Oct 20 10:43:53 2017 +0800
+
+    [zjp]  ---- added get_angle() to auto set angle
+
+commit 2b1d90ae5022adfe91af00173fe366270d8fbcdf
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Oct 19 19:39:00 2017 +0800
+
+    complete teh ppl_task_bringup.sh but cannot stop the process.
+
+commit c69e92559ddf5913efe72d920818a6ec879d3644
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Oct 19 17:52:40 2017 +0800
+
+    prepare to add the ppl_nw_listener.
+
+commit 662c498f6dd5eb226c94114cc198545a337fafba
+Author: jim1949 <jim1949@163.com>
+Date:   Wed Oct 18 17:57:13 2017 +0800
+
+    sleep 15s.
+
+commit 4e7468cd1880582050c1d10e0d56a0cf7414f2be
+Author: jim1949 <jim1949@163.com>
+Date:   Wed Oct 18 17:38:22 2017 +0800
+
+    change task_bringup.sh sleep 15
+
+commit 58ad67f13841a6480837272144c38529aaa65916
+Author: jim1949 <jim1949@163.com>
+Date:   Wed Oct 18 17:31:25 2017 +0800
+
+    update.
+
+commit 676e495bbf475e61cf210a60a70e2e3182595a7d
+Author: vcdanda <jim1949@163.com>
+Date:   Wed Oct 18 15:24:49 2017 +0800
+
+    update
+
+commit 45f3607b4bd4ecc6821e8f0c17e48ac65615daaf
+Author: vcdanda <jim1949@163.com>
+Date:   Wed Oct 18 14:53:31 2017 +0800
+
+    update the robot_path_reader
+
+commit b8f14ef4be5b67ca99127d7474a98c5c7e5ac4e9
+Merge: 9b3571d 917bc4e
+Author: vcdanda <jim1949@163.com>
+Date:   Wed Oct 18 13:43:08 2017 +0800
+
+    Merge branch 'master' of github.com:jim1949/src into HEAD
+    
+    Conflicts:
+    	operation/CMakeLists.txt
+
+commit 9b3571d477c8972afd1824e1385a9ee818efcbba
+Author: vcdanda <jim1949@163.com>
+Date:   Wed Oct 18 13:40:37 2017 +0800
+
+    add the latest ppl node inside. it's worked.
+
+commit 917bc4e0a0cbbb5c5d3a7bb18e638b576aa1b9ab
+Author: jim1949 <jim1949@163.com>
+Date:   Wed Oct 18 13:35:15 2017 +0800
+
+    Add transform point.
+
+commit dc718278ac520c2fb6e524a2cc596d87f6170797
+Author: jim1949 <jim1949@163.com>
+Date:   Tue Oct 17 18:10:43 2017 +0800
+
+    Add picture2map cpp
+
+commit 7938324c9d1e909bfc28cc32779b484201339bc5
+Author: jim1949 <jim1949@163.com>
+Date:   Tue Oct 17 11:42:15 2017 +0800
+
+    update
+
+commit 83fc31d7fe0e14e813afe8630b4d52b69768014b
+Author: vcdanda <jim1949@163.com>
+Date:   Thu Oct 12 18:44:09 2017 +0800
+
+    add ppl inside. cmake correctly, but no qt support.
+
+commit 0fa61d9d1f61c419b2dd1018b020af2c67d77d19
+Merge: 732ba90 6fe0b49
+Author: vcdanda <jim1949@163.com>
+Date:   Thu Oct 12 16:22:13 2017 +0800
+
+    Merge branch 'master' of github.com:jim1949/src into HEAD
+
+commit 6fe0b4977f824b4c175f2d4d32301bd09a56ba49
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Oct 12 16:19:33 2017 +0800
+
+    add ppl task launch but no ppl cpp inside.
+
+commit 0b42ceadca39bd6e6a1e9a884c21993673c68915
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Oct 12 11:27:40 2017 +0800
+
+    change the switch case function bug.
+
+commit 2879defb826ae9e950e9936d2666b034b30915ba
+Author: jim1949 <jim1949@163.com>
+Date:   Wed Oct 11 18:18:07 2017 +0800
+
+    update
+
+commit b902cd1c978525b337b8082789d7b660e85cdcad
+Author: jim1949 <jim1949@163.com>
+Date:   Wed Oct 11 17:50:44 2017 +0800
+
+    update recently. Before adding the path planning node inside.
+
+commit 6e252479f1a346ff0df9574324a40b0d6e90869d
+Author: jim1949 <jim1949@163.com>
+Date:   Wed Oct 11 16:54:35 2017 +0800
+
+    add service response to every mapping_status. The topic is /status.
+
+commit 81dfa8d0fa1d46f45c07dc9c8408205a343c9b25
+Author: jim1949 <jim1949@163.com>
+Date:   Tue Oct 10 18:17:26 2017 +0800
+
+    update
+
+commit 27dd5a49ce60c6df7d2b22393c21e33f73d6ecfb
+Author: jim1949 <jim1949@163.com>
+Date:   Tue Oct 10 09:45:12 2017 +0800
+
+    add newest changes to my api_ws.
+
+commit 732ba90b6d67eebfcf7b8f43cc4cd2b2095a2be0
+Merge: 0bac30a 9278344
+Author: vcdanda <jim1949@163.com>
+Date:   Sat Sep 30 16:41:32 2017 +0800
+
+    Merge branch 'master' of github.com:jim1949/src into HEAD
+
+commit 927834481e5e7d7614d07a9f366ec578ac12c599
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Sep 28 18:08:18 2017 +0800
+
+    Delete some unuseful packages.
+
+commit 2738b942cf15fdc171576d56c4e21edf2873de33
+Merge: 922f27a c73b498
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Sep 28 17:21:47 2017 +0800
+
+    Merge branch 'master' of https://github.com/jim1949/src into HEAD
+
+commit 922f27a9988d0c74e9392d7e564450cbbd6a238e
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Sep 28 17:21:23 2017 +0800
+
+    update for the laptop
+
+commit 0bac30a0d5366e381decc2b566c457bd65d93263
+Merge: eed73d9 c73b498
+Author: vcdanda <jim1949@163.com>
+Date:   Thu Sep 28 15:58:40 2017 +0800
+
+    Merge branch 'master' of github.com:jim1949/src into HEAD
+
+commit eed73d936ec7fd2b879607142b48ab43a3ff8c43
+Author: vcdanda <jim1949@163.com>
+Date:   Thu Sep 28 15:58:10 2017 +0800
+
+    old from testplatform
+
+commit c73b498c6d73c730269d3f02d86e9e6a8ded71d5
+Author: jim1949 <jim1949@163.com>
+Date:   Wed Sep 27 16:44:44 2017 +0800
+
+    update.
+
+commit 2263aba9ad14cf2e601885772769dd3bf8abaadc
+Author: jim1949 <jim1949@163.com>
+Date:   Tue Sep 26 11:20:00 2017 +0800
+
+    pitch>=0
+
+commit 6d0062ed7a0d00fa8ed4dc682833460bef59e9b4
+Author: jim1949 <jim1949@163.com>
+Date:   Tue Sep 26 11:15:12 2017 +0800
+
+    add checker for pitch.
+
+commit 9405d762faa676423546111d23139e196f4f605a
+Author: jim1949 <jim1949@163.com>
+Date:   Tue Sep 26 10:22:08 2017 +0800
+
+    yaw=yaw-t3
+
+commit 43a7957f0e32448def6333377a2be4577721d1ba
+Author: jim1949 <jim1949@163.com>
+Date:   Tue Sep 26 10:01:22 2017 +0800
+
+    can update the initial pose, but sometimes, fo 180 degree it is difficult to localize.
+
+commit 5918fe127f04eb40c4a3e572b15588f209129362
+Merge: 18d0b50 b615341
+Author: jim1949 <jim1949@163.com>
+Date:   Mon Sep 25 17:51:48 2017 +0800
+
+    Merge branch 'master' of https://github.com/jim1949/src into HEAD
+
+commit 18d0b50ab355c2ac3b6809507297ab75fc3cf67d
+Author: jim1949 <jim1949@163.com>
+Date:   Mon Sep 25 17:51:26 2017 +0800
+
+    update draw points and nav
+
+commit b615341fe548544966c465ed0be33ed1abf613c8
+Author: jim1949 <jim1949@163.com>
+Date:   Mon Sep 25 17:31:48 2017 +0800
+
+    get the operation_mapbuild.cpp back.
+
+commit bb203fc3dd1403f1a6342338301b45f8d14a79ff
+Merge: 99e6fa2 bd25802
+Author: jim1949 <jim1949@163.com>
+Date:   Mon Sep 25 16:08:18 2017 +0800
+
+    Merge branch 'master' of https://github.com/jim1949/src into HEAD
+    
+    Conflicts:
+    	gpsbot_navigation/src/draw_points_and_nav.cpp
+    	operation/src/mapping/mapsaver_save.sh
+    	operation/src/mapping/mapsaver_save.sh~
+
+commit 99e6fa2a14b8ebfe8a008b7dbbdbde8a0e522af2
+Author: jim1949 <jim1949@163.com>
+Date:   Mon Sep 25 16:01:54 2017 +0800
+
+    update for the sweepbot, prepare to merge.
+
+commit bd2580255069f8f980010bc7be994045207e25ef
+Author: jim1949 <jim1949@163.com>
+Date:   Mon Sep 25 15:54:18 2017 +0800
+
+    update, test the navigation in circle function in draw_points_and_nav.
+
+commit d52bbea58f99bca74d6e689e44f528ffb1475a30
+Author: jim1949 <jim1949@163.com>
+Date:   Fri Sep 22 15:43:45 2017 +0800
+
+    update sweep_bringup.sh
+
+commit 9530a0d6e3e52aabb39405d3e9a656bd9eab15c1
+Author: jim1949 <jim1949@163.com>
+Date:   Wed Sep 20 09:45:13 2017 +0800
+
+    update 9-19
+
+commit 9438f7ee937e2553b97810f2fcbf1520ace6026d
+Author: jim1949 <jim1949@163.com>
+Date:   Tue Sep 19 10:15:13 2017 +0800
+
+    Before change the structure of the launch. Goal: maintain the main part of the launch file. kill small range of launch file.
+
+commit f1c86f74224674443a6b7589adef60dcceb5a5ae
+Author: jim1949 <jim1949@163.com>
+Date:   Tue Sep 19 09:41:11 2017 +0800
+
+    Finally merge to have the useful draw_points script.
+
+commit a9dda37f91393002042f1835a660293b6c158050
+Merge: 34e1893 f8aa78d
+Author: jim1949 <jim1949@163.com>
+Date:   Tue Sep 19 09:29:32 2017 +0800
+
+    Merge#
+
+commit 34e18933c2f391f62fd62deee179c1bd848d4bfb
+Author: jim1949 <jim1949@163.com>
+Date:   Tue Sep 19 09:05:23 2017 +0800
+
+    update the automatic shell.
+
+commit f8aa78dac4aed54715c80ba44ad874b0c7effb78
+Author: jim1949 <jim1949@163.com>
+Date:   Mon Sep 18 14:32:28 2017 +0800
+
+    update 1
+
+commit 139a9d164b873190f6c4fdb8344b36721e44c637
+Author: jim1949 <jim1949@163.com>
+Date:   Mon Sep 18 11:28:38 2017 +0800
+
+    Update angle of last angle.
+
+commit 54982c18835b02673ba448a60d6e26690f2e4bf1
+Author: jim1949 <jim1949@163.com>
+Date:   Mon Sep 18 10:55:18 2017 +0800
+
+    Need to transfer the last_pose to picture frame.
+
+commit 9a5859da5d3334ed17c5efc7435ba3f3a0d51f23
+Author: jim1949 <jim1949@163.com>
+Date:   Fri Sep 15 18:53:39 2017 +0800
+
+    update 9-15
+
+commit faa7da395ba5290340b23b7357d8574d53916f9f
+Author: jim1949 <jim1949@163.com>
+Date:   Fri Sep 15 18:40:14 2017 +0800
+
+    New with angle updated.
+
+commit 3f6386c6cf0de8778b1ff56ba3341006ad7a8382
+Author: jim1949 <jim1949@163.com>
+Date:   Fri Sep 15 18:30:14 2017 +0800
+
+    Nothing
+
+commit 9f917484bfcf706865edd171076f10f9442b8d3c
+Author: jim1949 <jim1949@163.com>
+Date:   Fri Sep 15 17:39:58 2017 +0800
+
+    need to update the angle of the robot_pose.
+
+commit 575645695cfb02fca5367ce74ecc67547b363282
+Author: jim1949 <jim1949@163.com>
+Date:   Fri Sep 15 16:08:57 2017 +0800
+
+    update
+
+commit 35f0ff52e246aad5e50e944d9a8e0a0ca67e79fe
+Author: jim1949 <jim1949@163.com>
+Date:   Fri Sep 15 11:13:43 2017 +0800
+
+    update the initial_pose update part.
+
+commit 1f757bd635e54d07420e0cf6bd08bb077d90676c
+Merge: a513208 e71d973
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Sep 14 19:14:21 2017 +0800
+
+    Merge branch 'master' of https://github.com/jim1949/src
+
+commit a5132084e8a239089f9a179bf6d59f38d54ff415
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Sep 14 19:14:05 2017 +0800
+
+    update
+
+commit e71d97338981b3f071b4d4c88ccb6e1b91b1ebed
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Sep 14 19:02:47 2017 +0800
+
+    Add initialpose.txt
+
+commit 84dde85f25ce7670eeaf7ea9041dd7a1bd87e8f3
+Merge: cf3a1fd f05c192
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Sep 14 17:07:45 2017 +0800
+
+    Merge branch 'master' of https://github.com/jim1949/src
+
+commit f05c192a21207700031a5d4f1e14440063d60692
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Sep 14 17:02:10 2017 +0800
+
+    update
+
+commit cf3a1fd07414dd663d85d60441d33c25c08410c3
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Sep 14 15:06:52 2017 +0800
+
+    update
+
+commit 2d7a675cda7662cbdb5d1c558b300605dfcabc75
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Sep 14 12:08:56 2017 +0800
+
+    Update the shell and mapbuild cpp.
+
+commit 948b216d6b25d961f65a784f6d8c9e9c7601bc19
+Author: jim1949 <jim1949@163.com>
+Date:   Thu Sep 14 11:11:57 2017 +0800
+
+    Update some launch and shell file.
+
+commit 63952a391d7a13457fa484749d545e46bc502794
+Author: jim1949 <jim1949@163.com>
+Date:   Wed Sep 13 10:11:05 2017 +0800
+
+    add shell for four parts. Still need a overall services.
+
+commit 491263b90a2a945afa65b89ffcaa77d2e52c15e1
+Author: jim1949 <jim1949@163.com>
+Date:   Mon Sep 11 17:13:56 2017 +0800
+
+    Update.
+
+commit 5229f9dc9b2a6c241cec3a5fe06cce5b428b5987
+Merge: 30b95e3 07ed348
+Author: jim1949 <jim1949@163.com>
+Date:   Mon Sep 11 16:11:08 2017 +0800
+
+    Merge branch 'master' of https://github.com/jim1949/src
+
+commit 30b95e36dcbaf620658c8a9738cc669a5fcda51a
+Author: relaybot <jim1949>
+Date:   Mon Sep 11 16:05:55 2017 +0800
+
+    Update.
+
+commit 07ed3483f67733e240cc9faec4aec65bca1ba014
+Author: vcdanda <jim1949@163.com>
+Date:   Wed Sep 6 18:56:20 2017 +0800
+
+    Update 0906
+
+commit 4e5eab7b855a8cf4c09cadd2f8044389c770e62a
+Author: relaybot <jim1949>
+Date:   Mon Sep 4 19:08:58 2017 +0800
+
+    Update the navigation part. almost done. Just need to test the sendgoal with feedbackCb to pause.
+
+commit 5be6e9e872b9dceb6b80ff718b66c880dd98f811
+Author: relaybot <jim1949>
+Date:   Fri Sep 1 18:28:53 2017 +0800
+
+    Update.
+
+commit cc60d19c9b6ab1a95edb3a80fa2d4df756d4d611
+Author: relaybot <jim1949>
+Date:   Fri Sep 1 12:05:28 2017 +0800
+
+    Commit 12..05 9.1
+
+commit 1c3d72457fd500e3d09b0afba4f6b49789f4a310
+Author: relaybot <jim1949>
+Date:   Thu Aug 31 17:30:34 2017 +0800
+
+    Update
+
+commit 08b9659bfc520c7fea0fcc6f4c217af63e6d0fdf
+Author: vcdanda <jim1949@163.com>
+Date:   Thu Aug 31 15:21:46 2017 +0800
+
+    Add two services in the draw points_and_nav.cpp
+
+commit 11a123507a75e51d94ce403c7501453d9bb43aaf
+Author: relaybot <jim1949>
+Date:   Thu Aug 31 10:06:28 2017 +0800
+
+    update draw_points_and_nav.cpp
+
+commit 763c70a2c93517d98e1d87498915bec314704918
+Author: relaybot <jim1949>
+Date:   Wed Aug 30 17:25:28 2017 +0800
+
+    Add edit_nav_task service inside.
+
+commit 54a34862b9181c42f4e4f6e827d1afe34ef43dfd
+Author: vcdanda <jim1949@163.com>
+Date:   Wed Aug 30 14:46:59 2017 +0800
+
+    Add execute_nav_task service,edit_nav_task.srv
+
+commit a953df49c94b04880a26f5cdf0b964f2d89d1d42
+Author: vcdanda <jim1949@163.com>
+Date:   Wed Aug 30 11:04:09 2017 +0800
+
+    can publish the pose marker in the rviz.
+
+commit 9799a83f8e0e8646c2b22a2f28521f2e7afa676c
+Merge: b4d9e4b ba07c46
+Author: vcdanda <jim1949@163.com>
+Date:   Wed Aug 30 09:45:07 2017 +0800
+
+    Merge branch 'master' of github.com:jim1949/src into HEAD
+
+commit ba07c4632e0914e1043bfdf2306426dea80a4076
+Author: relaybot <jim1949>
+Date:   Tue Aug 29 18:23:38 2017 +0800
+
+    Add navigation inside of it.
+
+commit b4d9e4baf796db6357bd9850659a6d52b1f31806
+Author: vcdanda <jim1949@163.com>
+Date:   Mon Aug 28 18:15:43 2017 +0800
+
+    store pgm path in the yaml.
+
+commit 835127bb6bf89ee866068be8bc2cfbadd9b97a06
+Author: vcdanda <jim1949@163.com>
+Date:   Mon Aug 28 16:48:17 2017 +0800
+
+    _bk.pgm is used to store initial img, and .pgm is used to use.
+
+commit 26470a8b51fa335b659056ce36442c1954293d84
+Author: vcdanda <jim1949@163.com>
+Date:   Mon Aug 28 16:09:24 2017 +0800
+
+    debug nw_listener.
+
+commit b502af93fc590810c8653ab78c51ee7f4053d4b5
+Author: JimmyJiao <jim1949@163.com>
+Date:   Mon Aug 28 15:48:46 2017 +0800
+
+    Add mapid.
+
+commit ceb12c01f914c9c3bbc188e681173c82c014c5c8
+Author: vcdanda <jim1949@163.com>
+Date:   Fri Aug 25 18:06:06 2017 +0800
+
+    visual wall funciton realize.
+
+commit f3ef67919f4be0269824da88375c833d3d4a6a43
+Author: JimmyJiao <jim1949@163.com>
+Date:   Fri Aug 25 11:11:02 2017 +0800
+
+    wall_pose_set service test.
+
+commit 3a9e2edfbf6f1e672c0392cf2567c7ff0d4d0f3d
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 24 18:13:20 2017 +0800
+
+    opencv to add one visual wall. But need to add more walls.
+
+commit 3b951845b98953e245c6e7b99fc16dfaa53e35db
+Author: vcdanda <jim1949@163.com>
+Date:   Thu Aug 24 14:40:17 2017 +0800
+
+    add a wall_pose folder to test
+
+commit bac5403e3186ac16e94b67bd137235bfc4ca8b61
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 24 14:12:45 2017 +0800
+
+    add opencv test
+
+commit f9fea0433a8d8ac79b08da8bcd2e4368fb6d83ad
+Author: vcdanda <jim1949@163.com>
+Date:   Thu Aug 24 10:51:38 2017 +0800
+
+    add opencvtest folder inside of it.
+
+commit 5747a3ef195eda368bf7875466e08cf3a2dcdad5
+Merge: a3aa020 2288bdb
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 24 09:41:59 2017 +0800
+
+    Merge branch 'master' of github.com:jim1949/src into 0816
+
+commit a3aa0200155ec88b94fc3e12ec7f52028971a28b
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 24 09:41:16 2017 +0800
+
+    Test wall pose service
+
+commit 2ba008c4edbd356ec647c141dc4ec43c07b5cbf0
+Author: JimmyJiao <jim1949@163.com>
+Date:   Wed Aug 23 19:49:29 2017 +0800
+
+    0823 nw_listener:transfer_wall_json still need to edit.
+
+commit 2288bdb31f2764450b3718999be72d0973dd39e9
+Author: vcdanda <jim1949@163.com>
+Date:   Wed Aug 23 17:07:00 2017 +0800
+
+    Add waitfortransform for the transformpoint class. And divided by 20
+
+commit e8b5e109c74da9b7c835dff0130f6a7012a25251
+Merge: b21e472 5c5a644
+Author: vcdanda <jim1949@163.com>
+Date:   Wed Aug 23 16:21:32 2017 +0800
+
+    Test:commit.
+    Merge branch 'master' of github.com:jim1949/src into HEAD
+
+commit b21e47237c1aa5390d11b2e08d918b6cbd167392
+Author: vcdanda <jim1949@163.com>
+Date:   Wed Aug 23 16:21:20 2017 +0800
+
+    my change
+
+commit 5c5a644bb77b5f54bef079d7e85cb4927740b3ff
+Author: JimmyJiao <jim1949@163.com>
+Date:   Wed Aug 23 16:18:54 2017 +0800
+
+    add my test for tranformpoint and waitfortransform
+
+commit 594bdefa9f8bbb95f3951be2c49226011879979d
+Author: vcdanda <jim1949@163.com>
+Date:   Wed Aug 23 16:05:20 2017 +0800
+
+    tf topic with /
+
+commit 8648ccb362211a4cdf1f45a90a2aa3a53d995802
+Author: JimmyJiao <jim1949@163.com>
+Date:   Wed Aug 23 14:33:43 2017 +0800
+
+    test to transform a nav point from a picture frame to the map frame.
+
+commit 0bce24ebbce910d7c72d52c6b189ae20ac26760b
+Author: vcdanda <jim1949@163.com>
+Date:   Wed Aug 23 10:19:50 2017 +0800
+
+    Add json lib in the robot.
+    1.http://blog.csdn.net/yes_i_am/article/details/47146829
+    2.-ljsoncpp which is linked to /usr/local/lib/libjsoncpp.a, and in CMakelists.txt,
+    it is in target_link_directories.
+
+commit 1b29ad0c72c9f6c32501e8a8acefe2d168a48234
+Author: JimmyJiao <jim1949@163.com>
+Date:   Wed Aug 23 09:05:17 2017 +0800
+
+    add json folder
+
+commit a45ad7465bb7ad3f1ac680cc3477a996c99140eb
+Author: JimmyJiao <jim1949@163.com>
+Date:   Tue Aug 22 19:19:03 2017 +0800
+
+    Add json zip and scons zip
+
+commit c5371901059728dbd117f5a661cc14f506e56f56
+Author: JimmyJiao <jim1949@163.com>
+Date:   Tue Aug 22 19:12:39 2017 +0800
+
+    Add nav_pose_set service to store the json information
+
+commit e018223e948e5bb0bf932ce7b556de47b4a80319
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 17 18:39:35 2017 +0800
+
+    0817
+
+commit 41f6b56c6f927dd1c17254d3b19fd66e6e344a83
+Author: vcdanda <jim1949@163.com>
+Date:   Thu Aug 17 16:10:43 2017 +0800
+
+    change the scan and store_img according to sick sensor.
+
+commit 39cc3161d4e831f3765a9f47cdeefe2c1cf8dd1e
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 17 11:26:38 2017 +0800
+
+    laser points 2
+
+commit bf6e94b7d0966bab1728d82429c6d5f552bafb5e
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 17 11:00:38 2017 +0800
+
+    laser points
+
+commit 3aee2025f3820cb92d9acee1bb4601215c5672a3
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 17 10:53:57 2017 +0800
+
+    change sigma-3/4pi to sigma
+
+commit 70cee1087f401fa7a8ab1c663b8de98b2fbd5218
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 17 10:42:20 2017 +0800
+
+    fix a bug
+
+commit b3ce02d1149ada630d644284b0275291efad138f
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 17 10:34:32 2017 +0800
+
+    change sum of scan points
+
+commit 175b6ab6a931a5bcbc0b2a0770d5f5d3a86086e2
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 17 10:30:24 2017 +0800
+
+    change number of scan points
+
+commit bd0bde3b53f153476093b956eceece484cea754a
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 17 10:26:39 2017 +0800
+
+    change topic of base_scan to scan
+
+commit 291bb569516918b20fa731fd370f3c138f34babe
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 17 09:27:13 2017 +0800
+
+    Fix a small bug
+
+commit f905befacedb0dc6182274381821b966f1f15d19
+Merge: b9d3a13 5acd43d
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 17 09:22:54 2017 +0800
+
+    Merge branch 'master' of github.com:jim1949/src into 0816
+
+commit b9d3a1399e52cd1b05991f63546e6235d64a2b3b
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 17 09:21:52 2017 +0800
+
+    add operation launch
+
+commit 5acd43d4650c484021d023f9a483ae738f669a99
+Author: vcdanda <jim1949@163.com>
+Date:   Wed Aug 16 19:45:00 2017 +0800
+
+    0816 final
+
+commit 29b9d789d62ebafda15c2c36788e5c317e9fcdbb
+Author: JimmyJiao <jim1949@163.com>
+Date:   Wed Aug 16 19:01:48 2017 +0800
+
+    fix a warning in map_saver
+
+commit 08ee1a1e2a9899d3153685870cb05e826a411e41
+Author: JimmyJiao <jim1949@163.com>
+Date:   Wed Aug 16 18:54:55 2017 +0800
+
+    change some shells to save, pause, start mapping service.
+
+commit 7cecf2d562df0242e52da52b55239bde52f20760
+Author: JimmyJiao <jim1949@163.com>
+Date:   Wed Aug 16 14:13:00 2017 +0800
+
+    Add map_server inside this folder.
+
+commit 47a1e91ccbe6ff6852fd647bb21131786038f1b6
+Author: JimmyJiao <jim1949@163.com>
+Date:   Wed Aug 16 10:51:51 2017 +0800
+
+    change the output of error in world_tf_listener.cpp
+
+commit 46cd80b06e84ebc943eb2b1686eadca3ec1646a2
+Author: JimmyJiao <jim1949@163.com>
+Date:   Wed Aug 16 10:33:57 2017 +0800
+
+    new
+
+commit 00302ae7fcf5b8da3d8d476dd0c15a0b86419b44
+Author: JimmyJiao <jim1949@163.com>
+Date:   Wed Aug 16 10:30:25 2017 +0800
+
+    change sweep
+
+commit 7f8e66fdca8741dd78a8d810888c38e4ea7c67bf
+Author: JimmyJiao <jim1949@163.com>
+Date:   Wed Aug 16 09:55:16 2017 +0800
+
+    add sweep_communication
+
+commit 3c9a5757a3099f01638b96f182c31cab0cd5d083
+Author: JimmyJiao <jim1949@163.com>
+Date:   Tue Aug 15 18:46:27 2017 +0800
+
+    add all sh files
+
+commit d709a31c5e36299cd5c24c5dccfaf1b8b53a28cd
+Author: JimmyJiao <jim1949@163.com>
+Date:   Fri Aug 11 15:04:15 2017 +0800
+
+    Prepare to write service to get nav pose and wall pose. (Before.)
+
+commit 5fcb381889c9293678c772a3673375f2520e0afa
+Author: JimmyJiao <jim1949@163.com>
+Date:   Thu Aug 10 08:46:22 2017 +0800
+
+    Add tf_listener.cpp which can help to publish laser points in the picture frame.
+
+commit 67617ce91633124cb6d650a1e61bb39d450ec1d2
+Author: JimmyJiao <jim1949@163.com>
+Date:   Tue Aug 8 18:28:46 2017 +0800
+
+    Correct already, but still need to push_back the data of the laser points in the picture frame.
+
+commit 1ac1b459b6c4f981845bd3ab7694f1d2e871b726
+Author: JimmyJiao <jim1949@163.com>
+Date:   Tue Aug 8 17:17:17 2017 +0800
+
+    Can use vector to store the laser positions in the base_link frame.
+
+commit 2995ab8a9029220dfaed022904dbdc1cf48e0fe2
+Author: JimmyJiao <jim1949@163.com>
+Date:   Tue Aug 8 15:11:53 2017 +0800
+
+    Can get one laser point.
+
+commit 8423cd7d2b2ee6ae2aaed6377a47774a3b62aeab
+Author: JimmyJiao <jim1949@163.com>
+Date:   Mon Aug 7 10:02:52 2017 +0800
+
+    Add all files in the api_ws

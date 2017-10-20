@@ -26,7 +26,9 @@ geometry_msgs::Pose transform_point(geometry_msgs::Pose & pose_in_frame1,const s
     tf::TransformListener listener;
     geometry_msgs::PoseStamped PoseStamped_in_frame1,PoseStamped_in_frame2;
     geometry_msgs::Pose pose_in_frame2;
-    if (frame1=="picture_frame"){
+    string pic_frame("picture_frame");
+    ROS_INFO("frame1:%s",frame1.c_str());
+    if (frame1==pic_frame){
         ROS_INFO("it's picture_frame");
         PoseStamped_in_frame1.pose.position.x=PoseStamped_in_frame1.pose.position.x/20;
         PoseStamped_in_frame1.pose.position.y=PoseStamped_in_frame1.pose.position.y/20;
@@ -39,6 +41,7 @@ geometry_msgs::Pose transform_point(geometry_msgs::Pose & pose_in_frame1,const s
     PoseStamped_in_frame1.header.frame_id=frame1;
     PoseStamped_in_frame1.header.stamp=ros::Time();
     PoseStamped_in_frame1.pose=pose_in_frame1;
+    cout<< " "<< pose_in_frame1.position.x<< " "<< pose_in_frame1.position.y<< " "<< pose_in_frame1.position.z<< " "<< pose_in_frame1.orientation.x<< " "<< pose_in_frame1.orientation.y<< " "<< pose_in_frame1.orientation.z<< " "<< pose_in_frame1.orientation.w<< " "<< endl;
 
     bool flag=false;
     
