@@ -13,7 +13,7 @@ roslaunch operation frame.launch map_file:=$1/$2/$2.yaml &
 # got the path txt(/var/www/path/$1/... ).now ppl_src/...
 sleep 1
 #=====================there is some bug with this ppl.cpp
-roslaunch operation ppl_task_bringup.launch map_info:="$1 $2 $3" 
+# roslaunch operation ppl_task_bringup.launch map_info:="$1 $2 $3" 
 
 # read the path in /picture_frame, and write it inside /map.
 sleep 1
