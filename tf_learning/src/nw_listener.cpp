@@ -43,44 +43,46 @@ bool  successed
 #include <json/json.h>
 #include <iostream>
 #include <fstream>
+#include <tf_learning/pose_tf.h>
 
 #pragma comment(lib, "json_mtd.lib")
  
 #include <cstdio>
 using namespace std; 
 bool flag=false;
-geometry_msgs::Pose transform_point(geometry_msgs::Pose &nav_pose_picture){
+// geometry_msgs::Pose transform_point(geometry_msgs::Pose &nav_pose_picture){
     
-    tf::TransformListener listener;
-    geometry_msgs::PointStamped navpose_picture;
-    geometry_msgs::PointStamped navpose;
-    geometry_msgs::Pose nav_pose;
-    navpose_picture.header.frame_id="/picture_frame";
-    navpose_picture.header.stamp=ros::Time();
-    navpose_picture.point.x=(nav_pose_picture.position.x)/20;
-    navpose_picture.point.y=(nav_pose_picture.position.y)/20;
-    navpose_picture.point.z=(nav_pose_picture.position.z)/20;
+//     tf::TransformListener listener;
+//     geometry_msgs::PointStamped navpose_picture;
+//     geometry_msgs::PointStamped navpose;
+//     geometry_msgs::Pose nav_pose;
+//     navpose_picture.header.frame_id="/picture_frame";
+//     navpose_picture.header.stamp=ros::Time();
+//     navpose_picture.point.x=(nav_pose_picture.position.x)/20;
+//     navpose_picture.point.y=(nav_pose_picture.position.y)/20;
+//     navpose_picture.point.z=(nav_pose_picture.position.z)/20;
+    
 
-    flag=false;
-    while(flag==false){
-    try{
-    listener.waitForTransform("picture_frame", "map", ros::Time(), ros::Duration(10.0) );
-    listener.transformPoint("/map", navpose_picture, navpose);
-    ROS_INFO("transform from a point from picture_frame to map without any error ");
-    flag=true;
-    }
-    catch(tf::TransformException& ex){
-    flag=false;
-    ROS_ERROR("Received an exception trying to transform a point from \"picture_frame\" to \"map\": %s", ex.what());
-    }
-    }
-    nav_pose.position=navpose.point;
-    nav_pose.orientation=nav_pose_picture.orientation;
+//     flag=false;
+//     while(flag==false){
+//     try{
+//     listener.waitForTransform("picture_frame", "map", ros::Time(), ros::Duration(10.0) );
+//     listener.transformPoint("/map", navpose_picture, navpose);
+//     ROS_INFO("transform from a point from picture_frame to map without any error ");
+//     flag=true;
+//     }
+//     catch(tf::TransformException& ex){
+//     flag=false;
+//     ROS_ERROR("Received an exception trying to transform a point from \"picture_frame\" to \"map\": %s", ex.what());
+//     }
+//     }
+//     nav_pose.position=navpose.point;
+//     nav_pose.orientation=nav_pose_picture.orientation;
 
-    return nav_pose;
+//     return nav_pose;
 
 
-}
+// }
 Json::Value transfer_nav_json(basic_msgs::nav_pose_set::Request &req){
     Json::Value root;
     int map_id=req.nav_pose.mapid;
@@ -89,7 +91,9 @@ Json::Value transfer_nav_json(basic_msgs::nav_pose_set::Request &req){
     string nav_name=req.nav_pose.name;
     geometry_msgs::Pose nav_pose_picture=req.nav_pose.worldposition;
 
-    geometry_msgs::Pose nav_pose=transform_point(nav_pose_picture);
+    const string frame1("/picture_frame");
+    const string frame2("/map");
+    geometry_msgs::Pose nav_pose=transform_point(nav_pose_picture,frame1,frame2);
     
     int type=req.nav_pose.type;
     root["type"]=type;

@@ -281,6 +281,7 @@ add_dependencies(nw_listener ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORT
 link_directories(nw_listener /usr/local/lib)
 target_link_libraries(nw_listener
   ${catkin_LIBRARIES} jsoncpp
+  pose_tf
 )
 
 add_executable(nw_callservice
