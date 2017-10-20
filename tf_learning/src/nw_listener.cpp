@@ -242,17 +242,17 @@ bool nav_server(basic_msgs::nav_pose_set::Request &req, basic_msgs::nav_pose_set
     root=transfer_nav_json(req);
     // 1:delete,2:add,3:update.
     ROS_INFO("type:%d",root["type"].asInt());
-    if (root["type"]==1)
+    if (root["type"].asInt()==1)
     {
         delete_nav_json(req,root);
         sprintf(s,"got the delete message! pose.x: %f",req.nav_pose.worldposition.position.x);
         
     }
-    else if(root["type"]==2){
+    else if(root["type"].asInt()==2){
         add_nav_json(req,root);
         sprintf(s,"got the add message! pose.x: %f",req.nav_pose.worldposition.position.x);
     }
-    else if(root["type"]==3){
+    else if(root["type"].asInt()==3){
         update_nav_json(req,root);
         sprintf(s,"got the update message! pose.x: %f",req.nav_pose.worldposition.position.x);
     }
