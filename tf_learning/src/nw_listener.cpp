@@ -316,7 +316,9 @@ ros::Rate r(1);
   uint32_t shape = visualization_msgs::Marker::ARROW;
 
   while (ros::ok())
-  {
+  { 
+    ros::spinOnce();
+    if (nav_flag){
     visualization_msgs::Marker marker;
 
       // Set the frame ID and timestamp.  See the TF tutorials for information on these.
@@ -343,12 +345,18 @@ ros::Rate r(1);
     marker.pose.orientation.y = 0.0;
     marker.pose.orientation.z = 0.0;
     marker.pose.orientation.w = 1.0;
-    marker.pose=nav_pose;
-
+    marker.pose.position.x=nav_pose.position.x;
+    marker.pose.position.y=nav_pose.position.y;
+    marker.pose.position.z=nav_pose.position.z;
+    marker.pose.orientation.x=nav_pose.orientation.x;
+    marker.pose.orientation.y=nav_pose.orientation.y;
+    marker.pose.orientation.z=nav_pose.orientation.z;
+    marker.pose.orientation.w=nav_pose.orientation.w;
+    ROS_INFO("nav_pose got:%f %f %f %f",nav_pose.orientation.x,nav_pose.orientation.y,nav_pose.orientation.z,nav_pose.orientation.w);
     // Set the scale of the marker -- 1x1x1 here means 1m on a side
     marker.scale.x = 1.0;
-    marker.scale.y = 1.0;
-    marker.scale.z = 1.0;
+    marker.scale.y = 0.3;
+    marker.scale.z = 0.3;
 
     // Set the color -- be sure to set alpha to something non-zero!
     marker.color.r = 0.0f;
@@ -386,8 +394,9 @@ ros::Rate r(1);
     //   shape = visualization_msgs::Marker::CUBE;
     //   break;
     // }
-
+}   
     r.sleep();
+  
   }
 }
 // while(ros::ok()){
