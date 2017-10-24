@@ -49,6 +49,7 @@ bool  successed
 #pragma comment(lib, "json_mtd.lib")
  
 #include <cstdio>
+#define pi 3.1415926
 using namespace std; 
 bool flag=false;
 
@@ -93,11 +94,11 @@ Json::Value transfer_nav_json(basic_msgs::nav_pose_set::Request &req){
     string map_name=req.nav_pose.mapname;
     int nav_id=req.nav_pose.id;
     string nav_name=req.nav_pose.name;
-    geometry_msgs::Pose nav_pose_picture=req.nav_pose.worldposition;
 
     const string frame1("picture_frame");
     const string frame2("map");
-    nav_pose=transform_point(nav_pose_picture,frame1,frame2);
+
+    nav_pose=transform_point(req.nav_pose.x,req.nav_pose.y,req.nav_pose.angle*pi/180.0,frame1,frame2);
     nav_flag=true;
     int type=req.nav_pose.type;
     root["type"]=type;
@@ -249,16 +250,16 @@ bool nav_server(basic_msgs::nav_pose_set::Request &req, basic_msgs::nav_pose_set
     if (root["type"].asInt()==1)
     {
         delete_nav_json(req,root);
-        sprintf(s,"got the delete message! pose.x: %f",req.nav_pose.worldposition.position.x);
+        sprintf(s,"got the delete message! pose.x: %f",req.nav_pose.x);
         
     }
     else if(root["type"].asInt()==2){
         add_nav_json(req,root);
-        sprintf(s,"got the add message! pose.x: %f",req.nav_pose.worldposition.position.x);
+        sprintf(s,"got the add message! pose.x: %f",req.nav_pose.x);
     }
     else if(root["type"].asInt()==3){
         update_nav_json(req,root);
-        sprintf(s,"got the update message! pose.x: %f",req.nav_pose.worldposition.position.x);
+        sprintf(s,"got the update message! pose.x: %f",req.nav_pose.x);
     }
     else{
         sprintf(s,"wrong type for type=0");
@@ -352,7 +353,7 @@ ros::Rate r(1);
     marker.pose.orientation.y=nav_pose.orientation.y;
     marker.pose.orientation.z=nav_pose.orientation.z;
     marker.pose.orientation.w=nav_pose.orientation.w;
-    ROS_INFO("nav_pose got:%f %f %f %f %f %f %f",nav_pose.position.x,nav_pose.position.y,nav_pose.position.z,nav_pose.orientation.x,nav_pose.orientation.y,nav_pose.orientation.z,nav_pose.orientation.w);
+    ROS_INFO("nav_pose got:%f %f %f %f \n %f %f %f",nav_pose.position.x,nav_pose.position.y,nav_pose.position.z,nav_pose.orientation.x,nav_pose.orientation.y,nav_pose.orientation.z,nav_pose.orientation.w);
     // Set the scale of the marker -- 1x1x1 here means 1m on a side
     marker.scale.x = 1.0;
     marker.scale.y = 0.3;

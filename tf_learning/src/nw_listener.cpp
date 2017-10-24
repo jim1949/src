@@ -49,6 +49,7 @@ bool  successed
 #pragma comment(lib, "json_mtd.lib")
  
 #include <cstdio>
+#define pi 3.1415926
 using namespace std; 
 bool flag=false;
 
@@ -97,7 +98,7 @@ Json::Value transfer_nav_json(basic_msgs::nav_pose_set::Request &req){
     const string frame1("picture_frame");
     const string frame2("map");
 
-    nav_pose=transform_point(req.nav_pose.x,req.nav_pose.y,req.nav_pose.angle,frame1,frame2);
+    nav_pose=transform_point(req.nav_pose.x,req.nav_pose.y,(360-req.nav_pose.angle)*pi/180.0,frame1,frame2);
     nav_flag=true;
     int type=req.nav_pose.type;
     root["type"]=type;
