@@ -7,4 +7,3 @@ sleep 15
 rostopic pub -1 /mapping_status_feedback std_msgs/Int32 0
 
 
-
