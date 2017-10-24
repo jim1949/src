@@ -8,5 +8,5 @@ string name
 int32 mapid
 string mapname
 int32 type
-
+geometry_msgs/Pose worldposition
 
