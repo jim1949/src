@@ -4,9 +4,9 @@
 echo "mapsaver save, complete saving the map." &
 #complete the mapping process.
 
-mkdir $1/$2 &
-cp $1/now/map.pgm $1/$2/$2.pgm &
-cp $1/now/map.yaml $1/$2/$2.yaml &
+mkdir $1/$2 
+cp $1/now/map.pgm $1/$2/$2.pgm 
+cp $1/now/map.yaml $1/$2/$2.yaml 
 rosrun map_server store_img.py $1 $2 $3 
 
 rosnode kill arduino &

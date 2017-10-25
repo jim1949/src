@@ -34,16 +34,14 @@ def listener():
 
 def convert():
     arg='/var/www/maps/now/map'
-	map_id=0
-	map_name='unknown'
-	folder_path='/var/www/maps'
+
     #need two arg. first is the path(default is /var/www/maps), the second is the unique id of the map. The third is the name of the map.
     if len(sys.argv)>3:
         folder_path=sys.argv[1]#id
         map_id=sys.argv[2]
         map_name=sys.argv[3]
-    arg=folder_path+'/'+map_id+'/'+map_id
-    rospy.loginfo(arg+".pgm")
+    	arg=folder_path+'/'+map_id+'/'+map_id
+    	rospy.loginfo(arg+".pgm")
 
     #save pgm to jpg,jpeg.
 

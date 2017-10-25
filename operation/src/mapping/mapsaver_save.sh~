@@ -4,9 +4,9 @@
 echo "mapsaver save, complete saving the map." &
 #complete the mapping process.
 
-mkdir $1/$2 &
-cp $1/now/map.pgm $1/$2/$2.pgm &
-cp $1/now/map.yaml $1/$2/$2.yaml &
+mkdir $1/$2 
+cp $1/now/map.pgm $1/$2/$2.pgm 
+cp $1/now/map.yaml $1/$2/$2.yaml 
 rosrun map_server store_img.py $1 $2 $3 
 
 rosnode kill arduino &
@@ -32,7 +32,8 @@ rosnode kill pose_in_picture_frame_node &
 sleep 2
 cd /home/relaybot/api_ws/src/shell_rclocal/
 ./killnode.sh
-
+echo map saved to $1/$2/$2.pgm
+rostopic pub -1 /mapping_status_feedback std_msgs/Int32 2
 
 
 
