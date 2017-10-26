@@ -56,7 +56,7 @@ int main(int argc,char **argv){
             myfile >> ft_line;
             num=ft_line;
             cout<<"num:"<<num<<endl;
-            for(int i=0;i<num && ros::ok();i++)
+            for(int i=0;i<num & ros::ok();i++)
             {   printf("\nrow %d: ",i);
                 geometry_msgs::Pose pose_in_picture_frame1,pose_in_picture_frame2;
                 for(int j=0;j<4;j++){

@@ -21,7 +21,10 @@ int main(int argc, char **argv)
   srv.request.nav_pose.x=5;
   srv.request.nav_pose.y=0;
   srv.request.nav_pose.angle=0;
-
+  srv.request.nav_pose.worldposition.orientation.x=0;
+  srv.request.nav_pose.worldposition.orientation.y=0;
+  srv.request.nav_pose.worldposition.orientation.z=0;
+  srv.request.nav_pose.worldposition.orientation.w=1;
   // srv1.request.wall_pose.name=argv[5];
   // srv1.request.wall_pose.id=atoi(argv[2]);
   // srv1.request.wall_pose.mapid=atoi(argv[3]);
