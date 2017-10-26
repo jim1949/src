@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo " start in operation">>~/operation_log.txt
 HOSTIP=`ifconfig wlan0 | grep 'inet ' | cut -d ':'  -f 2 | cut -c -15`
 ETHIP=`ifconfig eth1 | grep 'inet ' | cut -d ':'  -f 2 | cut -c -15`
 if [ $ETHIP  == '192.168.31.130' ];then
@@ -19,6 +19,13 @@ echo Connect to AI_SPEECH.
 export ROS_HOSTNAME=192.168.31.11
 export ROS_MASTER_URI=http://192.168.31.11:11311
 export ROS_IP=192.168.31.11
+
+elif [ $HOSTIP  == '192.168.31.47' ];then
+echo Connect to AI_SPEECH.
+export ROS_HOSTNAME=192.168.31.47
+export ROS_MASTER_URI=http://192.168.31.47:11311
+export ROS_IP=192.168.31.47
+
 else
 echo Connect to AGV
 export ROS_HOSTNAME=ubuntu
@@ -43,5 +50,5 @@ echo "[$da]" >>/var/www/log/main_log/log_$da/operation_$da &
 sleep 2
 
 roslaunch rosbridge_server rosbridge_websocket.launch >> /var/www/log/main_log/log_$da/websocket_log_$da &
-sleep 5
+sleep 2
 roslaunch operation operation_mapbuild.launch >> /var/www/log/main_log/log_$da/operation_$da
