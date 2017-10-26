@@ -42,7 +42,7 @@ Map_set::~Map_set(){
 }
 
 void Map_set::MapSet_navpose_callback(const basic_msgs::nav_poseConstPtr& msg){
-        int num=sizeof(msg->worldposition);
+        // int num=sizeof(msg->x);
         basic_msgs::points test_msg;
         // Map_set::laser_point_vector.data.clear();
         // printf(" ranges: \n");
@@ -59,7 +59,7 @@ void Map_set::MapSet_navpose_callback(const basic_msgs::nav_poseConstPtr& msg){
         }
 
 void Map_set::MapSet_wallpose_callback(const basic_msgs::wall_poseConstPtr& msg){
-        int num=sizeof(msg->worldposition);
+        // int num=sizeof(msg->);
         basic_msgs::points test_msg;
         // Map_set::laser_point_vector.data.clear();
         // // printf(" ranges: \n");

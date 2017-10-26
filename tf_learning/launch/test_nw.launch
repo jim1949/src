@@ -6,7 +6,7 @@
 <!--broadcaste the picture frame-->
 
 <node name="picture_frame_broadcaster" pkg="tf_learning" type="world_tf_broadcaster" output="screen" />
-<node name="nw_listener" pkg="tf_learning" type="nw_listener" output="screen" />
+<node name="nw_listener" pkg="tf_learning" type="nw_listener" output="screen"/> 
 
 
 
