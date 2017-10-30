@@ -60,13 +60,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
-  navigation_status.srv
-  edit_wall_set.srv
-  mapping_name.srv
   mapping_status.srv
-  nav_points_info.srv
-  path_info.srv
-  wall_info.srv
   #   Service2.srv
 )
 

@@ -130,6 +130,7 @@ catkin_package(
 include_directories(
   include ${catkin_INCLUDE_DIRS}
   include ${catkin_INCLUDE_DIRS}
+  include ${catkin_INCLUDE_DIRS}
 
   include ${catkin_INCLUDE_DIRS}
 
@@ -215,33 +216,6 @@ include_directories(
 # catkin_add_nosetests(test)
 
 include_directories( include ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_INCLUDE_DIRS}  )
-add_library(pose_tf src/pose_tf.cpp)
-target_link_libraries(pose_tf ${catkin_LIBRARIES})
-
-
-add_executable(turtle_tf_broadcaster
-  src/turtle_tf_broadcaster.cpp
-)
-add_dependencies(turtle_tf_broadcaster ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(turtle_tf_broadcaster
-  ${catkin_LIBRARIES}
-)
-
-add_executable(turtle_tf_listener
-  src/turtle_tf_listener.cpp
-)
-add_dependencies(turtle_tf_listener ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(turtle_tf_listener
-  ${catkin_LIBRARIES}
-)
-
-add_executable(frame_tf_broadcaster
-  src/frame_tf_broadcaster.cpp
-)
-add_dependencies(frame_tf_broadcaster ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(frame_tf_broadcaster
-  ${catkin_LIBRARIES}
-)
 
 add_executable(world_tf_broadcaster
   src/world_tf_broadcaster.cpp
@@ -278,6 +252,15 @@ target_link_libraries(nw_tf_listener
 add_executable(nw_listener
   src/nw_listener.cpp
 )
+add_library(pose_tf
+  src/pose_tf.cpp
+)
+add_dependencies(pose_tf ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(pose_tf
+  ${catkin_LIBRARIES}
+)
+
+
 add_dependencies(nw_listener ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 link_directories(nw_listener /usr/local/lib)
 target_link_libraries(nw_listener
@@ -341,3 +324,4 @@ add_dependencies(test_marker ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORT
 target_link_libraries(test_marker
   ${catkin_LIBRARIES}
 )
+

@@ -39,7 +39,7 @@ geometry_msgs::Pose transform_point(geometry_msgs::Pose & pose_in_frame1,const s
     else{
         ROS_INFO("frame1 not picture frame.");
     }
-	PoseStamped_in_frame1.orientation=pose_in_frame1.orientation;
+	PoseStamped_in_frame1.pose.orientation=pose_in_frame1.orientation;
     PoseStamped_in_frame1.header.frame_id=frame1;
     PoseStamped_in_frame1.header.stamp=ros::Time();
     //PoseStamped_in_frame1.pose=pose_in_frame1;

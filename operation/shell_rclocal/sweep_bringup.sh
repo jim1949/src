@@ -1,6 +1,6 @@
 #!/bin/bash
 echo start >>~/start_log.txt
-source ~/.bashrc
+# source ~/.bashrc
 HOSTIP=`ifconfig wlan0 | grep 'inet ' | cut -d ':'  -f 2 | cut -c -15`
 if [ $HOSTIP  == '192.168.31.47' ];then
 echo  Connect to sweepbot.
