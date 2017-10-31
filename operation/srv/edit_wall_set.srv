@@ -1,6 +1,0 @@
-basic_msgs/edit_wall edit_wall
-
----
-float64[] data
-string errormsg
-bool  successed

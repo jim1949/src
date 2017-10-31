@@ -8,9 +8,7 @@ input:
 1.map positions: path, name.
 2.some initial parameters of the robot. Which will be set in the future.(Could be set as a global parameter.)
 functions:
-1.get the positions, and store. give response.
-2.transform the nav positions to map frame, and store in json file or SQL file.
-3.draw wall_positions
+
 
 nav_pose_set.srv:
 
