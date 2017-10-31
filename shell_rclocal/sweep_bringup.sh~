@@ -1,0 +1,16 @@
+#!/bin/bash
+echo "start" >>/home/relaybot/start_log.txt
+# source ~/.bashrc
+
+export ROS_HOSTNAME=192.168.31.11
+export ROS_MASTER_URI=http://192.168.31.11:11311
+export ROS_IP=192.168.31.11
+
+source /home/relaybot/gpsbot_ws/devel/setup.bash
+source /opt/ros/indigo/setup.bash
+source /home/relaybot/catkin_ws/devel/setup.bash
+source /home/relaybot/api_ws/devel/setup.bash
+source ~/.bashrc
+roslaunch operation bringup.launch
+
+
