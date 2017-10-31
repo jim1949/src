@@ -18,7 +18,7 @@ rosnode kill velocity_smoother
 rosnode kill nodelet_manager &
 rosnode kill robot_pose_publisher &
 rosnode kill robot_state_publisher &
-rosnode kill sick_tim551_2050001 &
+rosnode kill laser_node &
 rosnode kill slam_gmapping &
 
 rosnode kill map_saver &

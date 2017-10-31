@@ -24,8 +24,12 @@ rosnode kill lasers_in_picture_frame_node &
 
 rosnode kill picture_frame_broadcaster &
 rosnode kill pose_in_picture_frame_node &
+sleep 2
+cd /home/relaybot/api_ws/src/shell_rclocal/
+./killnode.sh
 #rosnode cleanup 
 echo "rosnode kill finished."
+rostopic pub -1 /mapping_status_feedback std_msgs/Int32 3
 
 
 #sh /home/relaybot/api_ws/src/operation/src/choice_action/gmapping_stop.sh

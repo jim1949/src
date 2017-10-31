@@ -1,7 +1,7 @@
 <launch>
   <!-- ros arduino bridge launch-->
 
-  <include file="$(find ros_arduino_python)/launch/driver_hokuyo.launch"/>
+  <include file="$(find ros_arduino_python)/launch/driver_sick.launch"/>
 
   <node name="robot_pose_publisher" pkg="robot_pose_publisher" type="robot_pose_publisher" />
 
@@ -12,11 +12,4 @@
   <include file="$(find gpsbot_nav)/include/odom/gmapping.launch"/>
 
   <include file="$(find map_server)/launch/multi_map_saver.launch"/>
-
 </launch>
-
-
-
-
-
-

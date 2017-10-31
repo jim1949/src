@@ -23,7 +23,7 @@ rosnode kill lasers_in_picture_frame_node &
 
 rosnode kill robot_pose_publisher &
 rosnode kill robot_state_publisher &
-rosnode kill sick_tim551_2050001 &
+rosnode kill laser_node &
 
 rosnode kill velocity_smoother &
 cd /home/relaybot/api_ws/src/shell_rclocal/

@@ -4,7 +4,7 @@
   <include file="$(find ros_arduino_python)/launch/demo.launch"/>
 
   <!-- sick_tim-561 sensor launch-->
-  <node name="sick_tim551_2050001" pkg="sick_tim" type="sick_tim551_2050001" respawn="false" output="screen">
+  <node name="laser_node" pkg="sick_tim" type="sick_tim551_2050001" respawn="false" output="screen">
 
   <!-- 
     <param name="min_ang" type="double" value="-1.9198622" />
@@ -27,7 +27,7 @@
   </node>
 
   <include file="$(find gpsbot_description)/launch/gpsbot_description.launch"/>
-  <include file="$(find operation)/launch/task.launch"/>
+
   <node pkg="tf" type="static_transform_publisher" name="base_link_to_laser4" 
    args="0.3 0.0 0.2 0.0 0.0  0.0 /base_link /laser_frame 40" />
 
@@ -48,5 +48,7 @@
     <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
     <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
   </include>
+
+  <include file="$(find operation)/launch/edit_nav_task.launch"/>
 
 </launch>
