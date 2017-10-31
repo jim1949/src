@@ -1,7 +1,0 @@
-<launch>
-    <param name="mapsaver_bringup_path" value="/home/relaybot/api_ws/src/operation/src/mapsaver_bringup.sh" type="string"/>
-    <param name="mapsaver_pause_path" value="/home/relaybot/api_ws/src/operation/src/mapsaver_pause.sh" type="string"/>
-    <param name="mapsaver_stop_path" value="/home/relaybot/api_ws/src/operation/src/mapsaver_stop.sh" type="string"/>
-    <node name="operation_buildmap" pkg="operation" type="operation_mapbuild" output="screen"/>
-
-</launch>
