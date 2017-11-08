@@ -72,7 +72,9 @@ if(last_type==param->type){
 ROS_INFO("Given the same input!");
 return 0;
 }
+last_type=param->type;
 if (param->type==-1) {
+  
   ROS_INFO("-1");
   ROS_INFO("wrong input for build the map.");
 
