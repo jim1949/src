@@ -1,7 +1,7 @@
 <launch>
   <!-- ros arduino bridge launch-->
 
-  <include file="$(find ros_arduino_python)/launch/driver_hokuyo.launch"/>
+  <include file="$(find ros_arduino_python)/launch/driver.launch"/>
 
   <node name="robot_pose_publisher" pkg="robot_pose_publisher" type="robot_pose_publisher" />
 
