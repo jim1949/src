@@ -1,13 +1,13 @@
 <launch>
   <!-- ros arduino bridge launch-->
 
-  <include file="$(find ros_arduino_python)/launch/driver_hokuyo.launch"/>
+  <include file="$(find ros_arduino_python)/launch/driver.launch"/>
 
   <node name="robot_pose_publisher" pkg="robot_pose_publisher" type="robot_pose_publisher" />
 
   <include file="$(find tf_learning)/launch/mapinfo_pub.launch"/>
 
-  <include file="$(find gpsbot_nav)/include/odom/teb_move_base.launch"/>
+  <include file="$(find gpsbot_nav)/include/odom/teb_move_base.launch.xml"/>
 
   <include file="$(find gpsbot_nav)/include/odom/gmapping.launch"/>
 
