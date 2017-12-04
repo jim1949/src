@@ -23,25 +23,30 @@ using namespace std;
 int main(int argc,char **argv){
     ros::init(argc, argv, "robot_path_node");
     ros::NodeHandle n; 
-
+    string map_path,map_id,map_name,path,tmp,robot_path,robot_path_map;
     //===============get the map name, id , path.======================================//
     if (argc<3){
         ROS_INFO("No map path and name input. Will use the default map path:%s.jpg",argv[1]);
+        map_id="now_id";
+        map_name="now";
+        tmp=argv[1];
+        path=tmp+".jpg";
     }
     else {
-        string map_path,map_id,map_name,path;
+
         map_path=argv[1];
         map_id=argv[2];
         map_name=argv[3];
         ROS_INFO("Receive the map_path:%s map_id:%s map_name:%s",map_path.c_str(),map_id.c_str(),map_name.c_str());
         path=map_path+"/"+map_id+"/"+map_id+".jpg";
         ROS_INFO("path is:%s",path.c_str());
-    
-
+    }
+    robot_path=map_path+"/"+map_id+"/robot_path.txt";
+    robot_path_map=map_path+"/"+map_id+"/robot_path_map.txt";
         //==============got the robot_path txt in picture frame.=============================//
-        fstream myfile("/home/relaybot/api_ws/src/operation/src/ppl_src/robot_path.txt", ios_base::in);
+        fstream myfile(robot_path.c_str(), ios_base::in);
         ofstream ofile;
-        ofile.open("/home/relaybot/api_ws/src/operation/src/ppl_src/robot_path_map.txt");
+        ofile.open(robot_path_map.c_str());
         float ft_line;
         int num;
         int count = 0;
@@ -107,9 +112,10 @@ int main(int argc,char **argv){
             cout<<endl;		
         }
         ofile<<root.toStyledString();
+        cout<<root.toStyledString();
         myfile.close();
         ofile.close();
-    }
+    
 
     return 0;
 }

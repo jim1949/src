@@ -115,13 +115,16 @@ bool box_drawn = false;
 bool preprocess_mouse_down = false;
 //================================================================
 int main(int argc, char ** argv){
-    if (argc >3){        string map_path,map_id,map_name,path;
+    string map_path,map_id,map_name,path,autosweep_path;
+    if (argc >3){        
         cout<<"argc: "<<argc<<endl;
         map_path=argv[1];
         map_id=argv[2];
         map_name=argv[3];
         ROS_INFO("Receive the map_path:%s map_id:%s map_name:%s",map_path.c_str(),map_id.c_str(),map_name.c_str());
         path=map_path+"/"+map_id+"/"+map_id+".jpg";
+        autosweep_path=map_path+"/"+map_id+"/"+"robot_path.txt";
+
         ROS_INFO("path is:%s",path.c_str());
         src=imread(path, IMREAD_GRAYSCALE );
     
@@ -139,14 +142,19 @@ int main(int argc, char ** argv){
         return 0;
     }
     //=================== Read file complete ==================//
-
+    imshow("src image", src);
+    /*while(1){
+        if(waitKey(15) == 27 ) break;
+    }*/
     // map image rotation and edge sharpening
     Mat src_rotate,src_threshold;
     // angle = -10.5;       // Full office map rotation angle
     // angle = 39;             // Square office map rotation angle
     // FLOOD_FILL_PT = Point(150,250);
     angle = get_angle(src);
-    FLOOD_FILL_PT = Point(450,300);
+
+    //Point(y,x);
+    FLOOD_FILL_PT = Point(200,400);
     src_rotate = rotate_img(src,angle);
 
     // map image thresholding
@@ -190,6 +198,9 @@ int main(int argc, char ** argv){
     masked_img = contours_img.clone();          // Clone contours_img to Mat masked_img and ready to floodfill it
     floodFill_1ch(masked_img, FLOOD_FILL_PT);
     imshow("masked_img1", masked_img);
+    /*while(1){
+        if(waitKey(15) == 27 ) break;
+    }*/
     // imwrite("FloodFilledMap.png", masked_img);
     // floodFill_1ch(masked_img, Point(150,250));
     
@@ -202,7 +213,7 @@ int main(int argc, char ** argv){
     }
     floodFill_1ch(masked_img, Point(450,300)); */
     //========================= manual set param for image clutch reduction ========
-    image_regulate(masked_img, 20);
+    image_regulate(masked_img, 9);
     /* while(1){
         if(waitKey(15) == 27 ) break;
     } */
@@ -229,12 +240,15 @@ int main(int argc, char ** argv){
    // cout << " count for small cells is " << count << endl;
     namedWindow("image contours after");
     imshow("image contours after", masked_img);
+    /*while(1){
+        if(waitKey(15) == 27 ) break;
+    }*/
     Mat masked_img_backup = masked_img.clone();
     // imwrite("map_masked.png", masked_img);
     namedWindow("Cells");
     setMouseCallback("Cells", cell_img_mouse_callback, (void*)&cell_decompose_result);
     // imshow("Cells before remove", map_before_remove);
-    imshow("Cells",cell_decompose_result);
+    // imshow("Cells",cell_decompose_result);
 
     coverage_path_planning(cells_v, masked_img);
     
@@ -245,7 +259,7 @@ int main(int argc, char ** argv){
     Mat src_color;
     namedWindow("Source image", WINDOW_AUTOSIZE);
     cvtColor(src,src_color,CV_GRAY2BGR);
-    imshow("Source image", src_color);
+    // imshow("Source image", src_color);
     int empty_cell_num = 0;
     for(int i = 0; i < cells_v.size(); ++i){
         cout << " the " << i << " th cell" << endl;
@@ -280,16 +294,16 @@ int main(int argc, char ** argv){
     Mat tmp = cell_decompose_result.clone();
     namedWindow("Cells to clean");
     setMouseCallback("Cells to clean", cell_to_clean_img_mouse_callback, (void*)&tmp);
-    imshow("Cells to clean",tmp);
+    // imshow("Cells to clean",tmp);
     // ifinity loop which breaks if key ESC is pressed
-    while(1){
+    /*while(1){
         // cell_decompose_result.copyTo(tmp);
         // Real-time Update image display 
         if(drawing_box){
             cell_decompose_result.copyTo(tmp);
             draw_box( tmp, box );
         }
-        imshow("Cells to clean",tmp);
+        // imshow("Cells to clean",tmp);
         // Using box_drawn flag to determine if a box has been drawn on image
         if(box_drawn){
             box_drawn = false;
@@ -299,7 +313,7 @@ int main(int argc, char ** argv){
             }
         }
         if(waitKey(15) == 27 ) break;
-    }
+    }*/
     // ========================== Generate D_matrix for ACO algorithm =======================
     cells_D_generation();        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! D_matrix disabled
 
@@ -359,7 +373,7 @@ int main(int argc, char ** argv){
         }
     }
     
-    robot_path_file_generate("robot_path.txt");
+    robot_path_file_generate(autosweep_path);
     //================================================= Compute robot position angle w and z ============
     
 
@@ -408,7 +422,13 @@ int main(int argc, char ** argv){
         }
         circle(draw_path, Point(cells_center_x[i],cells_center_y[i]), 5, Scalar(0,0,0), -1);
     } */
-
+    Mat path_plot = cell_decompose_result.clone();
+    for(i=0; i<cleaned_cells.size(); ++i){
+        for(auto it = cleaned_cells[i].path.begin(); it != cleaned_cells[i].path.end()-1; ++it){
+            line(path_plot, Point(it->x+4, it->y+4), Point((it+1)->x+4,(it+1)->y+4), Scalar(255,255,255));
+        }
+    }
+    imshow("path_plot", path_plot);
     for( i = 0; i < cleaned_cells.size(); ++i){
         if(cleaned_cells[i].path.size() > 1){
             cout << " the current cell is " << i << endl;
@@ -479,7 +499,7 @@ int main(int argc, char ** argv){
     
     
     // imshow("Source image", src);
-    waitKey(0);
+    // waitKey(0);
     return 0;
 }
 //============================== Function define ================
@@ -496,9 +516,9 @@ double get_angle(const Mat &src){
     Mat canny_img(src.size(), CV_8UC1);
     Canny(blurred_img, canny_img, 80, 100*2, 3);
 
-    imshow("source",src);
-    imshow("threshold image", src_threshold);
-    imshow("canny image",canny_img);
+    // imshow("source",src);
+    // imshow("threshold image", src_threshold);
+    // imshow("canny image",canny_img);
 
     Mat color_canny;
     cvtColor(canny_img, color_canny, CV_GRAY2BGR);
@@ -1569,14 +1589,14 @@ void rect_clean(Rect clean_area){
     Mat rect_result = print_cells(rect_map, rect_cells_v);
     coverage_path_planning(rect_cells_v, rect_map);
     namedWindow("rect result", WINDOW_AUTOSIZE);
-    imshow("rect result", rect_result);
+    // imshow("rect result", rect_result);
     if(waitKey(0) == 27){
         for(auto it = rect_cells_v.begin(); it != rect_cells_v.end(); ++it){
             cout << " the current cells " << it-rect_cells_v.begin() << endl;
             for(int i = 0; i < it->path.size() -1; ++i){
                 cout << " path point --> " << it->path[i] << endl;
                 line(rect_result, Point(it->path[i].x+4,it->path[i].y+4), Point(it->path[i+1].x+4,it->path[i+1].y+4),Scalar(255,255,255));
-                imshow("rect result", rect_result);
+                // imshow("rect result", rect_result);
 
             if(waitKey(5) >=0) return;
         }
@@ -1620,11 +1640,11 @@ void cells_fill_black(const cells &c1, Mat &map){
         // black_region.copyTo(map(region));
     }
 }
-void                                                                                                                                                           floodFill_1ch(Mat& src, Point fl_pt){
+void floodFill_1ch(Mat& src, Point fl_pt){
     Rect roi;
     Mat mask_img = src.clone();
     uchar seedColor = 200;
-    floodFill(mask_img,fl_pt,Scalar(200),&roi,Scalar(5),Scalar(5));
+    floodFill(mask_img,fl_pt,Scalar(200),0,Scalar(5),Scalar(5));
     src = (mask_img == seedColor);
 }
 void preprocess_draw(Mat& src){
@@ -1632,7 +1652,7 @@ void preprocess_draw(Mat& src){
     namedWindow("preprocessing", WINDOW_AUTOSIZE);
     setMouseCallback("preprocessing", preprocess_mouse_callback, (void*)& src);
     while(1){
-        imshow("preprocessing", src);
+        // imshow("preprocessing", src);
         if(waitKey(15) == 27 ) break;
     }
 }
@@ -1700,7 +1720,8 @@ void robot_path_file_generate(string filename){
     cout << " the size of robot_path is " << robot_path.size() << endl;
     cout << " the size of w and z is " << w.size() << "  " << z.size() << endl;
     ofstream ofile;
-    ofile.open("/home/relaybot/api_ws/src/operation/src/ppl_src/robot_path.txt");
+    ofile.open(filename);
+    ofile << robot_path.size() << endl;
     for(i = 0; i < robot_path.size(); ++i){
         ofile << robot_path[i].x << " " << robot_path[i].y << " " << w[i] << " " << z[i] << endl;
     }

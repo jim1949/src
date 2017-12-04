@@ -35,7 +35,7 @@ int main(int argc, char** argv)
     cout<<"测试json写入到文件"<<endl;
 
     ofstream ofs;
-    ofs.open("/home/jimmy/api_ws/src/tf_learning/src/test1.json");
+    ofs.open("/home/relaybot/api_ws/src/tf_learning/src/test1.json");
     ofs<<jsonRoot.toStyledString();
     ofs.close();
 
@@ -44,18 +44,20 @@ int main(int argc, char** argv)
     jsonRoot.clear();
 
     ifstream ifs;
-    ifs.open("/home/jimmy/api_ws/src/tf_learning/src/test1.json");
+    ifs.open("/home/relaybot/api_ws/src/tf_learning/src/test1.json");
     Json::Reader reader;
     Json::Value root;
-    Json::Value deleted; 
+    Json::Value test_root; 
     
     if (!reader.parse(ifs, root, false))
     {
         return -1;
         cout<<"wrong input parse";
     }
+    ifs.close();
     string item1,item2;
     int size = root.size();
+    cout<<"size: "<<size;
     for (int i=0; i<size; ++i)
     {
         item1 = root[i]["item1"].asString();
@@ -64,16 +66,21 @@ int main(int argc, char** argv)
             cout<<"heihei:"<<root[i]["item3"]<<endl;
             if(root[i]["item3"].asInt()==3){
                 cout<<"we found it@@@@@@@@@@@@@@"<<endl;
+                
             }
         }
  
        cout<<item1<<" "<<item2<<endl;
+       
     }
- 
-     
-    // root.removeIndex(1,&deleted); 
-    // cout<<deleted.toStyledString();
     
+
+
+    cout<<root.toStyledString()<<endl;
+    root[1].removeMember("item3"); 
+    cout<<root.toStyledString()<<endl;
+   
+    cout<<test_root.toStyledString()<<endl;
     return 0;
     
 }

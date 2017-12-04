@@ -132,7 +132,6 @@ include_directories(
   include ${catkin_INCLUDE_DIRS}
   include ${catkin_INCLUDE_DIRS}
 
-  include ${catkin_INCLUDE_DIRS}
 
 )
 
@@ -281,7 +280,7 @@ add_executable(jsontest
   src/jsontest.cpp
 )
 add_dependencies(jsontest ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-link_directories(jsontest /usr/local/lib)
+# link_directories(jsontest /usr/local/lib)
 target_link_libraries(jsontest
   ${catkin_LIBRARIES} jsoncpp
 )
@@ -324,4 +323,3 @@ add_dependencies(test_marker ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORT
 target_link_libraries(test_marker
   ${catkin_LIBRARIES}
 )
-
