@@ -1,0 +1,3 @@
+<<<17-11-27>>>
+1.利用已有的ppl写一个global plugin
+2.继续优化navigation相关参数，放弃teb_lobal_planner.但是可以就dwa_local_planner,借鉴前者进行优化。

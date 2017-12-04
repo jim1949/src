@@ -1551,11 +1551,11 @@ void cells_fill_black(const cells &c1, Mat &map){
         map(region) = 0;
     }
 }
-void                                                                                                                                                           floodFill_1ch(Mat& src, Point fl_pt){
+void floodFill_1ch(Mat& src, Point fl_pt){
     Rect roi;
     Mat mask_img = src.clone();
     uchar seedColor = 200;
-    floodFill(mask_img,fl_pt,Scalar(200),&roi,Scalar(5),Scalar(5));
+    floodFill(mask_img,fl_pt,Scalar(200),0,Scalar(5),Scalar(5));
     src = (mask_img == seedColor);
 }
 void preprocess_draw(Mat& src){

@@ -1,7 +1,7 @@
 <launch>
   <!-- ros arduino bridge launch-->
 
-  <arg name="map_info" default="/var/www/maps/now/map"/>
+  <arg name="map_info" default="/var/www/maps/now/map.jpg"/>
 
   <node name="robot_path_tf" pkg="tf_learning" type="robot_path_tf" args="$(arg map_info)" output="screen"/>  
 </launch>
