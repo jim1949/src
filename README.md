@@ -67,12 +67,20 @@ echo "rosnode kill finished."<br/>
 这里需要启动的节点有：
 
 * 节点1 地图编辑管理节点
->roslaunch tf_learning map_manager.launch
+>rosrun tf_learning map_manager
 
 这里有4个service可以分别调用。作为服务端接受安卓端提供的service请求进行nav_pose,wall_pose,plan，task的增删查改。注意的地图frame和图片frame上的点的位置不同，我们对nav_pose保存为points下的points.json和graphpoints.json，对地图也是，保存为wall.json和graphwall.json，plan 保存为graphplan.json和plan.json.<br/>
 同时，如果加载的地图map_id(最好用rosparam来设置)与之前的last_map_id不一致，将会调用新的map_server.launch.
+注意，在编辑地图的时候，根据type来做自动生成路径的部分。
+还有生成虚拟墙。
 
 
 * 节点2 地图的frame转换的节点，以及地图加载节点
 > roslaunch map_server map_server.launch map_file:=?
 > roslaunch tf_learning  picture_frame_pub.launch
+
+* ## step 3：任务执行
+应该和上述的map_manager在一起写成同一个代码。</br>
+需要读task.json,然后进行执行。
+写一个测试代码，task_callservice.
+
